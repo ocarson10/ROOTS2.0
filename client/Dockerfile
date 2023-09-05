@@ -1,7 +1,6 @@
 FROM node:alpine
 WORKDIR /app
-COPY package.json ./
-COPY package-lock.json ./
-COPY ./ ./
+COPY package*.json ./
 RUN npm i --legacy-peer-deps
+COPY ./ ./
 CMD ["npm", "run", "start"]

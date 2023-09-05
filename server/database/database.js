@@ -2,9 +2,7 @@
 const Sequelize = require('sequelize');
 const mysql = require('mysql2/promise');
 
-
 // Determine if testing, dev, or production environment
-
 let user, password, host;
 if(process.env.NODE_ENV === "development") {
   user = process.env.DB_USER;
@@ -17,13 +15,6 @@ if(process.env.NODE_ENV === "development") {
   host = process.env.DB_TEST_HOST;
   port = 3306;
 }
-// async function createSchema() {
-//   const connection = await mysql.createConnection({host, port, user, password});
-//   await connection.query(`CREATE DATABASE IF NOT EXISTS roots;`);
-//   connection.close();
-// }
-
-// createSchema();
 
 // Create the sequelize connection
 function tryConnect(attempts) {
@@ -36,13 +27,11 @@ function tryConnect(attempts) {
 
     return sequelize;
   } catch (error) {
-    tryConnect(attempts - 1);
+    tryConnect(attempts - 1); //fix
   }
 }
 
 const sequelize = tryConnect(5);
 
-
 // export the module
 module.exports = sequelize;
-
