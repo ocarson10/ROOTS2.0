@@ -23,6 +23,9 @@ module.exports = (app) => {
       res.send(innerRes);
     }).catch((error) => {
       console.log("Error in fetching user: ", error);
+      res.statusCode = 500;
+      res.statusMessage = error;
+      res.send(innerRes);
     })
   });
 

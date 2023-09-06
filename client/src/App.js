@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {instance} from './libs/services/api-client/apiClient';
 import "./App.css";
 import Login from "./libs/login/Login";
 import SeedMaterial from "./libs/forms/SeedMaterial";
@@ -40,9 +41,20 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/users/current").then((response) => {
-      setUser(response.data);
-    });
+    try {
+      instance.get("/users/ibmckend").then((response) => {
+        console.log(response.data);
+        console.log(response.status);
+        console.log(response.statusText);
+        console.log(response.headers);
+        console.log(response.config);
+        
+        setUser(response.data);
+      });
+    } catch (error) {
+      console.log('Error finding current user.\n' + error);
+    }
+    
   }, []);
 
   console.log("user: ", user);

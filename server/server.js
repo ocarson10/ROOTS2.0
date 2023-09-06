@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // const origin = "http://localhost:3000";
-const origin = "https://localhost/";
+const origin = "http://localhost:3000/";
 
 app.use(express.json());
 const corsOrigin ={
@@ -78,7 +78,7 @@ module.exports = async function createServer(options) {
       } catch(error) {
         console.log('Failed to connect, trying again...');
         console.log(error);
-        await delay(2000);
+        await delay(10000);
       }
     }
     
