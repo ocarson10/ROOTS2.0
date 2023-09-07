@@ -2,29 +2,15 @@
 const Sequelize = require('sequelize');
 const mysql = require('mysql2/promise');
 
-// Determine if testing, dev, or production environment
-// let user, password, host;
-// if(process.env.NODE_ENV === "development") {
-//   user = process.env.DB_USER;
-//   password = process.env.DB_PASS;
-//   host = process.env.DB_HOST;
-//   port = 9906;
-// } else if (process.env.NODE_ENV === "testing") {
-//   user = process.env.DB_TEST_USER;
-//   password = process.env.DB_TEST_PASS;
-//   host = process.env.DB_TEST_HOST;
-//   port = 3306;
-// }
-
-user = 'root';
-password = '';
-host = 'localhost';
+user = process.env.MYSQL_USER;
+password = process.env.MYSQL_PASSWORD;
+host = process.env.DB_HOST;
 port = 3306;
 
 // Create the sequelize connection
 function tryConnect(attempts) {
   try {
-    const sequelize = new Sequelize('roots', user, password, {
+    const sequelize = new Sequelize(process.env.MYSQL_DATABASE, user, password, {
       dialect: 'mysql',
       host: host,
       logging: false,

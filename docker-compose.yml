@@ -1,6 +1,7 @@
 version: '3.8'
 
 x-common-variables: &common-variables
+  DB_HOST: mysql_db
   MYSQL_DATABASE: roots
   MYSQL_USER: MYSQL_USER
   MYSQL_PASSWORD: MYSQL_PASSWORD
