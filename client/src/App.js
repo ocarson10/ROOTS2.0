@@ -42,19 +42,12 @@ function App() {
 
   useEffect(() => {
     try {
-      instance.get("/users/ibmckend").then((response) => {
-        console.log(response.data);
-        console.log(response.status);
-        console.log(response.statusText);
-        console.log(response.headers);
-        console.log(response.config);
-        
+      axios.get("/api/users/current").then((response) => {
         setUser(response.data);
       });
     } catch (error) {
       console.log('Error finding current user.\n' + error);
     }
-    
   }, []);
 
   console.log("user: ", user);
