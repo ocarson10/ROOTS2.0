@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // const origin = "http://localhost:3000";
-const origin = "https://localhost/";
+const origin = "http://localhost/";
 
 app.use(express.json());
 const corsOrigin ={
@@ -63,10 +63,25 @@ async function trySync(models, attempts, options) {
     }
   }
 }
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+} 
+
 module.exports = async function createServer(options) {
   try {
-    await db.authenticate();
-    console.log("Connected!");
+    for(let x = 3; x > 0; x--) {
+      try {
+        await db.authenticate();
+        console.log("Connected!");
+        break;
+      } catch(error) {
+        console.log('Failed to connect, trying again...');
+        console.log(error);
+        await delay(10000);
+      }
+    }
+    
     // Sync Models
     const models = [LocationModel, PopulationModel, SpeciesModel, GeneticIdModel, TreeModel,
       RametModel, ConeModel, SeedModel, InitiationModel, MaintenanceModel, AcclimationModel, 
