@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     try {
-      axios.get("/api/users/current").then((response) => {
+      instance.get("/users/current").then((response) => {
         setUser(response.data);
       });
     } catch (error) {
