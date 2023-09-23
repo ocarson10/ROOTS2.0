@@ -19,6 +19,7 @@ import InitiationForm from "./libs/forms/InitiationForm";
 import MaintenanceForm from "./libs/forms/MaintenanceForm";
 import MaturationForm from "./libs/forms/MaturationForm";
 import ColdTreatmentForm from "./libs/forms/ColdTreatmentForm";
+import MaterialForm from "./libs/forms/MaterialForm";
 
 import Report from "./libs/reports/Report";
 import GreenhouseForm from "./libs/forms/GreenhouseForm";
@@ -58,6 +59,11 @@ function App() {
           <Header user={user} />
           <Routes>
             <Route path="/" element={<Home user={user} />} />
+
+            <Route
+              path="/material/:material/:action"
+              element={<MaterialForm/>}
+            />
 
             <Route
               path="/add/seed-material"
