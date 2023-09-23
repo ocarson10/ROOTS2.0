@@ -73,7 +73,7 @@ function ColdTreatmentTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/cold-treatment" editLink= "/edit/cold-treatment" addLink="/add/cold-treatment" status={"active"} material={"treatment"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
+        <TableComponent propagateLink="/propagate/cold-treatment" editLink= "/material/cold-treatment/edit" addLink="/material/cold-treatment/add" status={"active"} material={"treatment"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
       ) : (
         <p></p>
       )}
