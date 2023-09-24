@@ -1,0 +1,34 @@
+div.button-div > button{
+    font: "Roboto";
+    padding: 10px;
+    margin-top: 10px;
+    width: 90%;
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    font-size: 12pt;
+    transition-duration: 300ms;
+    font-weight: bold;
+}
+div.button-div > button:hover{
+    background-color: white;
+    color:#990100;
+    transition-duration: 300ms;
+}
+div.upload__image-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    background-color: #990100;
+    padding: 20px;
+    margin: auto;
+    margin-top: 25px;
+}
+h1{
+    font-family: "Roboto";
+    color: white;
+}
+.button-div {
+    display: flex;
+}

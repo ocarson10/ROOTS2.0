@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
+import "../../libs/style/ImageUpload.css";
 
 function ImageUpload() {
   const [images, setImages] = React.useState([]);
@@ -31,15 +32,18 @@ function ImageUpload() {
         }) => (
           // write your building UI
           <div className="upload__image-wrapper">
-            <button
+            <h1>Photo Upload</h1>
+            <div class = "button-div"> 
+              <button
               style={isDragging ? { color: 'red' } : undefined}
               onClick={onImageUpload}
               {...dragProps}
             >
               Click or Drop here
-            </button>
-            &nbsp;
-            <button onClick={onImageRemoveAll}>Remove all images</button>
+              </button>
+              &nbsp;
+              <button onClick={onImageRemoveAll}>Remove all images</button>
+            </div>
             {imageList.map((image, index) => (
               <div key={index} className="image-item">
                 <img src={image['data_url']} alt="" width="100" />

@@ -7,43 +7,54 @@ import ConeMaterial from "./ConeMaterial";
 import MaintenanceForm from "./MaintenanceForm";
 import GreenhouseForm from "./GreenhouseForm";
 import ColdTreatment from "./ColdTreatmentForm";
-
+import "../../libs/style/Material.css";
 function MaterialForm(props) {
 	const { material, action } = useParams();
 
 	return (
 		<div>
-			{material === "trees" && (
-				<div>
-					<TreeMaterial operation={action}></TreeMaterial>
-				</div>
-			)}
-			{material === "seeds" && (
-				<div>
-					<SeedMaterial operation={action}></SeedMaterial>
-				</div>
-			)}
-			{material === "cones" && (
-				<div>
-					<ConeMaterial operation={action}></ConeMaterial>
-				</div>
-			)}
-			{material === "maintenance" && (
-				<div>
-					<MaintenanceForm operation={action}></MaintenanceForm>
-				</div>
-			)}
-			{material === "greenhouse" && (
-				<div>
-					<GreenhouseForm operation={action}></GreenhouseForm>
-				</div>
-			)}
-			{material === "cold-treatment" && (
-				<div>
-					<ColdTreatment operation={action}></ColdTreatment>
-				</div>
-			)}
-			<ImageUpload></ImageUpload>
+			<div>
+				<ImageUpload></ImageUpload>
+			</div>
+			<div class= "upload-section">
+				<h1>File Upload</h1>
+				
+			</div>
+			<div>
+				{material === "trees" && (
+					<div>
+						<TreeMaterial operation={action}></TreeMaterial>
+					</div>
+				)}
+				{material === "seeds" && (
+					<div>
+						<SeedMaterial operation={action}></SeedMaterial>
+					</div>
+				)}
+				{material === "cones" && (
+					<div>
+						<ConeMaterial operation={action}></ConeMaterial>
+					</div>
+				)}
+				{material === "maintenance" && (
+					<div>
+						<MaintenanceForm operation={action}></MaintenanceForm>
+					</div>
+				)}
+				{material === "greenhouse" && (
+					<div>
+						<GreenhouseForm operation={action}></GreenhouseForm>
+					</div>
+				)}
+				{material === "cold-treatment" && (
+					<div>
+						<ColdTreatment operation={action}></ColdTreatment>
+					</div>
+				)}
+			</div>
+		
+			
+			
 		</div>
 	);
 }
