@@ -322,7 +322,7 @@ function Initiation(props) {
           }}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

@@ -319,7 +319,7 @@ function Maintenance(props) {
           }}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

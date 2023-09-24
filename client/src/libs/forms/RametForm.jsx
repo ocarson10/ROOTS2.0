@@ -251,7 +251,7 @@ function RametForm(props) {
             }}
           />
         </div>
-
+        <ImageUpload></ImageUpload>
         <div className="button-div">
           <button
             className="form-button"

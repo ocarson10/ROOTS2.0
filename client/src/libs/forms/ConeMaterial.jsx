@@ -356,7 +356,7 @@ function ConeMaterial(props) {
           onChange={(e) => setLocation(e.target.value)}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
