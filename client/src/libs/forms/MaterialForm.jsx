@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ImageUpload from "./ImageUpload";
 import { useParams } from "react-router-dom";
 import TreeMaterial from "./TreeMaterial";
@@ -10,11 +10,17 @@ import ColdTreatment from "./ColdTreatmentForm";
 import "../../libs/style/Material.css";
 function MaterialForm(props) {
 	const { material, action } = useParams();
+	const [geneticId, setGeneticId] = useState(null);
+	const getGeneticIdFromChild = (data) => {
+		setGeneticId(data);
+	}
 
 	return (
 		<div>
 			<div>
-				<ImageUpload></ImageUpload>
+				{geneticId && 
+				<ImageUpload geneticId={geneticId}></ImageUpload>}
+
 			</div>
 			<div class= "upload-section">
 				<h1>File Upload</h1>
@@ -23,7 +29,7 @@ function MaterialForm(props) {
 			<div>
 				{material === "trees" && (
 					<div>
-						<TreeMaterial operation={action}></TreeMaterial>
+						<TreeMaterial operation={action} sendGeneticIdToParent={getGeneticIdFromChild}></TreeMaterial>
 					</div>
 				)}
 				{material === "seeds" && (

@@ -1,16 +1,17 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
-import "../../libs/style/ImageUpload.css";
+// import "../../libs/style/ImageUpload.css";
 
-function ImageUpload() {
-  const [images, setImages] = React.useState([]);
-  const maxNumber = 69;
+function ImageUpload(props) {
+	const [images, setImages] = React.useState([]);
+	const maxNumber = 1;
 
-  const onChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
-    setImages(imageList);
-  };
+	const onChange = (imageList, addUpdateIndex) => {
+		// data for submit
+		console.log(imageList, addUpdateIndex);
+		setImages(imageList);
+		console.log(props.geneticId);
+	};
 
   return (
     <div className="App">

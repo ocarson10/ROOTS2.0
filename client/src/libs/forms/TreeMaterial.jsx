@@ -17,6 +17,7 @@ import {
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "./ImageUpload";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -35,6 +36,7 @@ function TreeMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+
   useEffect(() => {
     //If editing, set the values to the current values
     if (props.operation === "Edit") {
@@ -206,6 +208,7 @@ function TreeMaterial(props) {
   const handleGeneticChange = async (e) => {
     setError("");
     setGeneticId({ value: e.value, label: e.value });
+    props.sendGeneticIdToParent(e.value);
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
