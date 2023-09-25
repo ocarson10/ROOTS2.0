@@ -17,7 +17,9 @@ import {
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function ConeMaterial(props) {
   const [coneId, setConeId] = useState("");
   const [motherTreeId, setMotherTreeId] = useState("");
@@ -357,6 +359,7 @@ function ConeMaterial(props) {
         />
       </div>
       <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

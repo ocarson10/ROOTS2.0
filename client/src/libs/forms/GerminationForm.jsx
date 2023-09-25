@@ -8,7 +8,9 @@ import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getColdTreatment } from "../services/api-client/coldTreatmentService";
 import Select from "react-select";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function GerminationForm(props) {
   const [germinationId, setGerminationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -200,6 +202,7 @@ function GerminationForm(props) {
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
       </div>
       <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

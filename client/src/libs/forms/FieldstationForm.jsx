@@ -8,7 +8,9 @@ import Select from "react-select";
 import GeneticHover from "../hover-info/GeneticHover";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function FieldstationForm(props) {
   const [fieldStationId, setFieldStationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -177,6 +179,7 @@ function FieldstationForm(props) {
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
       </div>
       <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

@@ -18,10 +18,6 @@ function MaterialForm(props) {
 	return (
 		<div>
 		
-			<div class= "upload-section">
-				<h1>File Upload</h1>
-				
-			</div>
 			<div>
 				{material === "trees" && (
 					<div>
