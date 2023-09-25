@@ -1,6 +1,5 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
-// import "../../libs/style/ImageUpload.css";
 
 function ImageUpload(props) {
 	const [images, setImages] = React.useState([]);
@@ -8,9 +7,12 @@ function ImageUpload(props) {
 
 	const onChange = (imageList, addUpdateIndex) => {
 		// data for submit
+		// Get the first image from the list (assuming only one image is selected)
+		const selectedImage = imageList.length > 0 ? imageList[0] : null;
 		console.log(imageList, addUpdateIndex);
+		// Call the parent component's function to pass the selected image
+		props.onImageSelect(selectedImage);
 		setImages(imageList);
-		console.log(props.geneticId);
 	};
 
   return (

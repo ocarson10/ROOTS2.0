@@ -17,11 +17,7 @@ function MaterialForm(props) {
 
 	return (
 		<div>
-			<div>
-				{geneticId && 
-				<ImageUpload geneticId={geneticId}></ImageUpload>}
 
-			</div>
 			<div class= "upload-section">
 				<h1>File Upload</h1>
 				
@@ -58,9 +54,6 @@ function MaterialForm(props) {
 					</div>
 				)}
 			</div>
-		
-			
-			
 		</div>
 	);
 }
