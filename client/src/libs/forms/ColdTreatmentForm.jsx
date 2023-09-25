@@ -8,7 +8,9 @@ import { addColdTreatment, getColdTreatment, updateColdTreatment } from "../serv
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getMaturation } from "../services/api-client/maturationService";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function ColdTreatment(props) {
   const [coldTreatmentId, setColdTreatmentId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -190,7 +192,8 @@ function ColdTreatment(props) {
         <label className="entry-label"><LocationHover text="Location of Maintenance" /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
       </div>
-
+      <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
