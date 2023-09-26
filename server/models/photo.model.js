@@ -18,20 +18,12 @@ const Photo = sequelize.define("photos", {
   }
 }, {timestamps: false});
 
-Photo.hasOne(GeneticId, {
-  foreignKey: "associatedMaterialGeneticId"
-});
-
-GeneticId.belongsTo(Photo, {
-  foreignKey: "associatedMaterialGeneticId"
-});
-
 GeneticId.hasMany(Photo, {
-  foreignKey: "associatedPhotoIds"
+  foreignKey: "photoId",
 });
 
 Photo.belongsTo(GeneticId, {
-  foreignKey: "associatedPhotoIds"
+  foreignKey: "photoId",
 });
 
 module.exports = Photo;
