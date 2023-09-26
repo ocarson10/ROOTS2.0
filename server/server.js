@@ -34,7 +34,7 @@ const maturationModel = require("./models/maturation.model");
 const greenhouseModel = require("./models/greenhouse.model");
 const userModel = require("./models/user.model");
 const logModel = require("./models/log.model");
-const photoModel = require('./models/photo.model')
+const photoModel = require('./models/photo.model');
 
 
 require('./routes/routes')(app);
@@ -88,7 +88,6 @@ module.exports = async function createServer(options) {
       rametModel, coneModel, seedModel, initiationModel, maintenanceModel, acclimationModel, 
       coldTreatmentModel, germinationModel, fieldStationModel, maturationModel, greenhouseModel, userModel, logModel, photoModel];
     await trySync(models, 3, options);
-
   }
   catch (error) {
     console.log("Could not connect to the database, ", error.original);

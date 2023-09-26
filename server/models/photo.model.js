@@ -4,7 +4,7 @@ const sequelize = require("../database/database");
 
 const GeneticId = require('./genetic-id.model');
 
-const Photo = sequelize.define("photo", {
+const Photo = sequelize.define("photos", {
   photoId: {
     primaryKey: true,
     autoIncrement: true,
@@ -19,11 +19,19 @@ const Photo = sequelize.define("photo", {
 }, {timestamps: false});
 
 Photo.hasOne(GeneticId, {
-  foreignKey: "materialGeneticId"
+  foreignKey: "associatedMaterialGeneticId"
+});
+
+GeneticId.belongsTo(Photo, {
+  foreignKey: "associatedMaterialGeneticId"
 });
 
 GeneticId.hasMany(Photo, {
-  foreignKey: "materialGeneticId"
-})
+  foreignKey: "associatedPhotoIds"
+});
+
+Photo.belongsTo(GeneticId, {
+  foreignKey: "associatedPhotoIds"
+});
 
 module.exports = Photo;
