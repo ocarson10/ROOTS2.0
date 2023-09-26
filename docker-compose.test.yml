@@ -2,7 +2,7 @@ version: '3.8'
 
 x-common-variables: &common-variables
   DB_HOST: mysql_db
-  MYSQL_DATABASE: roots-test
+  MYSQL_DATABASE: roots_test
   MYSQL_USER: MYSQL_USER
   MYSQL_PASSWORD: MYSQL_PASSWORD
 
@@ -27,7 +27,7 @@ services:
     cap_add:
       - SYS_NICE
     volumes:
-      - "./setup.sql:/docker-entrypoint-initdb.d/setup-test.sql"
+      - "./setup-test.sql:/docker-entrypoint-initdb.d/setup.sql"
     ports:
       - "9906:3306"
     environment:

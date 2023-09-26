@@ -14,7 +14,7 @@ const Photo = sequelize.define("photo", {
     type: DataTypes.BLOB,
   },
   associatedMaterial: {
-    foreignKey: GeneticId,
+    type: DataTypes.INTEGER,
   }
 }, {timestamps: false});
 
