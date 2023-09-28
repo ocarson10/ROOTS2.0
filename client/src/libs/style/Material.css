@@ -1,0 +1,9 @@
+div.upload-section{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    background-color: #990100;
+    padding: 20px;
+    margin: auto;
+    margin-top: 25px;
+}

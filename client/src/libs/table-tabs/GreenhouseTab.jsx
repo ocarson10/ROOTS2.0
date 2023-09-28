@@ -67,7 +67,7 @@ function GreenhouseTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/greenhouse" editLink= "/edit/greenhouse" addLink="/add/greenhouse" status={"active"} material={"greenhouse"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/greenhouse" editLink= "/material/greenhouse/edit" addLink="material/greenhouse/add" status={"active"} material={"greenhouse"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}
