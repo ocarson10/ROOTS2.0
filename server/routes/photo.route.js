@@ -7,20 +7,20 @@ module.exports = (app) => {
     router.get('/:geneticId', async (req, res) => {
         const geneticId = req.params;
         await Photo.findAll({ 
-            where: { 
-                associatedMaterial: geneticId
-            } 
+          where: { 
+              associatedMaterial: geneticId
+          } 
         }).then((innerRes) => {
-            if(innerRes) {
-              res.statusCode = 200;
-              res.statusMessage = 'OK';
-              res.send(innerRes);
-            } else {
-              res.sendStatus(404);
-            }
+          if(innerRes) {
+            res.statusCode = 200;
+            res.statusMessage = 'OK';
+            res.send(innerRes);
+          } else {
+            res.sendStatus(404);
+          }
         }).catch((error) => {
-            console.log("Error in fetching photos: ", error);
-            res.send(400);
+          console.log("Unexpected Error in retrieving photos. ", error);
+          res.send(500);
         })
     });
 
@@ -46,8 +46,8 @@ module.exports = (app) => {
 
     // Delete a photo from the database
     router.delete('/:id', async (req, res) => {
-        const reqphotoID = req.params.id;
-        const photo = await Photo.findOne({ where: { photoId: reqphotoID } });
+        const reqPhotoID = req.params.id;
+        const photo = await Photo.findOne({ where: { photoId: reqPhotoID } });
         if (photo) {
             photo.destroy();
             res.sendStatus(200);

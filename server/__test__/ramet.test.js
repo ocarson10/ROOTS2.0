@@ -1,6 +1,5 @@
 const request = require('supertest');
 require('dotenv');
-process.env.NODE_ENV = "testing";
 const createServer = require('../server');
 
 async function setUp() {
