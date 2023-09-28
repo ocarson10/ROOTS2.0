@@ -9,7 +9,7 @@ export async function getPhotos(geneticId) {
 export async function addPhoto(geneticId, photoData) {
 	addLogs("Added photo with genetic id: " + geneticId);
 	return await instance.post("photo", {
-		materialGeneticId: geneticId,
+		associatedMaterial: geneticId,
 		photoData: photoData
 	});
 }

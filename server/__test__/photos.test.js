@@ -45,7 +45,7 @@ const ensureTestingGenIdExists = async () => {
             rametId: null,
             species: "Test Species",
             yearPlanted: "1989",
-            populationId: "1"
+            populationId: "100"
             };
         
         const createResponse = await request(app).post("/genetic-id").send(newGeneticId);
@@ -76,7 +76,7 @@ describe('Photos API', () => {
 
     test('POST should return 400, bad request -- not photo data', async () => {
         const newPhoto = {
-            reqMaterialGeneticId: 100
+            materialGeneticId: 100
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -85,7 +85,7 @@ describe('Photos API', () => {
 
     test('POST should return 400, bad request -- no geneticId specified', async () => {
         const newPhoto = {
-            reqPhotoData: 'xyzbytesandmorebytesdotphoto'
+            photoData: 'xyzbytesandmorebytesdotphoto'
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -94,8 +94,8 @@ describe('Photos API', () => {
 
     test('POST should return 200, succesful creation response', async () => {
         const newPhoto = {
-            reqMaterialGeneticId: 100,
-            reqPhotoData: 'xyzbytesandmorebytesdotphoto'
+            materialGeneticId: 100,
+            photoData: 'xyzbytesandmorebytesdotphoto'
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -108,16 +108,16 @@ describe('Photos API', () => {
         expect(response.statusCode.body).toBe(
             [
                 {
-                    'reqMaterialGeneticId': '100',
-                    'reqPhotoData': 'xyzbytesandmorebytesdotphoto'
+                    'materialGeneticId': '100',
+                    'photoData': 'xyzbytesandmorebytesdotphoto'
                 }
             ]);
     });
 
     test('POST should return 200, succesful addition of extra photo', async () => {
         const newPhoto = {
-            reqMaterialGeneticId: 100,
-            reqPhotoData: 'xyzbytesandmorebytesnumerodosdotphoto'
+            materialGeneticId: 100,
+            photoData: 'xyzbytesandmorebytesnumerodosdotphoto'
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -131,13 +131,13 @@ describe('Photos API', () => {
             [
                 {
                     'id': '1',
-                    'reqMaterialGeneticId': '100',
-                    'reqPhotoData': 'xyzbytesandmorebytesdotphoto'
+                    'materialGeneticId': '100',
+                    'photoData': 'xyzbytesandmorebytesdotphoto'
                 }, 
                 {
                     'id': '2',
-                    'reqMaterialGeneticId': '100',
-                    'reqPhotoData': 'xyzbytesandmorebytesnumerodosdotphoto'
+                    'materialGeneticId': '100',
+                    'photoData': 'xyzbytesandmorebytesnumerodosdotphoto'
                 }
             ]);
     });
@@ -158,8 +158,8 @@ describe('Photos API', () => {
         expect(response.statusCode.body).toBe(
             [
                 {
-                    'reqMaterialGeneticId': '100',
-                    'reqPhotoData': 'xyzbytesandmorebytesdotphoto'
+                    'materialGeneticId': '100',
+                    'photoData': 'xyzbytesandmorebytesdotphoto'
                 }
             ]);
     });
