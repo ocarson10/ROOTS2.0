@@ -21,32 +21,32 @@ function MaterialForm(props) {
 			<div>
 				{material === "trees" && (
 					<div>
-						<TreeMaterial operation={action} sendGeneticIdToParent={getGeneticIdFromChild}></TreeMaterial>
+						<TreeMaterial operation={action} sendGeneticIdToParent={getGeneticIdFromChild}/>
 					</div>
 				)}
 				{material === "seeds" && (
 					<div>
-						<SeedMaterial operation={action}></SeedMaterial>
+						<SeedMaterial operation={action}/>
 					</div>
 				)}
 				{material === "cones" && (
 					<div>
-						<ConeMaterial operation={action}></ConeMaterial>
+						<ConeMaterial operation={action}/>
 					</div>
 				)}
 				{material === "maintenance" && (
 					<div>
-						<MaintenanceForm operation={action}></MaintenanceForm>
+						<MaintenanceForm operation={action}/>
 					</div>
 				)}
 				{material === "greenhouse" && (
 					<div>
-						<GreenhouseForm operation={action}></GreenhouseForm>
+						<GreenhouseForm operation={action}/>
 					</div>
 				)}
 				{material === "cold-treatment" && (
 					<div>
-						<ColdTreatment operation={action}></ColdTreatment>
+						<ColdTreatment operation={action}/>
 					</div>
 				)}
 			</div>

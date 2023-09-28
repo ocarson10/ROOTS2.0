@@ -192,8 +192,8 @@ function ColdTreatment(props) {
         <label className="entry-label"><LocationHover text="Location of Maintenance" /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+      <ImageUpload/>
+      <FileUpload/>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
