@@ -13,3 +13,8 @@ export async function addPhoto(geneticId, photoData) {
 		photoData: photoData
 	});
 }
+
+export async function deletePhoto(photoId) {
+	await addLogs("Deleted photo with id: " + photoId);
+	return await instance.delete(`/${photoId}`);
+}
