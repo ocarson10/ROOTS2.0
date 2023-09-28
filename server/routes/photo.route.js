@@ -5,7 +5,7 @@ module.exports = (app) => {
 
     // Retrieve all photos associated with material
     router.get('/:geneticId', async (req, res) => {
-        const geneticId = req.params;
+        const geneticId = req.params.geneticId;
         await Photo.findAll({ 
           where: { 
               associatedMaterial: geneticId

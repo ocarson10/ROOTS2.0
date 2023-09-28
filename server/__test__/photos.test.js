@@ -58,10 +58,10 @@ describe('Photos API', () => {
         app = await setUp();
         
         //Creating Population to use with Genetic Ids
-        ensurePopExists();
+        await ensurePopExists();
 
         //Creating GeneticId to use with Photos
-        ensureTestingGenIdExists();
+        await ensureTestingGenIdExists();
     });
 
     test('GET should return 404, geneticId not found', async () => {
