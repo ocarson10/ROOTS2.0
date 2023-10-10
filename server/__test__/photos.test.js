@@ -10,8 +10,6 @@ async function setUp() {
 let app;
 jest.setTimeout(30000);
 
-const testId = 100;
-
 const ensurePopExists = async () => {
     const response = await request(app).get("/populations");
     
@@ -38,7 +36,6 @@ const ensureTestingGenIdExists = async () => {
     if(response.statusCode !== 200) {
         //Creating geneticId to use with Photos
         const newGeneticId = {
-            id: testId,
             geneticId: "123456789",
             progenyId: "A3",
             familyId: "51",
@@ -46,7 +43,7 @@ const ensureTestingGenIdExists = async () => {
             species: "Test Species",
             yearPlanted: "1989",
             populationId: "100"
-            };
+        };
         
         const createResponse = await request(app).post("/genetic-id").send(newGeneticId);
         expect(createResponse.statusCode).toBe(200);
@@ -70,7 +67,7 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, empty photos response -- none created yet', async () => {
-        const response = await request(app).get('/photos/100');
+        const response = await request(app).get('/photos/1');
         expect(response.statusCode).toBe(200);
     });
 
@@ -94,7 +91,7 @@ describe('Photos API', () => {
 
     test('POST should return 200, succesful creation response', async () => {
         const newPhoto = {
-            materialGeneticId: 100,
+            materialGeneticId: 1,
             photoData: 'xyzbytesandmorebytesdotphoto'
         };
 
@@ -103,20 +100,15 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, should reflect newly added photo', async () => {
-        const response = await request(app).get('/photos/100');
+        const response = await request(app).get('/photos/1');
         expect(response.statusCode).toBe(200);
-        expect(response.statusCode.body).toBe(
-            [
-                {
-                    'materialGeneticId': '100',
-                    'photoData': 'xyzbytesandmorebytesdotphoto'
-                }
-            ]);
+        expect(response.body[0].associatedMaterial).toBe(1);
+        expect(response.body[0].photoId).toBe(1);
     });
 
     test('POST should return 200, succesful addition of extra photo', async () => {
         const newPhoto = {
-            materialGeneticId: 100,
+            materialGeneticId: 1,
             photoData: 'xyzbytesandmorebytesnumerodosdotphoto'
         };
 
@@ -125,21 +117,12 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, should reflect both photos', async () => {
-        const response = await request(app).get('/photos/100');
+        const response = await request(app).get('/photos/1');
         expect(response.statusCode).toBe(200);
-        expect(response.statusCode.body).toBe(
-            [
-                {
-                    'id': '1',
-                    'materialGeneticId': '100',
-                    'photoData': 'xyzbytesandmorebytesdotphoto'
-                }, 
-                {
-                    'id': '2',
-                    'materialGeneticId': '100',
-                    'photoData': 'xyzbytesandmorebytesnumerodosdotphoto'
-                }
-            ]);
+        expect(response.body[0].associatedMaterial).toBe(1);
+        expect(response.body[0].photoId).toBe(1);
+        expect(response.body[1].associatedMaterial).toBe(1);
+        expect(response.body[1].photoId).toBe(2);
     });
 
     test('DELETE should return 404, Id not found', async () => {
@@ -153,15 +136,10 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, should show one photo', async () => {
-        const response = await request(app).get('/photos/100');
+        const response = await request(app).get('/photos/1');
         expect(response.statusCode).toBe(200);
-        expect(response.statusCode.body).toBe(
-            [
-                {
-                    'materialGeneticId': '100',
-                    'photoData': 'xyzbytesandmorebytesdotphoto'
-                }
-            ]);
+        expect(response.body[0].associatedMaterial).toBe(1);
+        expect(response.body[0].photoId).toBe(1);
     });
 
     test('DELETE should return 200, deleting photo success', async () => {
@@ -175,8 +153,8 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, empty photos response -- none left', async () => {
-        const response = await request(app).get('/photos/100');
+        const response = await request(app).get('/photos/1');
         expect(response.statusCode).toBe(200);
-        expect(response.body).toBe([]);
+        expect(response.body).toEqual([]);
     });
 });
