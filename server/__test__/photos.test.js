@@ -31,7 +31,7 @@ const ensurePopExists = async () => {
 }
 
 const ensureTestingGenIdExists = async () => {
-    const response = await request(app).get("/genetic-id/100");
+    const response = await request(app).get("/genetic-id/1");
 
     if(response.statusCode !== 200) {
         //Creating geneticId to use with Photos
@@ -59,6 +59,11 @@ describe('Photos API', () => {
 
         //Creating GeneticId to use with Photos
         await ensureTestingGenIdExists();
+    });
+
+    afterAll(async() => {
+        await request(app).delete("/populations").send({id: "100"});
+        await request(app).delete("/genetic-id").send({id: 1});
     });
 
     test('GET should return 404, geneticId not found', async () => {
