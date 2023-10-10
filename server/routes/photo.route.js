@@ -1,15 +1,26 @@
 module.exports = (app) => {
     const Photo = require('../models/photo.model');
+    const GeneticId = require('../models/genetic-id.model');
     let router = require('express').Router();
     const db = require('../database/database');
 
+    async function ensureGeneticIdExists(geneticId) {
+      const innerRes = await GeneticId.findOne({ where: { id: geneticId } });
+      if (innerRes) {
+        return true;
+      }
+      return false;
+    }
+
     // Retrieve all photos associated with material
     router.get('/:geneticId', async (req, res) => {
-        const geneticId = req.params.geneticId;
-        await Photo.findAll({ 
+      const geneticId = req.params.geneticId;
+      const genExist = await ensureGeneticIdExists(geneticId);
+      if (genExist) {
+        Photo.findAll({ 
           where: { 
-              associatedMaterial: geneticId
-          } 
+            associatedMaterial: geneticId
+          }
         }).then((innerRes) => {
           if(innerRes) {
             res.statusCode = 200;
@@ -21,8 +32,13 @@ module.exports = (app) => {
         }).catch((error) => {
           console.log("Unexpected Error in retrieving photos. ", error);
           res.send(500);
-        })
+        });
+      } else {
+        console.log("GeneticId: " + geneticId + " not found");
+        res.sendStatus(404);
+      }
     });
+    
 
     // Add photo to material
     router.post('/', async (req, res) => {
