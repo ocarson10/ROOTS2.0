@@ -9,21 +9,16 @@ const Photo = sequelize.define("photos", {
     primaryKey: true,
     autoIncrement: true,
     type: DataTypes.INTEGER,
+    allowNull: false,
   },
   photoData: {
     type: DataTypes.BLOB,
+    allowNull: false,
   },
   associatedMaterial: {
     type: DataTypes.INTEGER,
+    allowNull: false,
   }
 }, {timestamps: false});
-
-GeneticId.hasMany(Photo, {
-  foreignKey: "photoId",
-});
-
-Photo.belongsTo(GeneticId, {
-  foreignKey: "photoId",
-});
 
 module.exports = Photo;
