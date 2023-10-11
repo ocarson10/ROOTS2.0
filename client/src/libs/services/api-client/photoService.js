@@ -8,7 +8,7 @@ export async function getPhotos(geneticId) {
 
 export async function addPhoto(geneticId, photoData) {
 	addLogs("Added photo with genetic id: " + geneticId);
-	return await instance.post("photo", {
+	return await instance.post("photos", {
 		associatedMaterial: geneticId,
 		photoData: photoData
 	});
@@ -16,5 +16,5 @@ export async function addPhoto(geneticId, photoData) {
 
 export async function deletePhoto(photoId) {
 	await addLogs("Deleted photo with id: " + photoId);
-	return await instance.delete(`/${photoId}`);
+	return await instance.delete(`photos/${photoId}`);
 }
