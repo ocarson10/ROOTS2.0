@@ -75,7 +75,12 @@ function TreeMaterial(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
-      await addPhoto(geneticId.value, selectedImage.file);
+      await addPhoto(progenyId.value,
+        geneticId.value,
+        familyId.value,
+        population.value,
+        rametId.value, 
+        selectedImage.file);
       await addTree(
         progenyId.value,
         geneticId.value,
