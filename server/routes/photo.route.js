@@ -3,6 +3,9 @@ module.exports = (app) => {
     const GeneticId = require('../models/genetic-id.model');
     let router = require('express').Router();
     const db = require('../database/database');
+    const util = require('util');
+    const multer = require('multer');
+    const upload = multer({ dest: 'uploads/' }); // Configure multer to save files in the "uploads" directory
 
     async function ensureGeneticIdExists(geneticId) {
       const innerRes = await GeneticId.findOne({ where: { id: geneticId } });
@@ -42,23 +45,25 @@ module.exports = (app) => {
 
     // Add photo to material
     router.post('/', async (req, res) => {
-        const reqMaterialGeneticId = req.body.materialGeneticId;
-        const reqPhotoData = req.body.photoData;
+      try {
+        const { geneticId, photoData } = req.body;
     
-        await db.sync().then(async() => {
-          await Photo.create({
-            photoData: reqPhotoData,
-            associatedMaterial: reqMaterialGeneticId,
-          }).then((innerRes) => {
-            res.statusCode = 200;
-            res.statusMessage = 'OK';
-            res.send(innerRes);
-          }).catch((error) => {
-            console.log("Error Inserting Photo: ", error);
-            res.sendStatus(400);
-          })
-        })
+        if (!geneticId || !photoData) {
+          return res.status(400).json({ error: 'Missing geneticId or photoData' });
+        }
+    
+        const photo = await Photo.create({
+          associatedMaterial: geneticId,
+          photoData,
+        });
+    
+        res.status(200).json(photo);
+      } catch (error) {
+        console.error("Error Inserting Photo: ", error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
     });
+    
 
     // Delete a photo from the database
     router.delete('/:id', async (req, res) => {

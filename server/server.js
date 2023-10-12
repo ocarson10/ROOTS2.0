@@ -6,7 +6,7 @@ require('dotenv').config();
 // const origin = "http://localhost:3000";
 const origin = "http://localhost/";
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb'}));
 const corsOrigin ={
   origin: origin, //or whatever port your frontend is using
   credentials:true,            
@@ -14,6 +14,7 @@ const corsOrigin ={
 }
 app.use(cors(corsOrigin));
 app.use(express.urlencoded({ extended: true }));
+
 
 const db = require('./database/database');
 const locationModel = require('./models/locations.model');

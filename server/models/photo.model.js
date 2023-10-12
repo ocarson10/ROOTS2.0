@@ -12,7 +12,7 @@ const Photo = sequelize.define("photos", {
     allowNull: false,
   },
   photoData: {
-    type: DataTypes.BLOB,
+    type: DataTypes.BLOB('medium'),
     allowNull: false,
   },
   associatedMaterial: {
