@@ -19,6 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
 import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import MyGallery from "./PhotoGallery";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -343,6 +344,7 @@ function TreeMaterial(props) {
             }}
           />
         </div>
+        
         <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
 
         <div className="button-div">
