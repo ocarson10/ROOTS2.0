@@ -344,7 +344,8 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-        
+        <h1>Image Gallery</h1>
+        <MyGallery />
         <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
 
         <div className="button-div">
