@@ -18,7 +18,7 @@ import {
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
 import MyGallery from "./PhotoGallery";
 
 function TreeMaterial(props) {
@@ -39,11 +39,16 @@ function TreeMaterial(props) {
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState([]);
 
   // Function to receive the selected image from child component
   const handleImageSelection = (image) => {
     setSelectedImage(image);
   };
+
+  useEffect(async () => {
+    setPhotos(await getPhotos(123));
+  }, []);
 
   useEffect(() => {
     //If editing, set the values to the current values
@@ -345,8 +350,8 @@ function TreeMaterial(props) {
           />
         </div>
         <h1>Image Gallery</h1>
-        <MyGallery />
-        <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
+        <MyGallery photos={photos} />
+        <ImageUpload onImageSelect={handleImageSelection} />
 
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
