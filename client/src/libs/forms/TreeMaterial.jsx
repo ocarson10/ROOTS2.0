@@ -46,8 +46,11 @@ function TreeMaterial(props) {
     setSelectedImage(image);
   };
 
-  useEffect(async () => {
-    setPhotos(await getPhotos(123));
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(123));
+    }
+    loadPhotos();
   }, []);
 
   useEffect(() => {
