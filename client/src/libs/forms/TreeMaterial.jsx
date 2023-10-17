@@ -39,7 +39,7 @@ function TreeMaterial(props) {
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState(null);
 
   // Function to receive the selected image from child component
   const handleImageSelection = (image) => {
