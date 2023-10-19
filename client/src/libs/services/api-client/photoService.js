@@ -10,7 +10,6 @@ export async function addPhoto(geneticId, photoData) {
 	const reader = new FileReader();
 	reader.onload = function (event) {
 	  const base64PhotoData = event.target.result;
-  
 	  const requestData = {
 		geneticId: geneticId,
 		photoData: base64PhotoData,
