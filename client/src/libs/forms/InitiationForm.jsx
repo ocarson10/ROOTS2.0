@@ -8,7 +8,9 @@ import Select from "react-select";
 import { getIds, getId } from "../services/api-client/idService";
 import { getSeed } from "../services/api-client/seedService";
 import { useNavigate } from "react-router-dom";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function Initiation(props) {
   const [initiationId, setInitiationId] = useState("");
   const [seedId, setSeedId] = useState("");
@@ -322,7 +324,8 @@ function Initiation(props) {
           }}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

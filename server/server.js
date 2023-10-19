@@ -6,7 +6,7 @@ require('dotenv').config();
 // const origin = "http://localhost:3000";
 const origin = "http://localhost/";
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb'}));
 const corsOrigin ={
   origin: origin, //or whatever port your frontend is using
   credentials:true,            
@@ -15,26 +15,28 @@ const corsOrigin ={
 app.use(cors(corsOrigin));
 app.use(express.urlencoded({ extended: true }));
 
-const db = require('./database/database');
-const LocationModel = require('./models/locations.model');
-const PopulationModel = require("./models/population.model");
-const GeneticIdModel = require("./models/genetic-id.model");
-const TreeModel = require("./models/tree.model");
-const SpeciesModel = require("./models/species.model");
-const RametModel = require("./models/ramet.model");
-const ConeModel = require("./models/cone.model");
-const SeedModel = require("./models/seed.model");
-const InitiationModel = require("./models/initiation.model");
-const MaintenanceModel = require("./models/maintenance.model");
-const AcclimationModel = require("./models/acclimation.model");
-const ColdTreatmentModel = require("./models/coldtreatment.model");
-const GerminationModel = require("./models/germination.model");
-const FieldStationModel = require("./models/fieldstation.model");
-const MaturationModel = require("./models/maturation.model");
-const GreenHouseModel = require("./models/greenhouse.model");
-const UserModel = require("./models/user.model");
-const LogModel = require("./models/log.model");
 
+const db = require('./database/database');
+const locationModel = require('./models/locations.model');
+const populationModel = require("./models/population.model");
+const geneticIdModel = require("./models/genetic-id.model");
+const treeModel = require("./models/tree.model");
+const speciesModel = require("./models/species.model");
+const rametModel = require("./models/ramet.model");
+const coneModel = require("./models/cone.model");
+const seedModel = require("./models/seed.model");
+const initiationModel = require("./models/initiation.model");
+const maintenanceModel = require("./models/maintenance.model");
+const acclimationModel = require("./models/acclimation.model");
+const coldTreatmentModel = require("./models/coldtreatment.model");
+const germinationModel = require("./models/germination.model");
+const fieldStationModel = require("./models/fieldstation.model");
+const maturationModel = require("./models/maturation.model");
+const greenhouseModel = require("./models/greenhouse.model");
+const userModel = require("./models/user.model");
+const logModel = require("./models/log.model");
+const photoModel = require('./models/photo.model');
+const fileModel = require('./models/file.model');
 
 require('./routes/routes')(app);
 
@@ -83,15 +85,13 @@ module.exports = async function createServer(options) {
     }
     
     // Sync Models
-    const models = [LocationModel, PopulationModel, SpeciesModel, GeneticIdModel, TreeModel,
-      RametModel, ConeModel, SeedModel, InitiationModel, MaintenanceModel, AcclimationModel, 
-      ColdTreatmentModel, GerminationModel, FieldStationModel, MaturationModel, GreenHouseModel, UserModel, LogModel];
+    const models = [locationModel, populationModel, speciesModel, geneticIdModel, treeModel,
+      rametModel, coneModel, seedModel, initiationModel, maintenanceModel, acclimationModel, 
+      coldTreatmentModel, germinationModel, fieldStationModel, maturationModel, greenhouseModel, userModel, logModel, photoModel, fileModel];
     await trySync(models, 3, options);
-
   }
   catch (error) {
     console.log("Could not connect to the database, ", error.original);
   }
   return app;
 }
-

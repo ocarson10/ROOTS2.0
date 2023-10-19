@@ -19,6 +19,7 @@ import {
 } from "../services/api-client/idService";
 import {getId} from "../services/api-client/idService";
 import {useNavigate} from "react-router-dom";
+import ImageUpload from "./ImageUpload";
 
 function SeedMaterial(props) {
   const [seedId, setSeedId] = useState("");
@@ -398,7 +399,7 @@ function SeedMaterial(props) {
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
