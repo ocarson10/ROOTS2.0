@@ -350,7 +350,7 @@ function TreeMaterial(props) {
           />
         </div>
         <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
-        <FileUpload onFileSelect={handleFileSelection}/>.
+        <FileUpload onFileSelect={handleFileSelection}/>
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
             Submit
