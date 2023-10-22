@@ -31,10 +31,10 @@ const transporter = nodemailer.createTransport({
 
 async function sendEmail(modelResults) {
     const mailOptions = {
-        from: 'ianmck2101@gmail.com',
-        to: 'hnwallac@ncsu.edu', // Replace with the recipient's email
+        from: 'rusanchez906@gmail.com',
+        to: 'rusanchez906@gmail.com', // Replace with the recipient's email
         subject: 'RNS Test Results',
-        text: modelResults,
+        html: modelResults,
     };
 
     try {
@@ -52,9 +52,41 @@ async function testModels() {
 
     const users = await UserModel.findAll();
 
-    sendEmail(users.toString());
+    //sendEmail(users.toString());
+    sendEmail(await treeChecker());
 };
 
 cron.schedule('* * * * *', async () => {
     await testModels();
 });
+
+async function treeChecker() {
+    let materialBody = ``;
+    const currentDate = new Date();
+    const materials = [];
+
+    // Commenting this part out for now, will test later
+
+    // materials = await TreeModel.findAll().then((innerRes) => {
+    //     res.statusCode = 200;
+    //     res.statusMessage = 'OK';
+    //     res.send(innerRes);
+    //   }).catch((error) => {
+    //     console.log("Error in fetching trees: ", error);
+    //   });
+      
+    // materials.forEach(element => {
+    //     // If within 3 days of transfer date
+    //     const daysForTransfer = element.transferDate - currentDate;
+
+    //     if (daysForTransfer <= 3) {
+    //         materialBody += `<li> ${element.materialName} pending transfer. Expected transfer by ${element.transferDate} </li>`
+    //     }
+    //  });
+
+    materialBody += `<li> {MaterialName} pending transfer. Expected transfer by {expectedTransferDate} </li>`;
+    materialBody += `<li> {MaterialName} pending transfer. Expected transfer by {expectedTransferDate} </li>`;
+    let materialHeader = `<h2> Tree Materials Needing Transfer </h2>`;
+    materialHeader += materialBody;
+    return materialHeader;
+};
