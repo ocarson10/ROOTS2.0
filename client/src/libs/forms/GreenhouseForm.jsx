@@ -8,7 +8,9 @@ import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getAcclimation } from "../services/api-client/acclimationService";
 import GeneticHover from "../hover-info/GeneticHover";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function GreenhouseForm(props) {
   const [greenHouseId, setGreenHouseId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -179,7 +181,8 @@ function GreenhouseForm(props) {
         <label className="entry-label"><LocationHover /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("")}} />
       </div>      
-
+      <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

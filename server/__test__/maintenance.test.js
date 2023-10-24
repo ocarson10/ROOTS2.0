@@ -1,6 +1,5 @@
 const request = require("supertest");
 require("dotenv");
-process.env.NODE_ENV = "testing";
 const createServer = require("../server");
 
 async function setUp() {
@@ -42,10 +41,11 @@ describe("test Maintenance API", () => {
     test("POST /maintenance", async () => {
         const newMaintenance = {
             maintenanceId: "1",
-            dateCurr: "2020-01-03",
+            transferDate: new Date("2020-01-14"),
+            dateCurr: new Date("2020-01-03"),
             mediaBatchCurr: "1",
             mediaBatchPrev: "1",
-            datePrev: "2020-01-01",
+            datePrev: new Date("2020-01-01"),
             numberOfPlates: 1,
             active: true,
             maintenanceGeneticId: geneticIdId,
@@ -58,6 +58,7 @@ describe("test Maintenance API", () => {
     test("POST /maintenance failure", async () => {
         const newMaintenance = {
             maintenanceId: null,
+            transferDate: null,
             dateCurr: "2020-01-03",
             mediaBatchCurr: null,
             mediaBatchPrev: null,
@@ -89,10 +90,11 @@ describe("test Maintenance API", () => {
     test("PUT /maintenance/:id", async () => {
         const updatedMaintenance = {
             maintenanceId: "1",
-            dateCurr: "2020-01-03",
+            dateCurr: new Date("2020-01-03"),
             mediaBatchCurr: "1",
             mediaBatchPrev: "1",
-            datePrev: "2020-01-01",
+            datePrev: new Date("2020-01-01"),
+            transferDate: new Date("2020-02-14"),
             numberOfPlates: 1,
             active: true,
             maintenanceGeneticId: geneticIdId,
@@ -105,10 +107,11 @@ describe("test Maintenance API", () => {
     test("PUT /maintenance/:id body failure", async () => {
         const updatedMaintenance = {
             maintenanceId: null,
-            dateCurr: "2020-01-03",
+            dateCurr: new Date("2020-01-03"),
             mediaBatchCurr: null,
             mediaBatchPrev: null,
-            datePrev: "2020-01-01",
+            datePrev: null,
+            transferDate: null,
             numberOfPlates: null,
             active: true,
             maintenanceGeneticId: geneticIdId,
@@ -121,10 +124,11 @@ describe("test Maintenance API", () => {
     test("PUT /maintenance/:id path failure", async () => {
         const updatedMaintenance = {
             maintenanceId: "1",
-            dateCurr: "2020-01-03",
+            dateCurr: new Date("2020-01-03"),
             mediaBatchCurr: "1",
             mediaBatchPrev: "1",
-            datePrev: "2020-01-01",
+            datePrev: new Date("2020-01-01"),
+            transferDate: new Date("2020-02-14"),
             numberOfPlates: 1,
             active: true,
             maintenanceGeneticId: geneticIdId,

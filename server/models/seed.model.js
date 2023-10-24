@@ -21,6 +21,9 @@ const Seed = sequelize.define("seeds", {
   dateMade: {
     type: DataTypes.DATE
   },
+  transferDate: {
+    type: DataTypes.DATE,
+  },
   active: {
     type: DataTypes.BOOLEAN
   }

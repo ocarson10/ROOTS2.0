@@ -1,6 +1,5 @@
 const request = require("supertest");
 require("dotenv");
-process.env.NODE_ENV = "testing";
 const createServer = require("../server");
 
 async function setUp() {
@@ -43,7 +42,8 @@ describe("test Maturation API", () => {
         const newMaturation = {
             maturationId: "1",
             mediaBatch: "1",
-            dateMatured: "2020-01-01",
+            dateMatured: new Date("2020-01-01"),
+            transferDate: new Date("2020-02-14"),
             numberOfPlates: 1,
             active: true,
             maturationGeneticId: geneticIdId,
@@ -58,6 +58,7 @@ describe("test Maturation API", () => {
             maturationId: null,
             mediaBatch: null,
             dateMatured: null,
+            transferDate: null,
             numberOfPlates: null,
             active: null,
             maturationGeneticId: null,
@@ -86,7 +87,8 @@ describe("test Maturation API", () => {
         const newMaturation = {
             maturationId: "1",
             mediaBatch: "1",
-            dateMatured: "2020-01-01",
+            dateMatured: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             numberOfPlates: 1,
             active: true,
             maturationGeneticId: geneticIdId,
@@ -101,6 +103,7 @@ describe("test Maturation API", () => {
             maturationId: null,
             mediaBatch: null,
             dateMatured: null,
+            transferDate: null,
             numberOfPlates: null,
             active: false,
             maturationGeneticId: null,
@@ -114,7 +117,7 @@ describe("test Maturation API", () => {
         const newMaturation = {
             maturationId: "1",
             mediaBatch: "1",
-            dateMatured: "2020-01-01",
+            dateMatured: new Date("2020-01-01"),
             numberOfPlates: 1,
             active: true,
             maturationGeneticId: geneticIdId,

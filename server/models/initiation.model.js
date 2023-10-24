@@ -19,6 +19,10 @@ const Initiation = sequelize.define('Initiation', {
         type: DataTypes.STRING,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     numberOfPlates: {
         type: DataTypes.INTEGER,
     },

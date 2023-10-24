@@ -1,6 +1,5 @@
 const request = require('supertest');
 require('dotenv');
-process.env.NODE_ENV = "testing";
 const createServer = require('../server');
 
 async function setUp() {
@@ -47,10 +46,11 @@ describe("tests Greenhouse API", () => {
                 
             const newGreenhouse = {
                 greenhouseId: "1",
-                dateGreenhouse: "2020-01-01",
+                dateGreenhouse: new Date("2020-01-01"),
                 active: true,
                 locationId: "Mountain Research Station",
                 greenhouseGeneticId: geneticIdId,
+                transferDate: new Date("2020-01-14"),
             };
         
             const response = await request(app).post("/greenhouses").send(newGreenhouse);
@@ -70,10 +70,12 @@ describe("tests Greenhouse API", () => {
     test("PUT /greenhouses/:id", async () => {
         const updateGreenhouse = {
             greenhouseId: "1",
-            dateGreenhouse: "2020-01-01",
+            dateGreenhouse: new Date("2020-01-01"),
             active: true,
             locationId: "Mountain Research Station",
             greenhouseGeneticId: geneticIdId,
+            transferDate: new Date("2020-12-12"),
+
         };
         const response = await request(app).put("/greenhouses/1").send(updateGreenhouse);
         expect(response.statusCode).toBe(200);
@@ -82,7 +84,8 @@ describe("tests Greenhouse API", () => {
     test("PUT /greenhouses/:id invalid path", async () => {
         const updateGreenhouse = {
             greenhouseId: "1",
-            dateGreenhouse: "2020-01-01",
+            dateGreenhouse: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             active: true,
             locationId: "Mountain Research Station",
             greenhouseGeneticId: geneticIdId,
@@ -94,7 +97,8 @@ describe("tests Greenhouse API", () => {
     test("PUT /greenhouses/:id invalid body", async () => {
         const updateGreenhouse = {
             greenhouseId: null,
-            dateGreenhouse: "2020-01-01",
+            dateGreenhouse: new Date("2020-01-01"),
+            transferDate: null,
             active: true,
             locationId: null,
             greenhouseGeneticId: geneticIdId,
