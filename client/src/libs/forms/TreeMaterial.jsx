@@ -19,7 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
 import { addPhoto, getPhotos } from "../services/api-client/photoService";
-import MyGallery from "./PhotoGallery";
+import Slideshow from "./Slideshow";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -106,6 +106,9 @@ function TreeMaterial(props) {
         });
     } else if (props.operation === "Edit") {
       e.preventDefault();
+      if(!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
       await editTree(
         treeId,
         progenyId.value,
@@ -226,7 +229,7 @@ function TreeMaterial(props) {
   const handleGeneticChange = async (e) => {
     setError("");
     setGeneticId({ value: e.value, label: e.value });
-    props.sendGeneticIdToParent(e.value);
+    //props.sendGeneticIdToParent(e.value);
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
@@ -352,8 +355,9 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-        <h1>Image Gallery</h1>
-        <MyGallery photos={photos} />
+        {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} />
+        }
         <ImageUpload onImageSelect={handleImageSelection} />
 
         <div className="button-div">

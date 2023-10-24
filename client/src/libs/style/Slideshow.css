@@ -1,0 +1,38 @@
+.slideshow-container {
+    position: relative;
+    max-width: 100%; /* Adjust this to fit the container it's rendered within */
+    overflow: hidden;
+  }
+  
+  /* Slideshow image */
+  .slideshow-image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Slideshow navigation buttons */
+  .prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 24px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    outline: none;
+    transition: background 0.3s;
+  }
+  
+  .prev:hover, .next:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .prev {
+    left: 0;
+  }
+  
+  .next {
+    right: 0;
+  }

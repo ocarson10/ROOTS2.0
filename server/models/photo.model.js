@@ -15,7 +15,7 @@ const Photo = sequelize.define("photos", {
     type: DataTypes.BLOB('medium'),
     allowNull: false,
     get() {
-      return this.getDataValue('photoData').toString('base64');
+      return this.getDataValue('photoData').toString();
     },
   },
   associatedMaterial: {
