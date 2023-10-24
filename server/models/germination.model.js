@@ -23,6 +23,10 @@ const Germination = sequelize.define('Germination', {
         type: DataTypes.DATE,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     active: {
         type: DataTypes.BOOLEAN,
     }
