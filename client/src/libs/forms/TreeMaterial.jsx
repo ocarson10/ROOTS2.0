@@ -48,10 +48,12 @@ function TreeMaterial(props) {
 
   useEffect(() => {
     async function loadPhotos() {
-      setPhotos(await getPhotos(123));
+      if(!!geneticId) {
+        setPhotos(await getPhotos(geneticId));
+      }
     }
     loadPhotos();
-  }, []);
+  }, [geneticId]);
 
   useEffect(() => {
     //If editing, set the values to the current values
