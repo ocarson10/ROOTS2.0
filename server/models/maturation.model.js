@@ -15,6 +15,10 @@ const Maturation = sequelize.define('Maturation', {
         type: DataTypes.INTEGER
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     mediaBatch: {
         type: DataTypes.STRING
     },
