@@ -48,7 +48,8 @@ describe("tests Acclimation API", () => {
             
         const newAcclimation = {
             acclimationId: "1",
-            dateAcclimation: "2020-01-01",
+            dateAcclimation: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             active: true,
             locationId: "Mountain Research Station",
             acclimationGeneticId: geneticIdId,
@@ -62,6 +63,7 @@ describe("tests Acclimation API", () => {
         const newAcclimation = {
             acclimationId: "1",
             dateAcclimation: null,
+            transferDate: new Date("2020-01-14"),
             active: true,
             locationId: null,
             acclimationGeneticId: geneticIdId,
@@ -91,6 +93,7 @@ describe("tests Acclimation API", () => {
         const updateAcclimation = {
             acclimationId: "1",
             dateAcclimation: "2020-01-01",
+            transferDate: new Date("2020-01-14"),
             active: false,
             locationId: "Mountain Research Station",
             acclimationGeneticId: geneticIdId,
@@ -103,6 +106,7 @@ describe("tests Acclimation API", () => {
         const updateAcclimation = {
             acclimationId: "1",
             dateAcclimation: "2020-01-01",
+            transferDate: new Date("2020-01-14"),
             active: false,
             locationId: "Mountain Research Station",
             acclimationGeneticId: geneticIdId,
@@ -116,6 +120,7 @@ describe("tests Acclimation API", () => {
         const updateAcclimation = {
             acclimationId: null,
             dateAcclimation: null,
+            transferDate: null,
             active: false,
             locationId: null,
             acclimationGeneticId: geneticIdId,

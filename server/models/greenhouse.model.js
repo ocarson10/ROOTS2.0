@@ -15,6 +15,10 @@ const Greenhouse = sequelize.define('Greenhouse', {
         type: DataTypes.DATE,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     active: {
         type: DataTypes.BOOLEAN,
     }
