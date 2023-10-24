@@ -15,7 +15,7 @@ const File = sequelize.define("files", {
     type: DataTypes.BLOB('medium'),
     allowNull: false,
     get() {
-      return this.getDataValue('photoData').toString();
+      return this.getDataValue('fileData').toString();
     },
   },
   associatedMaterial: {

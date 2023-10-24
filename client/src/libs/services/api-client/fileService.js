@@ -2,8 +2,28 @@ import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
 export async function getFiles(geneticId) {
-	const files = await instance.get("files/" + geneticId);
-	return files;
+	try {
+		const response = await instance.get("files/" + geneticId);
+		const filesData = response.data;
+	
+		if (!!filesData && filesData.length > 0) {
+		  // Iterate through the received file data and decode each image
+		  const files = filesData.map(file => {
+			  return {
+				fileData: file.photoData,
+				fileId: file.fileId
+			  }
+		  });
+	
+		  return files;
+		} else {
+		  // Handle the case where no files were found for the geneticId
+		  return [];
+		}
+	  } catch (error) {
+		console.error('Error fetching files:', error);
+		throw error;
+	  }
 }
 
 export async function addFile(geneticId, fileData) {
