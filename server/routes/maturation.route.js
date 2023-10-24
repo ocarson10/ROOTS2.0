@@ -22,6 +22,8 @@ module.exports = (app) => {
         const reqDateMatured = req.body.dateMatured;
         const reqGeneticId = req.body.maturationGeneticId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
+
 
         db.sync().then(() => {
             Maturation.create({
@@ -29,6 +31,7 @@ module.exports = (app) => {
                 numberOfPlates: reqNumberOfPlates,
                 mediaBatch: reqMediaBatch,
                 dateMatured: reqDateMatured,
+                transferDate: reqTransferDate,
                 active: true,
                 maturationGeneticId: reqGeneticId,
                 locationId: reqLocationId
@@ -86,8 +89,15 @@ module.exports = (app) => {
             const reqGeneticId = req.body.maturationGeneticId;
             const reqLocationId = req.body.locationId;
             const reqActive = req.body.active;
+            const reqTransferDate = req.body.transferDate;
 
-            if (reqId == null || reqId == undefined || reqNumberOfPlates == null || reqNumberOfPlates == undefined || reqMediaBatch == null || reqMediaBatch == undefined || reqDateMatured == null || reqDateMatured == undefined || reqGeneticId == null || reqGeneticId == undefined || reqLocationId == null || reqLocationId == undefined || reqActive == null || reqActive == undefined) {
+
+            if (reqId == null || reqId == undefined || reqNumberOfPlates == null 
+                || reqNumberOfPlates == undefined || reqMediaBatch == null || 
+                reqMediaBatch == undefined || reqDateMatured == null || reqDateMatured == undefined 
+                || reqGeneticId == null || reqGeneticId == undefined || reqLocationId == null || 
+                reqLocationId == undefined || reqActive == null || reqActive == undefined
+                || reqTransferDate == null || reqTransferDate == undefined) {
                 res.sendStatus(400);
                 return;
             }
@@ -95,6 +105,7 @@ module.exports = (app) => {
                 maturationId: reqId,
                 numberOfPlates: reqNumberOfPlates,
                 mediaBatch: reqMediaBatch,
+                transferDate: reqTransferDate,
                 dateMatured: reqDateMatured,
                 active: reqActive,
                 maturationGeneticId: reqGeneticId,

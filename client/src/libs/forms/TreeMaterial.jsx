@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
 import { addPhoto, getPhotos } from "../services/api-client/photoService";
 import Slideshow from "./Slideshow";
+import FileUpload from "./FileUpload";
+import { addFile, getFile } from "../services/api-client/fileService";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -40,12 +42,15 @@ function TreeMaterial(props) {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [photos, setPhotos] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   // Function to receive the selected image from child component
   const handleImageSelection = (image) => {
     setSelectedImage(image);
   };
-
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
   useEffect(() => {
     async function loadPhotos() {
       if(!!geneticId) {
@@ -86,6 +91,7 @@ function TreeMaterial(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
+      await addFile(geneticId.value, selectedFile);
       await addPhoto(geneticId.value, selectedImage.file);
       await addTree(
         progenyId.value,
@@ -361,7 +367,7 @@ function TreeMaterial(props) {
           <Slideshow photos={photos} />
         }
         <ImageUpload onImageSelect={handleImageSelection} />
-
+        <FileUpload onFileSelect={handleFileSelection}/>
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
             Submit

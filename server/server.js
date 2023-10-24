@@ -36,7 +36,7 @@ const greenhouseModel = require("./models/greenhouse.model");
 const userModel = require("./models/user.model");
 const logModel = require("./models/log.model");
 const photoModel = require('./models/photo.model');
-
+const fileModel = require('./models/file.model');
 
 require('./routes/routes')(app);
 
@@ -87,7 +87,7 @@ module.exports = async function createServer(options) {
     // Sync Models
     const models = [locationModel, populationModel, speciesModel, geneticIdModel, treeModel,
       rametModel, coneModel, seedModel, initiationModel, maintenanceModel, acclimationModel, 
-      coldTreatmentModel, germinationModel, fieldStationModel, maturationModel, greenhouseModel, userModel, logModel, photoModel];
+      coldTreatmentModel, germinationModel, fieldStationModel, maturationModel, greenhouseModel, userModel, logModel, photoModel, fileModel];
     await trySync(models, 3, options);
   }
   catch (error) {
@@ -95,4 +95,3 @@ module.exports = async function createServer(options) {
   }
   return app;
 }
-

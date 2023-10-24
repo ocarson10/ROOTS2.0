@@ -15,6 +15,10 @@ const Acclimation = sequelize.define('Acclimation', {
         type: DataTypes.DATE,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     active: {
         type: DataTypes.BOOLEAN,
     }

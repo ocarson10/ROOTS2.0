@@ -25,6 +25,8 @@ module.exports = (app) => {
         const reqDatePrev = req.body.datePrev;
         const reqGeneticId = req.body.maintenanceGeneticId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
+
 
         db.sync().then(() => {
             Maintenance.create({
@@ -34,6 +36,7 @@ module.exports = (app) => {
                 dateCurr: reqDateCurr,
                 mediaBatchPrev: reqMediaBatchPrev,
                 datePrev: reqDatePrev,
+                transferDate: reqTransferDate,
                 active: true,
                 maintenanceGeneticId: reqGeneticId,
                 locationId: reqLocationId
@@ -88,8 +91,13 @@ module.exports = (app) => {
             const reqGeneticId = req.body.maintenanceGeneticId;
             const reqLocationId = req.body.locationId;
             const reqActive = req.body.active;
+            const reqTransferDate = req.body.transferDate;
 
-            if (reqId == null || reqNumberOfPlates == null || reqMediaBatchCurr == null || reqDateCurr == null || reqMediaBatchPrev == null || reqDatePrev == null || reqGeneticId == null || reqLocationId == null || reqActive == null) {
+
+            if (reqId == null || reqNumberOfPlates == null || reqMediaBatchCurr == null 
+                || reqDateCurr == null || reqMediaBatchPrev == null || reqDatePrev == null 
+                || reqGeneticId == null || reqLocationId == null || reqActive == null ||
+                reqTransferDate) {
                 res.sendStatus(400);
                 return;
             }
@@ -99,6 +107,7 @@ module.exports = (app) => {
                 numberOfPlates: reqNumberOfPlates,
                 mediaBatchCurr: reqMediaBatchCurr,
                 dateCurr: reqDateCurr,
+                transferDate: reqTransferDate,
                 mediaBatchPrev: reqMediaBatchPrev,
                 datePrev: reqDatePrev,
                 active: reqActive,
