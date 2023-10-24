@@ -23,6 +23,7 @@ import FileUpload from "./FileUpload";
 import { addFile, getFile } from "../services/api-client/fileService";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -31,7 +32,7 @@ function TreeMaterial(props) {
   const [rametId, setRametId] = useState({ value: "", label: "" });
   const [progenyId, setProgenyId] = useState({ value: "", label: "" });
   const [population, setPopulation] = useState({ value: "", label: "" });
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [gps, setGps] = useState("");
   const [error, setError] = useState("");
   const [popOptions, setPopOptions] = useState([]);
@@ -45,6 +46,8 @@ function TreeMaterial(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
+
 
   // Function to receive the selected image from child component
   const handleImageSelection = (image) => {
@@ -85,6 +88,10 @@ function TreeMaterial(props) {
     let newValue = {value: newOption, label: newOption}
     setGenOptions([...genOptions, newValue]);
   };
+
+  useEffect(() => {
+    getExistingLocations();
+  },[]);
 
   useEffect(() => {
     //If editing, set the values to the current values
@@ -197,6 +204,19 @@ function TreeMaterial(props) {
     });
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
   // On load, get the population options.
   useEffect(() => {
     getPopulationsOptions();
@@ -287,6 +307,11 @@ function TreeMaterial(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
       <div>
@@ -311,7 +336,7 @@ function TreeMaterial(props) {
             Population ID:
           </label>
           <Select
-            options={[...newPopulationButtonOption, popOptions]}
+            options={[newPopulationButtonOption, ...popOptions]}
             onChange={handlePopulationChange}
             value={population ? population : ""}
           />
@@ -381,13 +406,10 @@ function TreeMaterial(props) {
           <label className="entry-label">
             <LocationHover /> Location:
           </label>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => {
-              setLocation(e.target.value);
-              setError("");
-            }}
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
           />
         </div>
 
