@@ -23,6 +23,10 @@ const Maintenance = sequelize.define('Maintenance', {
         type: DataTypes.DATE,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     mediaBatchPrev: {
         type: DataTypes.STRING,
     },
