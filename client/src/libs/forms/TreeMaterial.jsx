@@ -21,6 +21,8 @@ import ImageUpload from "./ImageUpload";
 import { addPhoto, getPhoto } from "../services/api-client/photoService";
 import FileUpload from "./FileUpload";
 import { addFile, getFile } from "../services/api-client/fileService";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -41,6 +43,8 @@ function TreeMaterial(props) {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
 
   // Function to receive the selected image from child component
   const handleImageSelection = (image) => {
@@ -49,6 +53,39 @@ function TreeMaterial(props) {
   const handleFileSelection = (file) => {
     setSelectedFile(file);
   };
+
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+
+  const handleOpenGenIdForm = () => {
+    setGeneticIdFormOpen(true);
+  };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
   useEffect(() => {
     //If editing, set the values to the current values
     if (props.operation === "Edit") {
@@ -167,18 +204,22 @@ function TreeMaterial(props) {
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({ value: e.value, label: e.value });
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -270,10 +311,24 @@ function TreeMaterial(props) {
             Population ID:
           </label>
           <Select
-            options={popOptions}
+            options={[...newPopulationButtonOption, popOptions]}
             onChange={handlePopulationChange}
             value={population ? population : ""}
           />
+          {isPopulationFormOpen &&
+            <PopulationForm 
+              isOpen={isPopulationFormOpen}
+              onClose={handleClosePopulationForm}
+              addPopOption={addPopulationOption}
+            />
+          }
+          {isGeneticIdFormOpen && 
+            <GeneticIdForm
+              isOpen={isGeneticIdFormOpen}
+              onClose={handleCloseGenIdForm}
+              addGenIdOption={addGenIdOption}
+            />
+          }
         </div>
 
         <div className="input-div">
@@ -349,7 +404,6 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-        <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
         <FileUpload onFileSelect={handleFileSelection}/>
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>

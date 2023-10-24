@@ -8,11 +8,22 @@ import MaintenanceForm from "./MaintenanceForm";
 import GreenhouseForm from "./GreenhouseForm";
 import ColdTreatment from "./ColdTreatmentForm";
 import "../../libs/style/Material.css";
+import { addPhoto, getPhoto } from "../services/api-client/photoService";
 function MaterialForm(props) {
 	const { material, action } = useParams();
 	const [geneticId, setGeneticId] = useState(null);
+	const [selectedImage, setSelectedImage] = useState(null);
 	const getGeneticIdFromChild = (data) => {
 		setGeneticId(data);
+	}
+	// Function to receive the selected image from child component
+	const handleImageSelection = (image) => {
+		setSelectedImage(image);
+	};
+
+	const submitPhoto = async () => {
+		console.log(geneticId);
+		await addPhoto(geneticId, selectedImage.file);
 	}
 
 	return (
@@ -50,6 +61,8 @@ function MaterialForm(props) {
 					</div>
 				)}
 			</div>
+			<ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
+			{geneticId && <button onClick={submitPhoto}></button> }
 		</div>
 	);
 }

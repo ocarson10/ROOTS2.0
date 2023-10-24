@@ -8,7 +8,7 @@ import YearPlanted from "../hover-info/YearPlanted";
 import PopulationHover from "../hover-info/PopulationHover";
 import { addId } from "../services/api-client/idService";
 
-function GeneticIdForm(props) {
+function GeneticIdForm({isOpen, onClose, addGenIdOption}) {
   const [geneticId, setGeneticId] = useState("");
   const [familyId, setFamilyId] = useState("");
   const [rametId, setRametId] = useState("");
@@ -16,12 +16,19 @@ function GeneticIdForm(props) {
   const [species, setSpecies] = useState("");
   const [yearPlanted, setYearPlanted] = useState("");
   const [population, setPopulation] = useState("");
+  const [fromForm, setFromForm] = useState(isOpen ? isOpen : false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addId(geneticId, familyId, progenyId, species, yearPlanted, population, rametId).then(() => {
       clearForm();
-      window.location.href = "/";
+      if (fromForm) {
+        addGenIdOption(geneticId);
+        onClose();
+      }
+      else {
+        window.location.href = "/";
+      }
     }).catch((error) => {
       console.log(error);
     });
@@ -39,7 +46,7 @@ function GeneticIdForm(props) {
 
   
   return (
-    <div className="form-div">
+    <div className={`form-div ${isOpen ? "modal-open" : ""}`}>
       <form onSubmit={handleSubmit} >
       <h1>Add Genetic Id</h1>
 
