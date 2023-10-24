@@ -38,12 +38,15 @@ module.exports = (app) => {
     const reqMotherTreeId = req.body.motherTreeId;
     const reqRametGeneticId = req.body.rametGeneticId;
     const reqLocationId = req.body.locationId;
+    const reqTransferDate = req.body.transferDate;
+
 
     db.sync().then(() => {
       Ramet.create({
         id: reqRametId,
         motherTreeId: reqMotherTreeId,
         rametGeneticId: reqRametGeneticId,
+        transferDate: reqTransferDate,
         gps: reqGPS,
         locationId: reqLocationId,
         active: true

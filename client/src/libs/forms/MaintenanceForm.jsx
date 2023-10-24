@@ -8,7 +8,9 @@ import Select from "react-select";
 import { addMaintenance, updateMaintenance, getMaintenance } from "../services/api-client/maintenanceService";
 import { getIds, getId } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
+import "../../libs/style/ImageUpload.css";
 function Maintenance(props) {
   const [maintenanceId, setMaintenanceId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -319,7 +321,8 @@ function Maintenance(props) {
           }}
         />
       </div>
-
+      <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

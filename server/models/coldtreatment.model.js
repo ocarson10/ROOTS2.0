@@ -23,6 +23,10 @@ const ColdTreatment = sequelize.define('ColdTreatment', {
         type: DataTypes.STRING,
     },
 
+    transferDate: {
+        type: DataTypes.DATE,
+    },
+
     active: {
         type: DataTypes.BOOLEAN,
     }

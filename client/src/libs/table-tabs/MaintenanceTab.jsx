@@ -78,7 +78,7 @@ function MaintenanceTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/maintenance" editLink= "/edit/maintenance" addLink="/add/maintenance" status={"active"} material={"maintenance"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/maintenance" editLink= "/material/maintenance/edit" addLink="/material/maintenance/add" status={"active"} material={"maintenance"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

@@ -1,7 +1,6 @@
 const { describe } = require("node:test");
 const request = require("supertest");
 require("dotenv");
-process.env.NODE_ENV = "testing";
 const createServer = require("../server");
 
 async function setUp() {
@@ -43,7 +42,8 @@ describe("tests Germination API", () => {
     test("POST /germination", async () => {
         const newGermination = {
             germinationId: "1",
-            dateGermination: "2020-01-01",
+            dateGermination: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             mediaBatch: "1",
             numberEmbryos: 1,
             active: true,
@@ -57,7 +57,8 @@ describe("tests Germination API", () => {
     test("POST /germination failure", async () => {
         const newGermination = {
             germinationId: null,
-            dateGermination: "2020-01-01",
+            dateGermination: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             mediaBatch: null,
             numberEmbryos: null,
             active: true,
@@ -86,7 +87,8 @@ describe("tests Germination API", () => {
     test("PUT /germination/:id", async () => {
         const newGermination = {
             germinationId: "1",
-            dateGermination: "2020-01-01",
+            dateGermination: new Date("2020-01-01"),
+            transferDate: new Date("2020-02-14"),
             mediaBatch: "1",
             numberEmbryos: 1,
             active: false,
@@ -100,7 +102,8 @@ describe("tests Germination API", () => {
     test("PUT /germination/:id body failure", async () => {
         const newGermination = {
             germinationId: null,
-            dateGermination: "2020-01-01",
+            dateGermination: null,
+            transferDate: null,
             mediaBatch: null,
             numberEmbryos: null,
             active: true,
@@ -114,7 +117,8 @@ describe("tests Germination API", () => {
     test("PUT /germination/:id failure", async () => {
         const newGermination = {
             germinationId: "1",
-            dateGermination: "2020-01-01",
+            dateGermination: new Date("2020-01-01"),
+            transferDate: new Date("2020-10-14"),
             mediaBatch: "1",
             numberEmbryos: 1,
             active: false,

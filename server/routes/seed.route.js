@@ -26,6 +26,8 @@ module.exports = (app) => {
         const reqSeedGeneticId = req.body.seedGeneticId;
         const reqConeId = req.body.coneId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
+
 
         db.sync().then(() => {
             Seed.create({
@@ -34,6 +36,7 @@ module.exports = (app) => {
                 quantity: reqQuantity,
                 dateMade: reqDateMade,
                 active: true,
+                transferDate: reqTransferDate,
                 motherTreeId: reqMotherTreeId,
                 fatherTreeId: reqFatherTreeId,
                 seedGeneticId: reqSeedGeneticId,
@@ -85,6 +88,8 @@ module.exports = (app) => {
         const reqSeedGeneticId = req.body.seedGeneticId;
         const reqConeId = req.body.coneId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
+
         
         const seed = await Seed.findOne({ where: { id: reqId } });
         if (seed) {
@@ -95,6 +100,7 @@ module.exports = (app) => {
                 dateMade: reqDateMade,
                 motherTreeId: reqMotherTreeId,
                 fatherTreeId: reqFatherTreeId,
+                transferDate: reqTransferDate,
                 seedGeneticId: reqSeedGeneticId,
                 coneId: reqConeId,
                 locationId: reqLocationId
