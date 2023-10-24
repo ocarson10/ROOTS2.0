@@ -14,7 +14,9 @@ import {
   getIdsByPopulationAndFamilyAndRamet,
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from '../services/api-client/idService';
-
+import ImageUpload from "./ImageUpload";
+import FileUpload from './FileUpload';
+import "../../libs/style/ImageUpload.css";
 
 function RametForm(props) {
   const [id, setId] = useState('');
@@ -251,7 +253,8 @@ function RametForm(props) {
             }}
           />
         </div>
-
+        <ImageUpload></ImageUpload>
+        <FileUpload></FileUpload>
         <div className="button-div">
           <button
             className="form-button"

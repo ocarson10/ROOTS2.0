@@ -21,6 +21,7 @@ module.exports = (app) => {
         const reqDateGreenhouse = req.body.dateGreenhouse;
         const reqLocationId = req.body.locationId;
         const reqGeneticId = req.body.greenhouseGeneticId;
+        const reqTransferDate = req.body.transferDate;
 
         db.sync().then(() => {
             Greenhouse.create({
@@ -28,8 +29,8 @@ module.exports = (app) => {
                 active: true,
                 dateGreenhouse: reqDateGreenhouse,
                 locationId: reqLocationId,
-                greenhouseGeneticId: reqGeneticId
-
+                greenhouseGeneticId: reqGeneticId,
+                transferDate: reqTransferDate
             }).then((innerRes) => {
                 res.sendStatus(200);
             }).catch((error) => {
@@ -76,8 +77,11 @@ module.exports = (app) => {
             const reqGeneticId = req.body.greenhouseGeneticId;
             const reqActive = req.body.active;
             const reqGreenhouseId = req.body.greenhouseId;
+            const reqTransferDate = req.body.transferDate;
 
-            if (reqDateGreenhouse == null || reqLocationId == null || reqGeneticId == null || reqActive == null || reqGreenhouseId == null) {
+
+            if (reqDateGreenhouse == null || reqLocationId == null || reqGeneticId == null || reqActive == null || reqGreenhouseId == null
+                || reqTransferDate == null) {
                 res.sendStatus(400);
                 return;
             }
@@ -87,7 +91,9 @@ module.exports = (app) => {
                 locationId: reqLocationId,
                 greenhouseGeneticId: reqGeneticId,
                 active: reqActive,
-                greenhouseId: reqGreenhouseId
+                greenhouseId: reqGreenhouseId,
+                transferDate: reqTransferDate
+                
             })
             res.sendStatus(200);
         } else {

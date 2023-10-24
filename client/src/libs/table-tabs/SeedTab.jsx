@@ -93,7 +93,7 @@ function SeedTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/seed-material" editLink= "/edit/seed-material" addLink="/add/seed-material" status={"active"} material={"seed"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/seed-material" editLink= "/material/seeds/edit" addLink="/material/seeds/add" status={"active"} material={"seed"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

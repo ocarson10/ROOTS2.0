@@ -1,6 +1,5 @@
 const request = require("supertest");
 require("dotenv");
-process.env.NODE_ENV = "testing";
 const createServer = require("../server");
 
 async function setUp() {
@@ -42,7 +41,9 @@ describe("tests ColdTreatment API", () => {
     test("POST /coldtreatments", async () => {
         const newColdTreatment = {
             coldTreatmentId: "1",
-            dateColdTreatment: "2020-01-01",
+            numberEmbryos: 3,
+            dateCold: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             active: true,
             locationId: "Mountain Research Station",
             coldTreatmentGeneticId: geneticIdId,
@@ -54,7 +55,8 @@ describe("tests ColdTreatment API", () => {
     test("POST /coldtreatments failure", async () => {
         const newColdTreatment = {
             coldTreatmentId: null,
-            dateColdTreatment: "2020-01-01",
+            dateCold: new Date("2020-01-01"),
+            transferDate: new Date("2020-01-14"),
             active: true,
             locationId: null,
             coldTreatmentGeneticId: 0,
@@ -81,7 +83,8 @@ describe("tests ColdTreatment API", () => {
     test("PUT /coldtreatments/:id", async () => {
         const newColdTreatment = {
             coldTreatmentId: "1",
-            dateColdTreatment: "2020-01-01",
+            dateCold: new Date("2020-01-01"),
+            transferDate: new Date("2020-14-01"),
             active: false,
             locationId: "Mountain Research Station",
             coldTreatmentGeneticId: geneticIdId,
@@ -93,7 +96,8 @@ describe("tests ColdTreatment API", () => {
     test("PUT /coldtreatments/:id body failure", async () => {
         const newColdTreatment = {
             coldTreatmentId: null,
-            dateColdTreatment: "2020-01-01",
+            dateCold: new Date("2020-01-01"),
+            transferDate: "2020-14-01",
             active: true,
             locationId: null,
             coldTreatmentGeneticId: 0,
@@ -105,7 +109,7 @@ describe("tests ColdTreatment API", () => {
     test("PUT /coldtreatments/:id path failure", async () => {
         const newColdTreatment = {
             coldTreatmentId: "1",
-            dateColdTreatment: "2020-01-01",
+            dateCold: new Date("2020-01-01"),
             active: false,
             locationId: "Mountain Research Station",
             coldTreatmentGeneticId: geneticIdId,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {instance} from './libs/services/api-client/apiClient';
+import { instance } from './libs/services/api-client/apiClient';
 import "./App.css";
 import Login from "./libs/login/Login";
 import SeedMaterial from "./libs/forms/SeedMaterial";
@@ -19,6 +19,7 @@ import InitiationForm from "./libs/forms/InitiationForm";
 import MaintenanceForm from "./libs/forms/MaintenanceForm";
 import MaturationForm from "./libs/forms/MaturationForm";
 import ColdTreatmentForm from "./libs/forms/ColdTreatmentForm";
+import MaterialForm from "./libs/forms/MaterialForm";
 
 import Report from "./libs/reports/Report";
 import GreenhouseForm from "./libs/forms/GreenhouseForm";
@@ -60,6 +61,11 @@ function App() {
             <Route path="/" element={<Home user={user} />} />
 
             <Route
+              path="/material/:material/:action"
+              element={<MaterialForm />}
+            />
+
+            <Route
               path="/add/seed-material"
               element={<SeedMaterial operation="Add" />}
             />
@@ -69,7 +75,7 @@ function App() {
             />
             <Route
               path="/propagate/seed-material/:id"
-              element={<InitiationForm operation="Add" prop="Yes"/>}
+              element={<InitiationForm operation="Add" prop="Yes" />}
             />
             <Route path="/login" element={<Login />} />
             <Route
@@ -99,28 +105,28 @@ function App() {
             />
             <Route path="/add/population" element={<PopulationForm />} />
             <Route path="/add/genetic-id" element={<GeneticIdForm />} />
-            <Route path="/add/initiation" element={<InitiationForm operation="Add"/>} />
-            <Route path="/edit/initiation/:id" element={<InitiationForm operation="Edit"/>} />
-            <Route path="/propagate/initiation/:id" element={<MaintenanceForm operation="Add" prop="Yes"/>} />
+            <Route path="/add/initiation" element={<InitiationForm operation="Add" />} />
+            <Route path="/edit/initiation/:id" element={<InitiationForm operation="Edit" />} />
+            <Route path="/propagate/initiation/:id" element={<MaintenanceForm operation="Add" prop="Yes" />} />
             <Route path="/add/maintenance" element={<MaintenanceForm operation="Add" />} />
             <Route path="/edit/maintenance/:id" element={<MaintenanceForm operation="Edit" />} />
-            <Route path="/propagate/maintenance/:id" element={<MaturationForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/maturation" element={<MaturationForm operation="Add"/>} />
+            <Route path="/propagate/maintenance/:id" element={<MaturationForm operation="Add" prop="Yes" />} />
+            <Route path="/add/maturation" element={<MaturationForm operation="Add" />} />
             <Route path="/edit/maturation/:id" element={<MaturationForm operation="Edit" />} />
-            <Route path="/propagate/maturation/:id" element={<ColdTreatmentForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/cold-treatment" element={<ColdTreatmentForm operation="Add"/>} />
+            <Route path="/propagate/maturation/:id" element={<ColdTreatmentForm operation="Add" prop="Yes" />} />
+            <Route path="/add/cold-treatment" element={<ColdTreatmentForm operation="Add" />} />
             <Route path="/edit/cold-treatment/:id" element={<ColdTreatmentForm operation="Edit" />} />
-            <Route path="/propagate/cold-treatment/:id" element={<GerminationForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/germination" element={<GerminationForm operation="Add"/>} />
-            <Route path="/edit/germination/:id" element={<GerminationForm operation="Edit" />}  />
-            <Route path="/propagate/germination/:id" element={<AcclimationForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/acclimation" element={<AcclimationForm operation="Add"/>} />
+            <Route path="/propagate/cold-treatment/:id" element={<GerminationForm operation="Add" prop="Yes" />} />
+            <Route path="/add/germination" element={<GerminationForm operation="Add" />} />
+            <Route path="/edit/germination/:id" element={<GerminationForm operation="Edit" />} />
+            <Route path="/propagate/germination/:id" element={<AcclimationForm operation="Add" prop="Yes" />} />
+            <Route path="/add/acclimation" element={<AcclimationForm operation="Add" />} />
             <Route path="/edit/acclimation/:id" element={<AcclimationForm operation="Edit" />} />
-            <Route path="/propagate/acclimation/:id" element={<GreenhouseForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/greenhouse" element={<GreenhouseForm operation="Add"/>} />
+            <Route path="/propagate/acclimation/:id" element={<GreenhouseForm operation="Add" prop="Yes" />} />
+            <Route path="/add/greenhouse" element={<GreenhouseForm operation="Add" />} />
             <Route path="/edit/greenhouse/:id" element={<GreenhouseForm operation="Edit" />} />
-            <Route path="/propagate/greenhouse/:id" element={<FieldstationForm operation="Add" prop="Yes"/>} />
-            <Route path="/add/fieldstation" element={<FieldstationForm operation="Add"/>} />
+            <Route path="/propagate/greenhouse/:id" element={<FieldstationForm operation="Add" prop="Yes" />} />
+            <Route path="/add/fieldstation" element={<FieldstationForm operation="Add" />} />
             <Route path="/edit/fieldstation/:id" element={<FieldstationForm operation="Edit" />} />
             <Route path="/add/ramet-material/" element={<RametForm />} />
             <Route path="/report/:type/:id/" element={<Report />} />

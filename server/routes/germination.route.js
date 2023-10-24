@@ -22,6 +22,7 @@ module.exports = (app) => {
         const reqDateGermination = req.body.dateGermination;
         const reqGeneticId = req.body.germinationGeneticId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
 
         db.sync().then(() => {
             Germination.create({
@@ -29,6 +30,7 @@ module.exports = (app) => {
                 numberEmbryos: reqNumberEmbryos,
                 mediaBatch: reqMediaBatch,
                 dateGermination: reqDateGermination,
+                transferDate: reqTransferDate,
                 active: true,
                 germinationGeneticId: reqGeneticId,
                 locationId: reqLocationId
@@ -80,8 +82,11 @@ module.exports = (app) => {
             const reqGeneticId = req.body.germinationGeneticId;
             const reqLocationId = req.body.locationId;
             const reqActive = req.body.active;
+            const reqTransferDate = req.body.tranferDate;
 
-            if (reqNumberEmbryos == null || reqMediaBatch == null || reqDateGermination == null || reqGeneticId == null || reqLocationId == null || reqActive == null) {
+            if (reqNumberEmbryos == null || reqMediaBatch == null ||
+                reqDateGermination == null || reqGeneticId == null || reqLocationId == null || reqActive == null 
+                || reqTransferDate == null) {
                 res.sendStatus(400);
                 return;
             }
@@ -89,6 +94,7 @@ module.exports = (app) => {
                 numberEmbryos: reqNumberEmbryos,
                 mediaBatch: reqMediaBatch,
                 dateGermination: reqDateGermination,
+                transferDate: reqTransferDate,
                 germinationGeneticId: reqGeneticId,
                 locationId: reqLocationId,
                 active: reqActive

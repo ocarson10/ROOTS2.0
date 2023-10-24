@@ -21,6 +21,7 @@ module.exports = (app) => {
         const reqDateAcclimation = req.body.dateAcclimation;
         const reqLocationId = req.body.locationId;
         const reqGeneticId = req.body.acclimationGeneticId;
+        const reqTransferDate = req.body.transferDate;
 
         db.sync().then(() => {
             Acclimation.create({
@@ -28,7 +29,8 @@ module.exports = (app) => {
                 dateAcclimation: reqDateAcclimation,
                 active: true,
                 locationId: reqLocationId,
-                acclimationGeneticId: reqGeneticId
+                acclimationGeneticId: reqGeneticId,
+                transferDate: reqTransferDate
             }).then((innerRes) => {
                 res.sendStatus(200);
             }).catch((error) => {
@@ -74,6 +76,8 @@ module.exports = (app) => {
             const reqGeneticId = req.body.acclimationGeneticId;
             const reqActive = req.body.active;
             const reqAcclimationId = req.body.acclimationId;
+            const reqTransferDate = req.body.transferDate;
+
 
             if (reqId == null || reqDateAcclimation == null || reqLocationId == null || reqGeneticId == null || reqActive == null || reqAcclimationId == null) {
                 res.sendStatus(400);
@@ -84,6 +88,7 @@ module.exports = (app) => {
                 dateAcclimation: reqDateAcclimation,
                 locationId: reqLocationId,
                 acclimationGeneticId: reqGeneticId,
+                transferDate: reqTransferDate,
                 active: reqActive
             });
             res.sendStatus(200);

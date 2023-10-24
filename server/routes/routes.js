@@ -17,4 +17,6 @@ module.exports = (app) => {
   require('./maintenance.route')(app);
   require('./maturation.route')(app);
   require('./log.route')(app);
+  require('./photo.route')(app);
+  require('./file.route')(app);
 }

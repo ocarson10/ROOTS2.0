@@ -17,6 +17,10 @@ import {
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import FileUpload from "./FileUpload";
+import { addFile, getFile } from "../services/api-client/fileService";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -35,6 +39,16 @@ function TreeMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
   useEffect(() => {
     //If editing, set the values to the current values
     if (props.operation === "Edit") {
@@ -64,8 +78,10 @@ function TreeMaterial(props) {
   }, [props.operation]);
 
   const handleSubmit = async (e) => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       e.preventDefault();
+      await addFile(geneticId.value, selectedFile);
+      await addPhoto(geneticId.value, selectedImage.file);
       await addTree(
         progenyId.value,
         geneticId.value,
@@ -128,6 +144,7 @@ function TreeMaterial(props) {
     setProOptions([]);
     setRametOptions([]);
     getPopulationsOptions();
+    setSelectedImage(null);
   };
 
   // function to get the population options
@@ -206,6 +223,7 @@ function TreeMaterial(props) {
   const handleGeneticChange = async (e) => {
     setError("");
     setGeneticId({ value: e.value, label: e.value });
+    props.sendGeneticIdToParent(e.value);
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
@@ -331,7 +349,8 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-
+        <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
+        <FileUpload onFileSelect={handleFileSelection}/>
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
             Submit
