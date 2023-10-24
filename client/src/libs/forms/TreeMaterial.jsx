@@ -18,7 +18,8 @@ import {
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
 import FileUpload from "./FileUpload";
 import { addFile, getFile } from "../services/api-client/fileService";
 
@@ -40,6 +41,7 @@ function TreeMaterial(props) {
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
   // Function to receive the selected image from child component
@@ -49,6 +51,15 @@ function TreeMaterial(props) {
   const handleFileSelection = (file) => {
     setSelectedFile(file);
   };
+  useEffect(() => {
+    async function loadPhotos() {
+      if(!!geneticId) {
+        setPhotos(await getPhotos(geneticId));
+      }
+    }
+    loadPhotos();
+  }, [geneticId]);
+
   useEffect(() => {
     //If editing, set the values to the current values
     if (props.operation === "Edit") {
@@ -103,6 +114,9 @@ function TreeMaterial(props) {
         });
     } else if (props.operation === "Edit") {
       e.preventDefault();
+      if(!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
       await editTree(
         treeId,
         progenyId.value,
@@ -223,7 +237,7 @@ function TreeMaterial(props) {
   const handleGeneticChange = async (e) => {
     setError("");
     setGeneticId({ value: e.value, label: e.value });
-    props.sendGeneticIdToParent(e.value);
+    //props.sendGeneticIdToParent(e.value);
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
@@ -349,7 +363,10 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-        <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
+        {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
         <FileUpload onFileSelect={handleFileSelection}/>
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
