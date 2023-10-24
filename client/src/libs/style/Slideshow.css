@@ -1,16 +1,14 @@
 .slideshow-container {
     position: relative;
-    max-width: 100%; /* Adjust this to fit the container it's rendered within */
+    max-width: 100%;
     overflow: hidden;
   }
   
-  /* Slideshow image */
   .slideshow-image img {
     width: 100%;
     height: auto;
   }
   
-  /* Slideshow navigation buttons */
   .prev, .next {
     position: absolute;
     top: 50%;
