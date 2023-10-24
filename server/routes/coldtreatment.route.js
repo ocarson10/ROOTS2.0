@@ -23,6 +23,8 @@ module.exports = (app) => {
         const reqDuration = req.body.duration;
         const reqGeneticId = req.body.coldTreatmentGeneticId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
+
 
         db.sync().then(() => {
             ColdTreatment.create({
@@ -30,6 +32,7 @@ module.exports = (app) => {
                 numberEmbryos: reqNumberEmbryos,
                 dateCold: reqDateCold,
                 duration: reqDuration,
+                transferDate: reqTransferDate,
                 active: true,
                 coldTreatmentGeneticId: reqGeneticId,
                 locationId: reqLocationId
@@ -82,19 +85,26 @@ module.exports = (app) => {
             const reqLocationId = req.body.locationId;
             const reqActive = req.body.active;
             const reqColdTreatmentId = req.body.coldTreatmentId;
+            const reqTransferDate = req.body.transferDate;
 
-            if (reqColdTreatmentId == null || reqColdTreatmentId == undefined || reqId == null || reqId == undefined || reqNumberEmbryos == null || reqNumberEmbryos == undefined || reqDateCold == null || reqDateCold == undefined || reqDuration == null || reqDuration == undefined || reqGeneticId == null || reqGeneticId == undefined || reqLocationId == null || reqLocationId == undefined || reqActive == null || reqActive == undefined ) {
+
+            if (reqColdTreatmentId == null || reqColdTreatmentId == undefined || reqId == null || 
+                reqId == undefined || reqNumberEmbryos == null || reqNumberEmbryos == undefined || 
+                reqDateCold == null || reqDateCold == undefined || reqDuration == null || reqDuration == undefined
+                || reqGeneticId == null || reqGeneticId == undefined || reqLocationId == null || reqLocationId == undefined
+                || reqActive == null || reqActive == undefined  || reqTransferDate == null || reqTransferDate == undefined) {
                 res.sendStatus(400);
                 return;
             }
             coldTreatment.update({
-                numberEmbryos: req.body.numberEmbryos,
-                dateCold: req.body.dateCold,
-                duration: req.body.duration,
-                coldTreatmentGeneticId: req.body.coldTreatmentGeneticId,
-                locationId: req.body.locationId,
-                active: req.body.active,
-                coldTreatmentId: req.body.coldTreatmentId
+                numberEmbryos: reqNumberEmbryos,
+                dateCold: reqDateCold,
+                duration: reqDuration,
+                coldTreatmentGeneticId: reqGeneticId,
+                transferDate: reqTransferDate,
+                locationId: reqLocationId,
+                active: reqActive,
+                coldTreatmentId: reqColdTreatmentId
             });
             res.sendStatus(200);
         } else {
