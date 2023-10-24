@@ -58,6 +58,7 @@ describe("tests ramet API", () => {
       id: 1,
       motherTreeId: "1",
       gps: "23.231334 24.13241",
+      transferDate: new Date("2020-01-14"),
       locationId: "Mountain Research Station",
       rametGeneticId: geneticIdId
     };
@@ -70,6 +71,7 @@ describe("tests ramet API", () => {
     const newRamet = {
       id: 1,
       motherTreeId: "1",
+      transferDate: new Date("2020-01-14"),
       gps: "23.231334 24.13241",
       locationId: "Mountain Research Station",
       rametGeneticId: geneticIdId
