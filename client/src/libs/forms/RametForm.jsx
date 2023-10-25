@@ -17,6 +17,9 @@ import {
 import ImageUpload from "./ImageUpload";
 import FileUpload from './FileUpload';
 import "../../libs/style/ImageUpload.css";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
 
 function RametForm(props) {
   const [id, setId] = useState('');
@@ -34,7 +37,58 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
 
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
 
   // function to get the population options
   const getPopulationsOptions = async () => {
@@ -56,18 +110,22 @@ function RametForm(props) {
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({value: e.value, label: e.value});
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -136,7 +194,17 @@ function RametForm(props) {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
-    addRamet(id, motherTreeId, geneticId.value, familyId.value, progenyId.value, population.value, rametId.value, location, gps).then((res) => {
+    addRamet(
+      id, 
+      motherTreeId, 
+      geneticId.value, 
+      familyId.value, 
+      progenyId.value, 
+      population.value, 
+      rametId.value, 
+      location.value, 
+      gps
+      ).then((res) => {
       if (res.status === 200) {
         clear()
         window.location.href = "/";
@@ -154,7 +222,7 @@ function RametForm(props) {
     setProgenyId({value: "", label: ""});
     setPopulation({value: "", label: ""});
     setRametId({value: "", label: ""});
-    setLocation("");
+    setLocation({value: "", label: ""});
     setGps("");
     setError("");
     setPopOptions([]);
@@ -193,7 +261,25 @@ function RametForm(props) {
             <PopulationHover />
             Population ID:
           </label>
-          <Select options={popOptions} onChange={handlePopulationChange} value={population ? population : ''} />
+          <Select
+            options={[newPopulationButtonOption, ...popOptions]}
+            onChange={handlePopulationChange}
+            value={population ? population : ""}
+          />
+          {isPopulationFormOpen &&
+            <PopulationForm 
+              isOpen={isPopulationFormOpen}
+              onClose={handleClosePopulationForm}
+              addPopOption={addPopulationOption}
+            />
+          }
+          {isGeneticIdFormOpen && 
+            <GeneticIdForm
+              isOpen={isGeneticIdFormOpen}
+              onClose={handleCloseGenIdForm}
+              addGenIdOption={addGenIdOption}
+            />
+          }
         </div>
 
         <div className="input-div">
@@ -201,7 +287,11 @@ function RametForm(props) {
             <GenericHover text="The family ID of the genetic ID" />
             Family ID:
           </label>
-          <Select options={famOptions} onChange={handleFamilyChange} value={familyId ? familyId : ''} />
+          <Select 
+            options={famOptions}
+            onChange={handleFamilyChange}
+            value={familyId ? familyId : ''}
+          />
         </div>
 
         <div className="input-div">
@@ -209,34 +299,43 @@ function RametForm(props) {
             <GenericHover text="The Ramet Id that can be associated with this id (can be blank)" />
             Ramet ID:
           </label>
-          <Select options={rametOptions} onChange={handleRametChange} value={rametId ? rametId : ''} />
+          <Select
+            options={rametOptions}
+            onChange={handleRametChange}
+            value={rametId ? rametId : ''} 
+          />
         </div>
 
         <div className="input-div">
           <label className="entry-label">
             <GeneticHover /> Genetic ID:
           </label>
-          <Select options={genOptions} onChange={handleGeneticChange} value={geneticId ? geneticId : ''} />
+          <Select 
+            options={genOptions}
+            onChange={handleGeneticChange}
+            value={geneticId ? geneticId : ''} 
+          />
         </div>
 
         <div className="input-div">
           <label className="entry-label">
             <ProgenyHover /> Progeny ID:
           </label>
-          <Select options={proOptions} onChange={handleProgenyChange} value={progenyId ? progenyId : ''} />
+          <Select 
+            options={proOptions}
+            onChange={handleProgenyChange}
+            value={progenyId ? progenyId : ''} 
+          />
         </div>
 
         <div className="input-div">
           <label className="entry-label">
             <LocationHover /> Location:
           </label>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => {
-              setLocation(e.target.value);
-              setError("");
-            }}
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
           />
         </div>
 
