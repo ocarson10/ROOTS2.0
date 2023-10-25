@@ -1,8 +1,35 @@
 import React, { useState } from 'react';
 import '../style/Slideshow.css';
 
-const Slideshow = ({ photos }) => {
+const Slideshow = ({ photos, updatePhotos }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const deleteImage = () => {
+    if (photos.length === 0) {
+      return;
+    }
+
+    const newPhotos = photos.filter((_, index) => index !== currentImageIndex);
+
+    if (newPhotos.length === 0) {
+      // If there are no images left, reset the current image index.
+      setCurrentImageIndex(0);
+    } else {
+      // Make sure the current image index stays within bounds.
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === newPhotos.length - 1 ? 0 : prevIndex
+      );
+    }
+
+    // Update the photos array.
+    // You can use a state management library like Redux to manage the state globally
+    // or lift the state up to a higher-level component if needed.
+    updatePhotos(newPhotos);
+
+    //need to delete from the database
+    
+  };
+
 
   // Function to handle the next image in the slideshow
   const nextImage = () => {
@@ -30,6 +57,9 @@ const Slideshow = ({ photos }) => {
         </button>
         <button className="next" onClick={nextImage}>
           &#10095;
+        </button>
+        <button className="delete" onClick={deleteImage}>
+          Delete
         </button>
       </div>
     </>
