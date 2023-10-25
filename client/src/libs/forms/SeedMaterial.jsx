@@ -20,6 +20,9 @@ import {
 import {getId} from "../services/api-client/idService";
 import {useNavigate} from "react-router-dom";
 import ImageUpload from "./ImageUpload";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
 
 function SeedMaterial(props) {
   const [seedId, setSeedId] = useState("");
@@ -43,6 +46,54 @@ function SeedMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
 
   useEffect(() => {
     if(props.operation === "Edit"){
@@ -91,18 +142,22 @@ function SeedMaterial(props) {
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({ value: e.value, label: e.value });
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -170,7 +225,7 @@ function SeedMaterial(props) {
   };
 
   const handleSubmit = (e) => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       e.preventDefault();
       if (seedId === "") {
         setError("Please enter a seed ID");
@@ -189,7 +244,7 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
-        location
+        location.value
       )
         .then((res) => {
           if (res.status === 200) {
@@ -216,7 +271,7 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
-        location
+        location.value
       )
         .then((res) => {
           if (res.status === 200) {
@@ -255,6 +310,11 @@ function SeedMaterial(props) {
     getPopulationsOptions();
   };
 
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
       <h1>Add Seed Material</h1>
@@ -277,12 +337,25 @@ function SeedMaterial(props) {
           Population ID:
         </label>
         <Select
-          options={popOptions}
+          options={[newPopulationButtonOption, ...popOptions]}
           onChange={handlePopulationChange}
           value={population ? population : ""}
         />
+        {isPopulationFormOpen &&
+            <PopulationForm 
+              isOpen={isPopulationFormOpen}
+              onClose={handleClosePopulationForm}
+              addPopOption={addPopulationOption}
+            />
+          }
+          {isGeneticIdFormOpen && 
+            <GeneticIdForm
+              isOpen={isGeneticIdFormOpen}
+              onClose={handleCloseGenIdForm}
+              addGenIdOption={addGenIdOption}
+            />
+          }
       </div>
-
       <div className="input-div">
         <label className="entry-label">
           <GenericHover text="The family ID of the genetic ID" />
@@ -333,11 +406,11 @@ function SeedMaterial(props) {
         <label className="entry-label">
           <LocationHover /> Location:
         </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
       </div>
 
       <div className="input-div">

@@ -74,11 +74,6 @@ function TreeMaterial(props) {
 
   const newPopulationButtonOption = { label: "Add new population", value: "add" };
 
-
-  const handleOpenGenIdForm = () => {
-    setGeneticIdFormOpen(true);
-  };
-
   const handleCloseGenIdForm = () => {
     setGeneticIdFormOpen(false);
   };
