@@ -18,6 +18,10 @@ const File = sequelize.define("files", {
       return this.getDataValue('fileData').toString();
     },
   },
+  fileName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   associatedMaterial: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -1,46 +1,27 @@
-import { useState, useEffect } from 'react';
 import { deleteFile } from "../services/api-client/fileService";
 
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-} 
-
 const FileList = ({ files }) => {
-    const [fileDeleteSuccess, setFileDeleteSuccess] = useState(false);
-
-    useEffect(() => {
-        async function clearDeleteMessage() {
-            delay(4000);
-            setFileDeleteSuccess(false);
-        };
-
-        clearDeleteMessage();
-    }, [fileDeleteSuccess]);
-
-    const handleDelete = async (fileId) => {
-        const response = await deleteFile(fileId);
+    const handleDelete = async (file) => {
+        const response = await deleteFile(file.fileId);
     
         if(response.status !== 200) {
-            console.log(`Error deleting file with id: ${fileId}`);
-        } else {
-            setFileDeleteSuccess(true);
+            console.log(`Error deleting file with id: ${file.fileId}`);
         }
     }
 
     return (
-        <>
-            <h1>Files</h1>
-            {files.map(x => {
-                return (
-                    <>
-                        <a href={x.fileData}> </a>
-                        <button onClick={handleDelete}>Delete</button>
-                    </>  
-                )
-            })}
-        </>
+        <div>
+            <h1>File List</h1>
+            {files.map((file) => (
+                <div key={file.fileId}>
+                    <a href={`${file.fileData}`} download={`${file.fileName}`}>
+                        {file.fileName}
+                    </a>
+                    <button onClick={() => handleDelete(file)}>Delete</button>
+                </div>
+            ))}
+        </div>
     );
-
 }
 
 export default FileList;

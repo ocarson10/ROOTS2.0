@@ -53,6 +53,7 @@ function TreeMaterial(props) {
   const handleFileSelection = (file) => {
     setSelectedFile(file);
   };
+
   useEffect(() => {
     async function loadPhotos() {
       setPhotos(await getPhotos(geneticId));
@@ -60,7 +61,7 @@ function TreeMaterial(props) {
     async function loadFiles() {
       setFiles(await getFiles(geneticId));
     }
-    if(!!geneticId) {
+    if(geneticId) {
       loadPhotos();
       loadFiles();
     }
@@ -122,6 +123,9 @@ function TreeMaterial(props) {
       e.preventDefault();
       if(!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
+      }
+      if(!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
       }
       await editTree(
         treeId,
@@ -373,9 +377,9 @@ function TreeMaterial(props) {
           <Slideshow photos={photos} />
         }
         <ImageUpload onImageSelect={handleImageSelection} />
-        <FileUpload onFileSelect={handleFileSelection}/>
+        <FileUpload onFileSelect={handleFileSelection} />
         {!!files && files.length !== 0 &&
-          <FileList files/>
+          <FileList files={files} />
         }
 
         <div className="button-div">
