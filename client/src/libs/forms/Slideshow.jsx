@@ -3,12 +3,13 @@ import '../style/Slideshow.css';
 
 const Slideshow = ({ photos, updatePhotos }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  const deleteImage = () => {
+ 
+
+  const deleteImage = async () => {
     if (photos.length === 0) {
       return;
     }
-
+    let currentPhotoId = photos[currentImageIndex].photoId;
     const newPhotos = photos.filter((_, index) => index !== currentImageIndex);
 
     if (newPhotos.length === 0) {
@@ -27,7 +28,10 @@ const Slideshow = ({ photos, updatePhotos }) => {
     updatePhotos(newPhotos);
 
     //need to delete from the database
-    
+   const response = await deletePhoto(currentPhotoId);
+    if (response.status !== 200){
+      console.log(`Error deleting photo with id: ${currentPhotoId}`);
+    }
   };
 
 
