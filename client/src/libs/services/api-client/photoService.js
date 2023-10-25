@@ -9,7 +9,10 @@ export async function getPhotos(geneticId) {
 	  if (photosData && photosData.length > 0) {
 		// Iterate through the received photo data and decode each image
 		const photoURLs = photosData.map(photoItem => {
-			return photoItem.photoData;
+			return {
+				photoData: photoItem.photoData, 
+				photoId: photoItem.photoId
+			}
 		});
   
 		return photoURLs;
