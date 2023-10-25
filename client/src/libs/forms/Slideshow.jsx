@@ -50,7 +50,7 @@ const Slideshow = ({ photos, updatePhotos }) => {
       <h1>Image Gallery</h1>
       <div className="slideshow-container">
         <div className="slideshow-image">
-          <img src={`${photos[currentImageIndex]}`} alt={`Image ${currentImageIndex + 1}`} />
+          <img src={`${photos[currentImageIndex].photoData}`} alt={`Image ${currentImageIndex + 1}`} />
         </div>
         <button className="prev" onClick={prevImage}>
           &#10094;
