@@ -20,6 +20,10 @@ import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
 import FileUpload from "./FileUpload";
 import "../../libs/style/ImageUpload.css";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
+
 function ConeMaterial(props) {
   const [coneId, setConeId] = useState("");
   const [motherTreeId, setMotherTreeId] = useState("");
@@ -40,6 +44,42 @@ function ConeMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+
   useEffect(() => {
     if (props.operation === "Edit") {
       setChangeId(false);
@@ -77,7 +117,7 @@ function ConeMaterial(props) {
   }, [props.operation]);
 
   const handleSubmit = (e) => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       e.preventDefault();
       addCone(
         coneId,
@@ -89,7 +129,7 @@ function ConeMaterial(props) {
         progenyId.value,
         population.value,
         dateHarvested,
-        location,
+        location.value,
         true
       )
         .then(() => {
@@ -113,7 +153,7 @@ function ConeMaterial(props) {
         progenyId.value,
         population.value,
         dateHarvested,
-        location,
+        location.value,
         true
       )
         .then(() => {
@@ -169,18 +209,22 @@ function ConeMaterial(props) {
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({ value: e.value, label: e.value });
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -247,6 +291,24 @@ function ConeMaterial(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
       <h1>Add Cone Material</h1>
@@ -285,10 +347,24 @@ function ConeMaterial(props) {
           Population ID:
         </label>
         <Select
-          options={popOptions}
+          options={[newPopulationButtonOption, ...popOptions]}
           onChange={handlePopulationChange}
           value={population ? population : ""}
         />
+        {isPopulationFormOpen &&
+          <PopulationForm 
+            isOpen={isPopulationFormOpen}
+            onClose={handleClosePopulationForm}
+            addPopOption={addPopulationOption}
+          />
+        }
+        {isGeneticIdFormOpen && 
+          <GeneticIdForm
+            isOpen={isGeneticIdFormOpen}
+            onClose={handleCloseGenIdForm}
+            addGenIdOption={addGenIdOption}
+          />
+        }
       </div>
 
       <div className="input-div">
@@ -352,11 +428,11 @@ function ConeMaterial(props) {
         <label className="entry-label">
           <LocationHover /> Location:
         </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
       </div>
       <ImageUpload></ImageUpload>
       <FileUpload></FileUpload>

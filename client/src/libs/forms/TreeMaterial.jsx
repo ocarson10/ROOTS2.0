@@ -91,7 +91,7 @@ function TreeMaterial(props) {
 
   useEffect(() => {
     getExistingLocations();
-  },[]);
+  }, []);
 
   useEffect(() => {
     //If editing, set the values to the current values
@@ -124,15 +124,20 @@ function TreeMaterial(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
-      await addFile(geneticId.value, selectedFile);
-      await addPhoto(geneticId.value, selectedImage.file);
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
+
       await addTree(
         progenyId.value,
         geneticId.value,
         familyId.value,
         population.value,
         rametId.value,
-        location,
+        location.value,
         gps,
         true,
         treeId
@@ -154,7 +159,7 @@ function TreeMaterial(props) {
         familyId.value,
         population.value,
         rametId.value,
-        location,
+        location.value,
         gps,
         true
       )
