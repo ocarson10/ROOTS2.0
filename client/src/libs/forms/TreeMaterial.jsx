@@ -51,6 +51,11 @@ function TreeMaterial(props) {
   const handleFileSelection = (file) => {
     setSelectedFile(file);
   };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
   useEffect(() => {
     async function loadPhotos() {
       if(!!geneticId) {
@@ -364,7 +369,7 @@ function TreeMaterial(props) {
           />
         </div>
         {!!photos && photos.length !== 0 &&
-          <Slideshow photos={photos} />
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
         }
         <ImageUpload onImageSelect={handleImageSelection} />
         <FileUpload onFileSelect={handleFileSelection}/>
