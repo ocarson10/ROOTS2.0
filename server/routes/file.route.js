@@ -46,7 +46,7 @@ module.exports = (app) => {
     // Add file to material
     router.post('/', async (req, res) => {
       try {
-        const { geneticId, fileData } = req.body;
+        const { geneticId, fileData, fileName } = req.body;
     
         if (!geneticId || !fileData) {
           return res.status(400).json({ error: 'Missing geneticId or fileData' });
@@ -55,6 +55,7 @@ module.exports = (app) => {
         const file = await File.create({
           associatedMaterial: geneticId,
           fileData,
+          fileName,
         });
     
         res.status(200).json(file);

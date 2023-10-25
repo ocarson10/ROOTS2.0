@@ -2,18 +2,41 @@ import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
 export async function getFiles(geneticId) {
-	const files = await instance.get("files/" + geneticId);
-	return files;
+	try {
+		const response = await instance.get("files/" + geneticId);
+		const filesData = response.data;
+	
+		if (filesData && filesData.length > 0) {
+		  // Iterate through the received file data and decode each image
+		  const files = filesData.map(file => {
+			  return {
+				fileData: file.fileData,
+				fileId: file.fileId,
+				fileName: file.fileName
+			  }
+		  });
+	
+		  return files;
+		} else {
+		  // Handle the case where no files were found for the geneticId
+		  return [];
+		}
+	  } catch (error) {
+		console.error('Error fetching files:', error);
+		throw error;
+	  }
 }
 
 export async function addFile(geneticId, fileData) {
 	const reader = new FileReader();
+	const fileName = fileData.name;
 	reader.onload = function (event) {
 	  const base64FileData = event.target.result;
 	  console.log('File content:', base64FileData);
 	  const requestData = {
 		geneticId: geneticId,
 		fileData: base64FileData,
+		fileName: fileName
 	  };
   
 	  addLogs("Added file with genetic id: " + geneticId);
