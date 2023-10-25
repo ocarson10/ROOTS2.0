@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import '../style/Slideshow.css';
+import { deletePhoto } from '../services/api-client/photoService';
 
 const Slideshow = ({ photos, updatePhotos }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
  
-
   const deleteImage = async () => {
     if (photos.length === 0) {
       return;
@@ -33,7 +33,6 @@ const Slideshow = ({ photos, updatePhotos }) => {
       console.log(`Error deleting photo with id: ${currentPhotoId}`);
     }
   };
-
 
   // Function to handle the next image in the slideshow
   const nextImage = () => {
