@@ -14,6 +14,13 @@ const File = sequelize.define("files", {
   fileData: {
     type: DataTypes.BLOB('medium'),
     allowNull: false,
+    get() {
+      return this.getDataValue('fileData').toString();
+    },
+  },
+  fileName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   associatedMaterial: {
     type: DataTypes.INTEGER,
