@@ -8,7 +8,7 @@ module.exports = (app) => {
     const upload = multer({ dest: 'uploads/' }); // Configure multer to save files in the "uploads" directory
 
     async function ensureGeneticIdExists(geneticId) {
-      const innerRes = await GeneticId.findOne({ where: { id: geneticId } });
+      const innerRes = await GeneticId.findOne({ where: { geneticId } });
       if (innerRes) {
         return true;
       }

@@ -24,6 +24,7 @@ module.exports = (app) => {
         const reqDateMade = req.body.dateMade;
         const reqGeneticId = req.body.initiationGeneticId;
         const reqLocationId = req.body.locationId;
+        const reqTransferDate = req.body.transferDate;
 
         db.sync().then(() => {
             Initiation.create({
@@ -34,7 +35,8 @@ module.exports = (app) => {
                 active: true,
                 initiationGeneticId: reqGeneticId,
                 locationId: reqLocationId,
-                numberOfPlates: numberOfPlates
+                numberOfPlates: numberOfPlates,
+                transferDate: reqTransferDate
             }).then((innerRes) => {
                 res.sendStatus(200);
             }).catch((error) => {
@@ -83,9 +85,16 @@ module.exports = (app) => {
             const reqDateMade = req.body.dateMade;
             const reqGeneticId = req.body.initiationGeneticId;
             const reqLocationId = req.body.locationId;
+            const reqTransferDate = req.body.transferDate;
+
             const reqActive = req.body.active;
 
-            if (reqId == null || reqId == undefined || seedsAndEmbryos == null || seedsAndEmbryos == undefined || reqMediaBatch == null || reqMediaBatch == undefined || numberOfPlates == null || numberOfPlates == undefined || reqDateMade == null || reqDateMade == undefined || reqGeneticId == null || reqGeneticId == undefined || reqLocationId == null || reqLocationId == undefined || reqActive == null || reqActive == undefined) {
+            if (reqId == null || reqId == undefined || seedsAndEmbryos == null || 
+                seedsAndEmbryos == undefined || reqMediaBatch == null || reqMediaBatch == undefined 
+                || numberOfPlates == null || numberOfPlates == undefined || reqDateMade == null 
+                || reqDateMade == undefined || reqGeneticId == null || reqGeneticId == undefined 
+                || reqLocationId == null || reqLocationId == undefined || reqActive == null || reqActive == undefined
+                || reqTransferDate == null || reqTransferDate == undefined) {
                 res.sendStatus(400);
                 return;
             }
@@ -97,7 +106,8 @@ module.exports = (app) => {
                 active: reqActive,
                 initiationGeneticId: reqGeneticId,
                 locationId: reqLocationId,
-                numberOfPlates: numberOfPlates
+                numberOfPlates: numberOfPlates,
+                transferDate: reqTransferDate
             });
             res.sendStatus(200);
 
