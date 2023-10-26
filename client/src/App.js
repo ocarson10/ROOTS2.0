@@ -61,7 +61,7 @@ function App() {
             <Route path="/" element={<Home user={user} />} />
 
             <Route
-              path="/material/:material/:action"
+              path="/material/:material/:action/:id?"
               element={<MaterialForm />}
             />
 

@@ -113,12 +113,8 @@ function TreeMaterial(props) {
     if (props.operation === "Edit") {
       setChangeId(false);
 
-      //Get id from url
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
-
       //Get tree from id
-      getTree(id).then((tree) => {
+      getTree(props.treeId).then((tree) => {
         setTreeId(tree.data.treeId);
         setLocation(tree.data.locationId);
         setGps(tree.data.gps);
