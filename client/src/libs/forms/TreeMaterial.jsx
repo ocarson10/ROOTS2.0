@@ -18,9 +18,11 @@ import {
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import FileUpload from "./FileUpload";
-import { addFile, getFile } from "../services/api-client/fileService";
+import { addFile, getFiles } from "../services/api-client/fileService";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
