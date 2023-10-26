@@ -17,7 +17,7 @@ export async function getSeed(seedId) {
 // Add a new seed material to the database given a mother tree id, a father tree id, a progeny id,
 // geentic id, origin, quantityt, dateMade, location, active
 export async function addSeed(seedId, motherId, coneId, fatherTreeId, geneticId, 
-  familyId, progenyId, population, ramet,  origin, quantity, dateMade, location) {
+  familyId, progenyId, population, ramet,  origin, quantity, dateMade, location, expectedTransferDate) {
     const response = await getSingleId(geneticId, familyId, progenyId, population, ramet);
     await addLogs("Added seed with id: " + seedId);
     return await instance.post("seeds", {
@@ -30,13 +30,14 @@ export async function addSeed(seedId, motherId, coneId, fatherTreeId, geneticId,
     quantity: quantity,
     dateMade: dateMade,
     locationId: location,
-    active: true
+    active: true,
+    transferDate: expectedTransferDate
   });
 }
 
 // Update a seed material via a put request
 export async function editSeed(seedId, motherId, coneId, fatherTreeId, geneticId, 
-  familyId, progenyId, population, ramet,  origin, quantity, dateMade, location, active) {
+  familyId, progenyId, population, ramet,  origin, quantity, dateMade, location, active, expectedTransferDate) {
   const response = await getSingleId(geneticId, familyId, progenyId, population, ramet);
 
   await addLogs("Updated seed with id: " + seedId);
@@ -50,6 +51,7 @@ export async function editSeed(seedId, motherId, coneId, fatherTreeId, geneticId
     dateMade: dateMade,
     locationId: location,
     active: active,
+    transferDate: expectedTransferDate
   });
 }
 

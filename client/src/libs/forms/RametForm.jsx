@@ -17,6 +17,7 @@ import {
 import ImageUpload from "./ImageUpload";
 import FileUpload from './FileUpload';
 import "../../libs/style/ImageUpload.css";
+import ExpectedTransferDateHover from '../hover-info/ExpectedTransferDateHover';
 
 function RametForm(props) {
   const [id, setId] = useState('');
@@ -34,6 +35,7 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
 
 
   // function to get the population options
@@ -136,7 +138,7 @@ function RametForm(props) {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
-    addRamet(id, motherTreeId, geneticId.value, familyId.value, progenyId.value, population.value, rametId.value, location, gps).then((res) => {
+    addRamet(id, motherTreeId, geneticId.value, familyId.value, progenyId.value, population.value, rametId.value, location, gps, expectedTransferDate).then((res) => {
       if (res.status === 200) {
         clear()
         window.location.href = "/";
@@ -163,6 +165,7 @@ function RametForm(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
+    setExpectedTransferDate(null);
   };
 
 
@@ -242,6 +245,19 @@ function RametForm(props) {
 
         <div className="input-div">
           <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="entry-label">
             <GPSHover /> GPS:
           </label>
           <input
@@ -253,6 +269,7 @@ function RametForm(props) {
             }}
           />
         </div>
+
         <ImageUpload></ImageUpload>
         <FileUpload></FileUpload>
         <div className="button-div">
