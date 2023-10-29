@@ -26,7 +26,7 @@ function Maintenance(props) {
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
       console.log("id: " + id);
@@ -116,7 +116,7 @@ function Maintenance(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addMaintenance(
         maintenanceId,
         geneticId.value,
@@ -136,7 +136,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       await updateMaintenance(
         maintenanceId,
         geneticId.value,
@@ -203,7 +203,10 @@ function Maintenance(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Maintenance Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Maintenance</h1> :
+        <h1>Edit Maintenance</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">

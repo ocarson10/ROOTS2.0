@@ -27,7 +27,7 @@ function Initiation(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
 
       const id = window.location.href.split("/")[5];
@@ -133,7 +133,7 @@ function Initiation(props) {
   // }, [seedId]);
 
   const handleSubmit = async (e) => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       e.preventDefault();
       await addInitiation(
         initiationId,
@@ -154,7 +154,7 @@ function Initiation(props) {
           setError("An error occured: " + error);
         });
     }
-    else if (props.operation === "Edit") {
+    else if (props.operation === "edit") {
       e.preventDefault();
       await editInitiation(
         initiationId,
@@ -221,7 +221,10 @@ function Initiation(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Initiation Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Initiation</h1> :
+        <h1>Edit Initiation</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">

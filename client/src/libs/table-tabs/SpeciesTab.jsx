@@ -54,7 +54,7 @@ function SpeciesTab(props) {
 
   return (
     <div>
-      {data ? <TableComponent editLink="/edit/species" addLink="/add/species" status={"active"} material={"species"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
+      {data ? <TableComponent editLink="/material/species/edit" addLink="/material/species/add" status={"active"} material={"species"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
     </div>
   )
 }

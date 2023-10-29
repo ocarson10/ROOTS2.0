@@ -23,7 +23,7 @@ function GreenhouseForm(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
 
@@ -102,7 +102,7 @@ function GreenhouseForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(props.operation === "Add") {
+    if(props.operation === "add") {
       await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
         clear();
         navigate("/");
@@ -110,7 +110,7 @@ function GreenhouseForm(props) {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
         clear();
         navigate("/");
@@ -160,7 +160,10 @@ function GreenhouseForm(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Greenhouse Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Greenhouse</h1> :
+        <h1>Edit Greenhouse</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The ID of the material in the Greenhouse stage"/>Greenhouse ID:</label>

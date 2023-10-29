@@ -109,7 +109,8 @@ function ArchivedTreeTab(props) {
     <div>
       {data ? (
         <TableComponent
-          addLink="/add/tree-material"
+          addLink="/material/trees/edit"
+          editLink="/material/trees/add"
           status={"archive"}
           material={"tree"}
           rows={rows}

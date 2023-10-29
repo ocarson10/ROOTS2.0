@@ -26,7 +26,7 @@ function Maturation(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
 
@@ -112,7 +112,7 @@ function Maturation(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location, true).then(() => {
         clear();
         navigate("/");
@@ -120,7 +120,7 @@ function Maturation(props) {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location, true).then(() => {
         clear();
         navigate("/");

@@ -55,7 +55,7 @@ function LocationTab(props) {
 
   return (
     <div>
-      {data ? <TableComponent editLink="/edit/location" addLink="/add/location" status={"active"} material={"location"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
+      {data ? <TableComponent editLink="/material/location/edit" addLink="/material/location/add" status={"active"} material={"location"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
     </div>
   )
 }

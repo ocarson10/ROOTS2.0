@@ -96,7 +96,7 @@ function SeedMaterial(props) {
 
 
   useEffect(() => {
-    if(props.operation === "Edit"){
+    if(props.operation === "edit"){
       setChangeId(false);
 
       const id = window.location.href.split("/")[5];
@@ -256,7 +256,7 @@ function SeedMaterial(props) {
           setError(error.response.data.message);
         });
     }
-    else if (props.operation === "Edit") {
+    else if (props.operation === "edit") {
       e.preventDefault();
       editSeed(
         seedId,
@@ -286,7 +286,7 @@ function SeedMaterial(props) {
   };
 
   const clear = () => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       setSeedId("");
     }
 
@@ -317,7 +317,10 @@ function SeedMaterial(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Seed Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Seed</h1> :
+        <h1>Edit Seed</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">

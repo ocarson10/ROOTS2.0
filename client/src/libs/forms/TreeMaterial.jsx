@@ -112,7 +112,7 @@ function TreeMaterial(props) {
 
   useEffect(() => {
     //If editing, set the values to the current values
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
 
       //Get tree from id
@@ -163,7 +163,7 @@ function TreeMaterial(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       e.preventDefault();
       if(!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
@@ -194,7 +194,7 @@ function TreeMaterial(props) {
   };
 
   const clear = () => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       setTreeId("");
     }
 
@@ -339,7 +339,10 @@ function TreeMaterial(props) {
   return (
     <div className="form-div">
       <div>
-        <h1>{props.operation + " Tree Material"}</h1>
+      {props.operation === 'add' ?
+        <h1>Add Tree</h1> :
+        <h1>Edit Tree</h1>
+      }
 
         <div className="input-div">
           <label className="entry-label">Tree ID:</label>

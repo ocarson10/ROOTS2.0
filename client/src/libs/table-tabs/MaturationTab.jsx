@@ -73,7 +73,7 @@ function MaturationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/maturation" editLink= "/edit/maturation" addLink="/add/maturation" status={"active"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/maturation" editLink= "/material/maturation/edit" addLink="/material/maturation/add" status={"active"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

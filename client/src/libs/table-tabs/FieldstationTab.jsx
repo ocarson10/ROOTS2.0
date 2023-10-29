@@ -67,7 +67,7 @@ function FieldstationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/fieldstation" addLink="/add/fieldstation" status={"active"} material={"fieldstation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
+        <TableComponent editLink= "/material/fieldstation/edit" addLink="/material/fieldstation/add" status={"active"} material={"fieldstation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
       ) : (
         <p></p>
       )}

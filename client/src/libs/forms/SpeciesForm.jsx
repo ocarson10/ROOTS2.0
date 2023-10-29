@@ -3,10 +3,13 @@ import "../../libs/style/SpeciesForm.css";
 import SpeciesHover from "../hover-info/SpeciesHover";
 import SpeciesShorthandHover from "../hover-info/SpeciesShorthandHover";
 
-function SpeciesForm() {
+function SpeciesForm(props) {
   return (
     <div className="form-div">
-      <h1>Add Species</h1>
+      {props.operation === 'add' ?
+        <h1>Add Species</h1> :
+        <h1>Edit Species</h1>
+      }
       <div className="input-div">
         <label className="entry-label"><SpeciesHover /> Species:</label>
         <input type="text" />

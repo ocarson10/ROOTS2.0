@@ -25,7 +25,7 @@ function GerminationForm(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
 
@@ -113,7 +113,7 @@ function GerminationForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location, true).then(() => {
         clear();
         navigate("/");
@@ -121,7 +121,7 @@ function GerminationForm(props) {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location, true).then(() => {
         clear();
         navigate("/");

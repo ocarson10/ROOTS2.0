@@ -8,7 +8,7 @@ import YearPlanted from "../hover-info/YearPlanted";
 import PopulationHover from "../hover-info/PopulationHover";
 import { addId } from "../services/api-client/idService";
 
-function GeneticIdForm({isOpen, onClose, addGenIdOption}) {
+function GeneticIdForm(props) {
   const [geneticId, setGeneticId] = useState("");
   const [familyId, setFamilyId] = useState("");
   const [rametId, setRametId] = useState("");
@@ -16,15 +16,15 @@ function GeneticIdForm({isOpen, onClose, addGenIdOption}) {
   const [species, setSpecies] = useState("");
   const [yearPlanted, setYearPlanted] = useState("");
   const [population, setPopulation] = useState("");
-  const [fromForm, setFromForm] = useState(isOpen ? isOpen : false);
+  const [fromForm, setFromForm] = useState(props.isOpen ? props.isOpen : false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addId(geneticId, familyId, progenyId, species, yearPlanted, population, rametId).then(() => {
       clearForm();
       if (fromForm) {
-        addGenIdOption(geneticId);
-        onClose();
+        props.addGenIdOption(geneticId);
+        props.props.onClose();
       }
       else {
         window.location.href = "/";
@@ -46,9 +46,12 @@ function GeneticIdForm({isOpen, onClose, addGenIdOption}) {
 
   
   return (
-    <div className={`form-div ${isOpen ? "modal-open" : ""}`}>
+    <div className={`form-div ${props.isOpen ? "modal-open" : ""}`}>
       <form onSubmit={handleSubmit} >
-      <h1>Add Genetic Id</h1>
+      {props.operation === 'add' ?
+        <h1>Add Genetic Id</h1> :
+        <h1>Edit Genetic Id</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><PopulationHover /> Population:</label>

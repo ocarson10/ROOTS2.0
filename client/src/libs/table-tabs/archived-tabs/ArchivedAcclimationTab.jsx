@@ -65,7 +65,7 @@ function ArchivedAcclimationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/acclimation" addLink="/add/acclimation" status={"archive"} material={"acclimation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/acclimation/edit" addLink="/material/acclimation/add" status={"archive"} material={"acclimation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

@@ -67,7 +67,7 @@ function AcclimationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/acclimation" editLink= "/edit/acclimation" addLink="/add/acclimation" status={"active"} material={"acclimation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
+        <TableComponent propagateLink="/propagate/acclimation" editLink= "/material/acclimation/edit" addLink="/material/acclimation/add" status={"active"} material={"acclimation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} />
       ) : (
         <p></p>
       )}

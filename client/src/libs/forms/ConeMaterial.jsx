@@ -81,7 +81,7 @@ function ConeMaterial(props) {
 
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
 
       const id = window.location.href.split("/")[5];
@@ -141,7 +141,7 @@ function ConeMaterial(props) {
           setError(error.response.data.message);
         });
     }
-    else if(props.operation === "Edit") {
+    else if(props.operation === "edit") {
       e.preventDefault();
       editCone(
         coneId,
@@ -168,7 +168,7 @@ function ConeMaterial(props) {
   };
 
   const clearForm = () => {
-    if(props.operation === "Add") {
+    if(props.operation === "add") {
       setConeId("");
     }
     
@@ -311,7 +311,10 @@ function ConeMaterial(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Cone Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Cone</h1> :
+        <h1>Edit Cone</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">Cone ID:</label>

@@ -76,7 +76,7 @@ function InitiationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/initiation" editLink= "/edit/initiation" addLink="/add/initiation" status={"active"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/initiation" editLink= "/material/initiation/edit" addLink="/material/initiation/add" status={"active"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

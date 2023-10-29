@@ -73,7 +73,7 @@ function ArchivedMaturationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/maturation" addLink="/add/maturation" status={"archive"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/maturation/edit" addLink="/material/maturation/add" status={"archive"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

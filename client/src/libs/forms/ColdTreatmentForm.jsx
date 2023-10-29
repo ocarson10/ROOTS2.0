@@ -25,7 +25,7 @@ function ColdTreatment(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
       getColdTreatment(id).then((response) => {
@@ -104,7 +104,7 @@ function ColdTreatment(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
         clear();
         navigate("/");
@@ -112,7 +112,7 @@ function ColdTreatment(props) {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
+    } else if (props.operation === "edit") {
       await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
         clear();
         navigate("/");
@@ -161,7 +161,10 @@ function ColdTreatment(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Cold Treatment Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Cold Treatment</h1> :
+        <h1>Edit Cold Treatment</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The ID of the material in the Cold Treatment Stage" />Cold Treatment ID:</label>

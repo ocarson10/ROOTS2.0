@@ -94,7 +94,7 @@ function RametTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/ramet-material" addLink="/add/ramet-material" status={"active"} material={"ramet"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/ramet-material/edit" addLink="/material/ramet-material/add" status={"active"} material={"ramet"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

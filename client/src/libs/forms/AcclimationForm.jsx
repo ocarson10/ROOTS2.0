@@ -21,7 +21,7 @@ function AcclimationForm(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
 
@@ -101,7 +101,7 @@ function AcclimationForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(props.operation === "Add") {
+    if(props.operation === "add") {
       await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
         clear();
         navigate("/");
@@ -109,7 +109,7 @@ function AcclimationForm(props) {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if(props.operation === "Edit") {
+    } else if(props.operation === "edit") {
       await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
         clear();
         navigate("/");
@@ -157,7 +157,10 @@ function AcclimationForm(props) {
 
   return (
     <div className="form-div">
-        <h1>Add Acclimation Material</h1>
+        {props.operation === 'add' ?
+        <h1>Add Acclimation</h1> :
+        <h1>Edit Acclimation</h1>
+      }
 
         <div className="input-div">
           <label className="entry-label"><GenericHover text="The ID of the material in the Acclimation stage" />Acclimation ID:</label>

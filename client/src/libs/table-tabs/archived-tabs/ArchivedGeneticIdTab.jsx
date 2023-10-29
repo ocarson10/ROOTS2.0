@@ -61,7 +61,7 @@ function ArchivedGeneticIdTab(props) {
 
   return (
       <div>
-        {data ? <TableComponent editLink="/edit/genetic-id" addLink="/add/genetic-id"  status={"archive"} material={"geneticId"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
+        {data ? <TableComponent editLink="/material/genetic-id/edit" addLink="/material/genetic-id/add"  status={"archive"} material={"geneticId"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
       </div>
   )
 }

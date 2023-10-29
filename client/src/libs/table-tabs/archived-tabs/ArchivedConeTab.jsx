@@ -117,7 +117,7 @@ function ArchivedConeTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/cone-material" addLink="/add/cone-material" status={"archive"} material={"cone"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/cones/edit" addLink="/material/cones/add" status={"archive"} material={"cone"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

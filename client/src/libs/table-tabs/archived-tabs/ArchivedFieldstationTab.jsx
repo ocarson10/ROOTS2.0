@@ -67,7 +67,7 @@ function ArchivedFieldstationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/fieldstation" addLink="/add/fieldstation" status={"archive"} material={"fieldstation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/fieldstation/edit" addLink="/material/trees/add" status={"archive"} material={"fieldstation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

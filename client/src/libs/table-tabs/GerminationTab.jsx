@@ -75,7 +75,7 @@ function GerminationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/germination" editLink= "/edit/germination" addLink="/add/germination" status={"active"} material={"germination"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/germination" editLink= "/material/germination/edit" addLink="/material/germination/add" status={"active"} material={"germination"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

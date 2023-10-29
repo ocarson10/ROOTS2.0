@@ -15,7 +15,7 @@ function LocationForm(props) {
   });
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       const locName = window.location.href.split("/")[5];
       console.log("location: " + locName);
 
@@ -35,7 +35,7 @@ function LocationForm(props) {
   }, [props.operation]);
 
   const handleSubmit = async (e) => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       e.preventDefault();
       await addLocation(locationForm.location, locationForm.shortHand)
         .then(() => {
@@ -46,7 +46,7 @@ function LocationForm(props) {
           console.log(error);
         });
     }
-    else if(props.operation === "Edit") {
+    else if(props.operation === "edit") {
       console.log("editing");
       e.preventDefault();
       await editLocation(currentLocationForm.location, locationForm.location, locationForm.shortHand)
@@ -69,7 +69,10 @@ function LocationForm(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Location</h1>
+      {props.operation === 'add' ?
+        <h1>Add Location</h1> :
+        <h1>Edit Location</h1>
+      }
       <form onSubmit={handleSubmit}>
         <div className="input-div">
           <label className="entry-label">
