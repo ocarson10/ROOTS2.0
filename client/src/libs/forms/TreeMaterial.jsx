@@ -204,7 +204,7 @@ function TreeMaterial(props) {
     setProgenyId({ value: "", label: "" });
     setPopulation({ value: "", label: "" });
     setRametId({ value: "", label: "" });
-    setLocation("");
+    setLocation({ value: "", label: "" });
     setGps("");
     setPopOptions([]);
     setFamOptions([]);

@@ -8,9 +8,14 @@ import Select from "react-select";
 import { getIds, getId } from "../services/api-client/idService";
 import { getSeed } from "../services/api-client/seedService";
 import { useNavigate } from "react-router-dom";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import { addFile, getFiles } from "../services/api-client/fileService";
 import FileUpload from "./FileUpload";
 import "../../libs/style/ImageUpload.css";
+
 function Initiation(props) {
   const [initiationId, setInitiationId] = useState("");
   const [seedId, setSeedId] = useState("");
@@ -24,7 +29,36 @@ function Initiation(props) {
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [changeId, setChangeId] = useState(true);
   const [changeGen, setChangeGen] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
+
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId));
+    }
+    if(geneticId) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
 
   useEffect(() => {
     if (props.operation === "edit") {
@@ -135,6 +169,12 @@ function Initiation(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
       await addInitiation(
         initiationId,
         geneticId.value,
@@ -327,8 +367,15 @@ function Initiation(props) {
           }}
         />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+      {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
+
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
