@@ -150,7 +150,7 @@ function ColdTreatment(props) {
       if (!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
       }
-      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -164,7 +164,7 @@ function ColdTreatment(props) {
       if (!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
       }
-      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
