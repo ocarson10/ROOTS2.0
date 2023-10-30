@@ -67,12 +67,12 @@ function TreeMaterial(props) {
 
   useEffect(() => {
     async function loadPhotos() {
-      setPhotos(await getPhotos(geneticId));
+      setPhotos(await getPhotos(geneticId.value));
     }
     async function loadFiles() {
-      setFiles(await getFiles(geneticId));
+      setFiles(await getFiles(geneticId.value));
     }
-    if(geneticId) {
+    if(!!geneticId.value) {
       loadPhotos();
       loadFiles();
     }

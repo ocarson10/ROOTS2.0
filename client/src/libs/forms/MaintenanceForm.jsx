@@ -9,8 +9,13 @@ import { addMaintenance, updateMaintenance, getMaintenance } from "../services/a
 import { getIds, getId } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
+import { addFile, getFiles } from "../services/api-client/fileService";
+import { getLocations } from "../services/api-client/locationService";
+
 function Maintenance(props) {
   const [maintenanceId, setMaintenanceId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -19,12 +24,43 @@ function Maintenance(props) {
   const [dateCurr, setDateCurr] = useState("");
   const [mediaBatchPrev, setMediaBatchPrev] = useState("");
   const [datePrev, setDatePrev] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId.value));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId.value));
+    }
+    if(!!geneticId.value) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
+
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
@@ -117,6 +153,13 @@ function Maintenance(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
+
       await addMaintenance(
         maintenanceId,
         geneticId.value,
@@ -125,7 +168,7 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
-        location,
+        location.value,
         true
       )
         .then(() => {
@@ -137,6 +180,12 @@ function Maintenance(props) {
           setError("An error occured: " + error);
         });
     } else if (props.operation === "edit") {
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
       await updateMaintenance(
         maintenanceId,
         geneticId.value,
@@ -145,7 +194,7 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
-        location,
+        location.value,
         true
       )
         .then(() => {
@@ -200,6 +249,24 @@ function Maintenance(props) {
     setGeneticId({ value: e.value, label: e.label });
     setError("");
   };
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
 
   return (
     <div className="form-div">
@@ -315,17 +382,20 @@ function Maintenance(props) {
         <label className="entry-label">
           <LocationHover text="Location of Maintenance" /> Location:
         </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => {
-            setLocation(e.target.value);
-            setError("");
-          }}
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
         />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+      {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
