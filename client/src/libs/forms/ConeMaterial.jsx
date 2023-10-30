@@ -18,7 +18,11 @@ import {
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import FileUpload from "./FileUpload";
+import { addFile, getFiles } from "../services/api-client/fileService";
 import "../../libs/style/ImageUpload.css";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
@@ -47,7 +51,36 @@ function ConeMaterial(props) {
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId));
+    }
+    if(geneticId) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
+  
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
   };
@@ -116,9 +149,15 @@ function ConeMaterial(props) {
     }
   }, [props.operation]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
       addCone(
         coneId,
         motherTreeId,
@@ -437,8 +476,14 @@ function ConeMaterial(props) {
             value={location ? location : ""}
           />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+      {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
