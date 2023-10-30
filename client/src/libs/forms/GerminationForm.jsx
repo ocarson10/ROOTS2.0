@@ -22,7 +22,7 @@ function GerminationForm(props) {
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateGermination, setDateGermination] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);

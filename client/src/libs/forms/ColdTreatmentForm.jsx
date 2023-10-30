@@ -22,7 +22,7 @@ function ColdTreatment(props) {
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [dateCold, setDateCold] = useState("");
   const [duration, setDuration] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
