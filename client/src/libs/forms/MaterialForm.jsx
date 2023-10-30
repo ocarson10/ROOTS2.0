@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ImageUpload from './ImageUpload';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import AcclimationForm from './AcclimationForm';
 import ColdTreatmentForm from './ColdTreatmentForm';
@@ -18,23 +17,9 @@ import SeedMaterial from './SeedMaterial';
 import SpeciesForm from './SpeciesForm';
 import TreeMaterial from './TreeMaterial';
 import '../../libs/style/Material.css';
-import { addPhoto, getPhoto } from '../services/api-client/photoService';
+
 function MaterialForm(props) {
 	const { material, action, id } = useParams();
-	const [geneticId, setGeneticId] = useState(null);
-	const [selectedImage, setSelectedImage] = useState(null);
-	const getGeneticIdFromChild = (data) => {
-		setGeneticId(data);
-	}
-	// Function to receive the selected image from child component
-	const handleImageSelection = (image) => {
-		setSelectedImage(image);
-	};
-
-	const submitPhoto = async () => {
-		console.log(geneticId);
-		await addPhoto(geneticId, selectedImage.file);
-	}
 
 	return (
 		<div>
@@ -116,12 +101,10 @@ function MaterialForm(props) {
 				)}
 				{material === 'trees' && (
 					<>
-						<TreeMaterial operation={action} sendGeneticIdToParent={getGeneticIdFromChild} treeId={id}/>
+						<TreeMaterial operation={action} treeId={id}/>
 					</>
 				)}
 			</div>
-			<ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
-			{geneticId && <button onClick={submitPhoto}></button> }
 		</div>
 	);
 }
