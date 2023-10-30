@@ -15,7 +15,11 @@ import {
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from '../services/api-client/idService';
 import ImageUpload from "./ImageUpload";
-import FileUpload from './FileUpload';
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
+import FileUpload from "./FileUpload";
+import { addFile, getFiles } from "../services/api-client/fileService";
 import "../../libs/style/ImageUpload.css";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
@@ -37,9 +41,38 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
+
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId.value));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId.value));
+    }
+    if (!!geneticId.value) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
 
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
@@ -51,7 +84,7 @@ function RametForm(props) {
 
   const addPopulationOption = (newOption) => {
     // Update the options with the newly added value
-    let newValue = {value: newOption, label: newOption}
+    let newValue = { value: newOption, label: newOption }
     setPopOptions([...popOptions, newValue]);
     setGeneticIdFormOpen(true);
   };
@@ -64,13 +97,13 @@ function RametForm(props) {
 
   const addGenIdOption = (newOption) => {
     // Update the options with the newly added value
-    let newValue = {value: newOption, label: newOption}
+    let newValue = { value: newOption, label: newOption }
     setGenOptions([...genOptions, newValue]);
   };
 
   const handleLocationChange = (e) => {
     setError("");
-    setLocation({value: e.value, label: e.value});
+    setLocation({ value: e.value, label: e.value });
   }
 
   const getExistingLocations = async () => {
@@ -131,7 +164,7 @@ function RametForm(props) {
   // When changing the family, get the ramet options
   const handleFamilyChange = async (e) => {
     setError("");
-    setFamilyId({value: e.value, label: e.value});
+    setFamilyId({ value: e.value, label: e.value });
     await getIdsByPopulationAndFamily(population?.value, e.value).then((ids) => {
       let options = ids.data.map((id) => {
         return {
@@ -140,7 +173,7 @@ function RametForm(props) {
         };
       });
       if (options.length < 1) {
-        options = [{value: null, label: "No Ramet Id (select)"}]
+        options = [{ value: null, label: "No Ramet Id (select)" }]
       }
       setRametOptions(options);
     });
@@ -149,7 +182,7 @@ function RametForm(props) {
   // gets the genetic ids
   const handleRametChange = async (e) => {
     setError("");
-    setRametId({value: e.value, label: e.value})
+    setRametId({ value: e.value, label: e.value })
     await getIdsByPopulationAndFamilyAndRamet(population.value, familyId.value, e.value).then((ids) => {
       const options = ids.data.map((id) => {
         return {
@@ -164,7 +197,7 @@ function RametForm(props) {
   // Gets the progeny ids
   const handleGeneticChange = async (e) => {
     setError("");
-    setGeneticId({value: e.value, label: e.value});
+    setGeneticId({ value: e.value, label: e.value });
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
@@ -185,7 +218,7 @@ function RametForm(props) {
   // Sets the progeny id
   const handleProgenyChange = (e) => {
     setError("");
-    setProgenyId({value: e.value, label: e.value});
+    setProgenyId({ value: e.value, label: e.value });
   };
 
   const handleSubmit = (e) => {
@@ -195,16 +228,16 @@ function RametForm(props) {
       return;
     }
     addRamet(
-      id, 
-      motherTreeId, 
-      geneticId.value, 
-      familyId.value, 
-      progenyId.value, 
-      population.value, 
-      rametId.value, 
-      location.value, 
+      id,
+      motherTreeId,
+      geneticId.value,
+      familyId.value,
+      progenyId.value,
+      population.value,
+      rametId.value,
+      location.value,
       gps
-      ).then((res) => {
+    ).then((res) => {
       if (res.status === 200) {
         clear()
         window.location.href = "/";
@@ -217,12 +250,12 @@ function RametForm(props) {
   const clear = () => {
     setId("");
     setMotherTreeId("");
-    setGeneticId({value: "", label: ""});
-    setFamilyId({value: "", label: ""});
-    setProgenyId({value: "", label: ""});
-    setPopulation({value: "", label: ""});
-    setRametId({value: "", label: ""});
-    setLocation({value: "", label: ""});
+    setGeneticId({ value: "", label: "" });
+    setFamilyId({ value: "", label: "" });
+    setProgenyId({ value: "", label: "" });
+    setPopulation({ value: "", label: "" });
+    setRametId({ value: "", label: "" });
+    setLocation({ value: "", label: "" });
     setGps("");
     setError("");
     setPopOptions([]);
@@ -267,13 +300,13 @@ function RametForm(props) {
             value={population ? population : ""}
           />
           {isPopulationFormOpen &&
-            <PopulationForm 
+            <PopulationForm
               isOpen={isPopulationFormOpen}
               onClose={handleClosePopulationForm}
               addPopOption={addPopulationOption}
             />
           }
-          {isGeneticIdFormOpen && 
+          {isGeneticIdFormOpen &&
             <GeneticIdForm
               isOpen={isGeneticIdFormOpen}
               onClose={handleCloseGenIdForm}
@@ -287,7 +320,7 @@ function RametForm(props) {
             <GenericHover text="The family ID of the genetic ID" />
             Family ID:
           </label>
-          <Select 
+          <Select
             options={famOptions}
             onChange={handleFamilyChange}
             value={familyId ? familyId : ''}
@@ -302,7 +335,7 @@ function RametForm(props) {
           <Select
             options={rametOptions}
             onChange={handleRametChange}
-            value={rametId ? rametId : ''} 
+            value={rametId ? rametId : ''}
           />
         </div>
 
@@ -310,10 +343,10 @@ function RametForm(props) {
           <label className="entry-label">
             <GeneticHover /> Genetic ID:
           </label>
-          <Select 
+          <Select
             options={genOptions}
             onChange={handleGeneticChange}
-            value={geneticId ? geneticId : ''} 
+            value={geneticId ? geneticId : ''}
           />
         </div>
 
@@ -321,10 +354,10 @@ function RametForm(props) {
           <label className="entry-label">
             <ProgenyHover /> Progeny ID:
           </label>
-          <Select 
+          <Select
             options={proOptions}
             onChange={handleProgenyChange}
-            value={progenyId ? progenyId : ''} 
+            value={progenyId ? progenyId : ''}
           />
         </div>
 
@@ -352,8 +385,14 @@ function RametForm(props) {
             }}
           />
         </div>
-        <ImageUpload></ImageUpload>
-        <FileUpload></FileUpload>
+        {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
         <div className="button-div">
           <button
             className="form-button"
