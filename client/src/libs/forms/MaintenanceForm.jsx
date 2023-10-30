@@ -62,6 +62,10 @@ function Maintenance(props) {
   }, [geneticId]);
 
   useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+  useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
       const id = window.location.href.split("/")[5];
