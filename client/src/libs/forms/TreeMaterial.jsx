@@ -135,15 +135,14 @@ function TreeMaterial(props) {
   }, [props.operation]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     if (props.operation === "add") {
-      e.preventDefault();
       if (!!selectedFile) {
         await addFile(geneticId.value, selectedFile);
       }
       if (!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
       }
-
       await addTree(
         progenyId.value,
         geneticId.value,
@@ -164,7 +163,6 @@ function TreeMaterial(props) {
           setError("An error occured: " + error);
         });
     } else if (props.operation === "edit") {
-      e.preventDefault();
       if(!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
       }

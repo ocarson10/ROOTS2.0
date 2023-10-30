@@ -8,17 +8,63 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { getGermination } from "../services/api-client/germinationService";
 import { addAcclimation, getAcclimation, updateAcclimation } from "../services/api-client/acclimationService";
+import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
+import FileUpload from "./FileUpload";
+import { addFile, getFiles } from "../services/api-client/fileService";
+import { getLocations } from "../services/api-client/locationService";
 
 function AcclimationForm(props) {
   const [acclimationId, setAcclimationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateAcclimation, setDateAcclimation] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  // Function to receive the selected image from child component
+  const handleImageSelection = (image) => {
+    setSelectedImage(image);
+  };
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId.value));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId.value));
+    }
+    if(!!geneticId.value) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
 
   useEffect(() => {
     if (props.operation === "edit") {
@@ -102,7 +148,13 @@ function AcclimationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
+      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -110,7 +162,13 @@ function AcclimationForm(props) {
         setError("An error occured: " + error);
       });
     } else if(props.operation === "edit") {
-      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
+      if (!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
+      if (!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
+      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -123,7 +181,7 @@ function AcclimationForm(props) {
   const clear = () => {
     setAcclimationId('');
     setDateAcclimation('');
-    setLocation('');
+    setLocation({ value: "", label: "" });
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
@@ -155,6 +213,19 @@ function AcclimationForm(props) {
     setError("");
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
   return (
     <div className="form-div">
         {props.operation === 'add' ?
@@ -178,10 +249,22 @@ function AcclimationForm(props) {
         </div>
 
         <div className="input-div">
-          <label className="entry-label"><LocationHover /> Location:</label>
-          <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
+          <label className="entry-label"><LocationHover /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
         </div>
-
+        {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
         <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
