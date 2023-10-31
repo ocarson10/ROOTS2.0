@@ -19,12 +19,6 @@ import {
 } from "../services/api-client/idService";
 import {getId} from "../services/api-client/idService";
 import {useNavigate} from "react-router-dom";
-import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhotos } from "../services/api-client/photoService";
-import Slideshow from "./Slideshow";
-import FileList from "./FileList";
-import FileUpload from "./FileUpload";
-import { addFile, getFiles } from "../services/api-client/fileService";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
@@ -51,39 +45,9 @@ function SeedMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [photos, setPhotos] = useState(null);
-  const [files, setFiles] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
-
-  // Function to receive the selected image from child component
-  const handleImageSelection = (image) => {
-    setSelectedImage(image);
-  };
-  const handleFileSelection = (file) => {
-    setSelectedFile(file);
-  };
-
-  const updatePhotos = (newPhotos) => {
-    setPhotos(newPhotos);
-  };
-
-  useEffect(() => {
-    async function loadPhotos() {
-      setPhotos(await getPhotos(geneticId));
-    }
-    async function loadFiles() {
-      setFiles(await getFiles(geneticId));
-    }
-    if(geneticId) {
-      loadPhotos();
-      loadFiles();
-    }
-  }, [geneticId]);
-
 
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
@@ -260,17 +224,11 @@ function SeedMaterial(props) {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     if (props.operation === "add") {
-      e.preventDefault();
       if (seedId === "") {
         setError("Please enter a seed ID");
         return;
-      }
-      if (!!selectedFile) {
-        await addFile(geneticId.value, selectedFile);
-      }
-      if (!!selectedImage) {
-        await addPhoto(geneticId.value, selectedImage.file);
       }
       addSeed(
         seedId,
@@ -298,13 +256,6 @@ function SeedMaterial(props) {
         });
     }
     else if (props.operation === "edit") {
-      e.preventDefault();
-      if (!!selectedFile) {
-        await addFile(geneticId.value, selectedFile);
-      }
-      if (!!selectedImage) {
-        await addPhoto(geneticId.value, selectedImage.file);
-      }
       editSeed(
         seedId,
         mother,
@@ -522,14 +473,6 @@ function SeedMaterial(props) {
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
-      {!!photos && photos.length !== 0 &&
-          <Slideshow photos={photos} updatePhotos={updatePhotos} />
-        }
-        <ImageUpload onImageSelect={handleImageSelection} />
-        <FileUpload onFileSelect={handleFileSelection} />
-        {!!files && files.length !== 0 &&
-          <FileList files={files} />
-        }
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

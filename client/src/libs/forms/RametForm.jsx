@@ -14,13 +14,6 @@ import {
   getIdsByPopulationAndFamilyAndRamet,
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from '../services/api-client/idService';
-import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhotos } from "../services/api-client/photoService";
-import Slideshow from "./Slideshow";
-import FileList from "./FileList";
-import FileUpload from "./FileUpload";
-import { addFile, getFiles } from "../services/api-client/fileService";
-import "../../libs/style/ImageUpload.css";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
@@ -41,38 +34,9 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [photos, setPhotos] = useState(null);
-  const [files, setFiles] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
-
-  // Function to receive the selected image from child component
-  const handleImageSelection = (image) => {
-    setSelectedImage(image);
-  };
-  const handleFileSelection = (file) => {
-    setSelectedFile(file);
-  };
-
-  const updatePhotos = (newPhotos) => {
-    setPhotos(newPhotos);
-  };
-
-  useEffect(() => {
-    async function loadPhotos() {
-      setPhotos(await getPhotos(geneticId.value));
-    }
-    async function loadFiles() {
-      setFiles(await getFiles(geneticId.value));
-    }
-    if (!!geneticId.value) {
-      loadPhotos();
-      loadFiles();
-    }
-  }, [geneticId]);
 
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
@@ -385,14 +349,6 @@ function RametForm(props) {
             }}
           />
         </div>
-        {!!photos && photos.length !== 0 &&
-          <Slideshow photos={photos} updatePhotos={updatePhotos} />
-        }
-        <ImageUpload onImageSelect={handleImageSelection} />
-        <FileUpload onFileSelect={handleFileSelection} />
-        {!!files && files.length !== 0 &&
-          <FileList files={files} />
-        }
         <div className="button-div">
           <button
             className="form-button"

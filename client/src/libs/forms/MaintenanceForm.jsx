@@ -8,12 +8,6 @@ import Select from "react-select";
 import { addMaintenance, updateMaintenance, getMaintenance } from "../services/api-client/maintenanceService";
 import { getIds, getId } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhotos } from "../services/api-client/photoService";
-import Slideshow from "./Slideshow";
-import FileList from "./FileList";
-import FileUpload from "./FileUpload";
-import { addFile, getFiles } from "../services/api-client/fileService";
 import { getLocations } from "../services/api-client/locationService";
 
 function Maintenance(props) {
@@ -30,36 +24,7 @@ function Maintenance(props) {
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [photos, setPhotos] = useState(null);
-  const [files, setFiles] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [locationOptions, setLocationOptions] = useState([]);
-
-  // Function to receive the selected image from child component
-  const handleImageSelection = (image) => {
-    setSelectedImage(image);
-  };
-  const handleFileSelection = (file) => {
-    setSelectedFile(file);
-  };
-
-  const updatePhotos = (newPhotos) => {
-    setPhotos(newPhotos);
-  };
-
-  useEffect(() => {
-    async function loadPhotos() {
-      setPhotos(await getPhotos(geneticId.value));
-    }
-    async function loadFiles() {
-      setFiles(await getFiles(geneticId.value));
-    }
-    if(!!geneticId.value) {
-      loadPhotos();
-      loadFiles();
-    }
-  }, [geneticId]);
 
   useEffect(() => {
     getExistingLocations();
@@ -157,13 +122,6 @@ function Maintenance(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      if (!!selectedFile) {
-        await addFile(geneticId.value, selectedFile);
-      }
-      if (!!selectedImage) {
-        await addPhoto(geneticId.value, selectedImage.file);
-      }
-
       await addMaintenance(
         maintenanceId,
         geneticId.value,
@@ -184,12 +142,6 @@ function Maintenance(props) {
           setError("An error occured: " + error);
         });
     } else if (props.operation === "edit") {
-      if (!!selectedFile) {
-        await addFile(geneticId.value, selectedFile);
-      }
-      if (!!selectedImage) {
-        await addPhoto(geneticId.value, selectedImage.file);
-      }
       await updateMaintenance(
         maintenanceId,
         geneticId.value,
@@ -392,14 +344,6 @@ function Maintenance(props) {
             value={location ? location : ""}
         />
       </div>
-      {!!photos && photos.length !== 0 &&
-          <Slideshow photos={photos} updatePhotos={updatePhotos} />
-        }
-        <ImageUpload onImageSelect={handleImageSelection} />
-        <FileUpload onFileSelect={handleFileSelection} />
-        {!!files && files.length !== 0 &&
-          <FileList files={files} />
-        }
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
