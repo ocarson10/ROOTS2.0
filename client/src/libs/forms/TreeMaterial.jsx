@@ -72,7 +72,7 @@ function TreeMaterial(props) {
     async function loadFiles() {
       setFiles(await getFiles(geneticId.value));
     }
-    if(!!geneticId.value) {
+    if (!!geneticId.value) {
       loadPhotos();
       loadFiles();
     }
@@ -89,7 +89,7 @@ function TreeMaterial(props) {
 
   const addPopulationOption = (newOption) => {
     // Update the options with the newly added value
-    let newValue = {value: newOption, label: newOption}
+    let newValue = { value: newOption, label: newOption }
     setPopOptions([...popOptions, newValue]);
     setGeneticIdFormOpen(true);
   };
@@ -102,7 +102,7 @@ function TreeMaterial(props) {
 
   const addGenIdOption = (newOption) => {
     // Update the options with the newly added value
-    let newValue = {value: newOption, label: newOption}
+    let newValue = { value: newOption, label: newOption }
     setGenOptions([...genOptions, newValue]);
   };
 
@@ -163,10 +163,10 @@ function TreeMaterial(props) {
           setError("An error occured: " + error);
         });
     } else if (props.operation === "edit") {
-      if(!!selectedImage) {
+      if (!!selectedImage) {
         await addPhoto(geneticId.value, selectedImage.file);
       }
-      if(!!selectedFile) {
+      if (!!selectedFile) {
         await addFile(geneticId.value, selectedFile);
       }
       await editTree(
@@ -331,16 +331,16 @@ function TreeMaterial(props) {
 
   const handleLocationChange = (e) => {
     setError("");
-    setLocation({value: e.value, label: e.value});
+    setLocation({ value: e.value, label: e.value });
   }
 
   return (
     <div className="form-div">
       <div>
-      {props.operation === 'add' ?
-        <h1>Add Tree</h1> :
-        <h1>Edit Tree</h1>
-      }
+        {props.operation === 'add' ?
+          <h1>Add Tree</h1> :
+          <h1>Edit Tree</h1>
+        }
 
         <div className="input-div">
           <label className="entry-label">Tree ID:</label>
@@ -366,13 +366,13 @@ function TreeMaterial(props) {
             value={population ? population : ""}
           />
           {isPopulationFormOpen &&
-            <PopulationForm 
+            <PopulationForm
               isOpen={isPopulationFormOpen}
               onClose={handleClosePopulationForm}
               addPopOption={addPopulationOption}
             />
           }
-          {isGeneticIdFormOpen && 
+          {isGeneticIdFormOpen &&
             <GeneticIdForm
               isOpen={isGeneticIdFormOpen}
               onClose={handleCloseGenIdForm}
