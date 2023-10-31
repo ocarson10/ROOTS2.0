@@ -24,7 +24,7 @@ function GeneticIdForm(props) {
       clearForm();
       if (fromForm) {
         props.addGenIdOption(geneticId);
-        props.props.onClose();
+        props.onClose();
       }
       else {
         window.location.href = "/";
