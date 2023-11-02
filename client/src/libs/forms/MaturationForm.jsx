@@ -21,6 +21,7 @@ function Maturation(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [locationOptions, setLocationOptions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
