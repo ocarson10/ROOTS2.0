@@ -36,7 +36,7 @@ const ensureTestingGenIdExists = async () => {
     if(response.statusCode !== 200) {
         //Creating geneticId to use with Photos
         const newGeneticId = {
-            geneticId: "123456789",
+            geneticId: "1",
             progenyId: "A3",
             familyId: "51",
             rametId: null,
@@ -50,6 +50,36 @@ const ensureTestingGenIdExists = async () => {
     }
 }
 
+const ensureLocationExists = async () => {
+    const response = await request(app).get("/locations/t3st");
+
+    if(!response) {
+        const newLocation = {
+            location: 't3st',
+            shorthand: 't3st'
+        };
+
+        const createResponse = await request(app).post('/locations').send(newLocation);
+        expect(createResponse.statusCode).toBe(200);
+    }
+}
+
+const ensureTreeExists = async () => {
+    const response = await request(app).get("/trees/1");
+
+    if(!response) {
+        const newTree = {
+            treeId: '1',
+            gps: 'testGPS123',
+            locationId: 't3st',
+            treeGeneticId: '1'
+        }
+
+        const createResponse = await request(app).post('/trees').send(newTree);
+        expect(createResponse.statusCode).toBe(200);
+    }
+}
+
 describe('Photos API', () => {
     beforeAll(async () => {
         app = await setUp();
@@ -59,26 +89,44 @@ describe('Photos API', () => {
 
         //Creating GeneticId to use with Photos
         await ensureTestingGenIdExists();
+
+        //Creating tree requires location
+        await ensureLocationExists();
+
+        //Creating tree
+        await ensureTreeExists();
     });
 
     afterAll(async() => {
-        await request(app).delete("/populations").send({id: "100"});
-        await request(app).delete("/genetic-id").send({id: 1});
+        /**await request(app).delete('/populations').send({id: '100'});
+        await request(app).delete('/genetic-id').send({id: 1});
+        await request(app).delete('/locations').send({location: 't3st'});
+        await request(app).delete('trees').send({id: 1});*/
     });
 
     test('GET should return 404, geneticId not found', async () => {
-        const response = await request(app).get('/photos/101');
+        const response = await request(app).get('/photos/tree/101');
         expect(response.statusCode).toBe(404);
     });
 
-    test('GET should return 200, empty photos response -- none created yet', async () => {
-        const response = await request(app).get('/photos/1');
-        expect(response.statusCode).toBe(200);
+    test('GET should return 404, no photos created yet', async () => {
+        const response = await request(app).get('/photos/tree/1');
+        expect(response.statusCode).toBe(404);
     });
 
     test('POST should return 400, bad request -- not photo data', async () => {
         const newPhoto = {
-            materialGeneticId: 100
+            materialId: 100, 
+            materialType: 'tree'
+        };
+
+        const response = await request(app).post('/photos').send(newPhoto);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST should return 400, bad request -- not photo/type data', async () => {
+        const newPhoto = {
+            materialId: 100
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -94,18 +142,31 @@ describe('Photos API', () => {
         expect(response.statusCode).toBe(400);
     });
 
-    test('POST should return 200, succesful creation response', async () => {
+    test('POST should return 400, no material type', async () => {
         const newPhoto = {
-            materialGeneticId: 1,
+            materialId: 1,
             photoData: 'xyzbytesandmorebytesdotphoto'
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST should return 200, succesful creation response', async () => {
+        const newPhoto = {
+            materialId: 1,
+            photoData: 'xyzbytesandmorebytesdotphoto', 
+            materialType: 'tree'
+        };
+
+        const response = await request(app).post('/photos').send(newPhoto);
+        console.log(response);
+        console.log(response.error);
         expect(response.statusCode).toBe(200);
     });
 
     test('GET should return 200, should reflect newly added photo', async () => {
-        const response = await request(app).get('/photos/1');
+        const response = await request(app).get('/photos/tree/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
         expect(response.body[0].photoId).toBe(1);
@@ -113,8 +174,9 @@ describe('Photos API', () => {
 
     test('POST should return 200, succesful addition of extra photo', async () => {
         const newPhoto = {
-            materialGeneticId: 1,
-            photoData: 'xyzbytesandmorebytesnumerodosdotphoto'
+            materialId: 1,
+            photoData: 'xyzbytesandmorebytesnumerodosdotphoto', 
+            materialType: 'tree'
         };
 
         const response = await request(app).post('/photos').send(newPhoto);
@@ -122,7 +184,7 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, should reflect both photos', async () => {
-        const response = await request(app).get('/photos/1');
+        const response = await request(app).get('/photos/tree/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
         expect(response.body[0].photoId).toBe(1);
@@ -141,7 +203,7 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, should show one photo', async () => {
-        const response = await request(app).get('/photos/1');
+        const response = await request(app).get('/photos/tree/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
         expect(response.body[0].photoId).toBe(1);
@@ -158,7 +220,7 @@ describe('Photos API', () => {
     });
 
     test('GET should return 200, empty photos response -- none left', async () => {
-        const response = await request(app).get('/photos/1');
+        const response = await request(app).get('/photos/tree/1');
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual([]);
     });
