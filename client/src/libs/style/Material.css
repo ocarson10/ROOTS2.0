@@ -1,4 +1,12 @@
-div.upload-section{
+.flex-container {
+    display: flex;
+}
+
+.flex-child {
+    flex: 1;
+}  
+
+.files {
     display: flex;
     flex-direction: column;
     width: 350px;

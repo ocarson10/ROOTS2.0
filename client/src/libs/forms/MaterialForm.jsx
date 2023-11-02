@@ -66,14 +66,14 @@ function MaterialForm(props) {
 	  }, [id]);
 
 	return (
-		<div>
-			<div>
-				{material == 'acclimation' &&
+		<div className='flex-container'>
+			<div className='flex-child'>
+				{material === 'acclimation' &&
 					<>
 						<AcclimationForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
 					</>
 				}
-				{material == 'cold-treatment' &&
+				{material === 'cold-treatment' &&
 					<>
 						<ColdTreatmentForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit}/>
 					</>
@@ -149,14 +149,18 @@ function MaterialForm(props) {
 					</>
 				)}
 			</div>
-			{!!photos && photos.length !== 0 &&
-				<Slideshow photos={photos} updatePhotos={updatePhotos} />
-			}
-			<ImageUpload onImageSelect={handleImageSelection} />
-			<FileUpload onFileSelect={handleFileSelection} />
-			{!!files && files.length !== 0 &&
-				<FileList files={files} />
-			}
+			<div className='flex-child'>
+				<div className='files'>
+					{!!photos && photos.length !== 0 &&
+						<Slideshow photos={photos} updatePhotos={updatePhotos} />
+					}
+					<ImageUpload onImageSelect={handleImageSelection} />
+					<FileUpload onFileSelect={handleFileSelection} />
+					{!!files && files.length !== 0 &&
+						<FileList files={files} />
+					}
+				</div>
+			</div>
 		</div>
 	);
 }
