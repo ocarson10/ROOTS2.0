@@ -63,7 +63,7 @@ async function testModels() {
     emailContent += await maintenanceChecker();
     emailContent += await maturationChecker();
     emailContent += await rametChecker();
-    emailContent += `<h1 style="text-align:center";>&lt;|º_º|&gt;</h1>·`
+    emailContent += `<h1 style="text-align:center";>·&lt;|º_º|&gt;·</h1>·`
 
     //sendEmail(users.toString());
     sendEmail(emailContent);
