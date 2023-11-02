@@ -1,21 +1,21 @@
-const locationModel = require('./models/locations.model');
-const populationModel = require("./models/population.model");
-const treeModel = require("./models/tree.model");
-const speciesModel = require("./models/species.model");
-const rametModel = require("./models/ramet.model");
-const coneModel = require("./models/cone.model");
-const seedModel = require("./models/seed.model");
-const initiationModel = require("./models/initiation.model");
-const maintenanceModel = require("./models/maintenance.model");
-const acclimationModel = require("./models/acclimation.model");
-const coldTreatmentModel = require("./models/coldtreatment.model");
-const germinationModel = require("./models/germination.model");
-const fieldStationModel = require("./models/fieldstation.model");
-const maturationModel = require("./models/maturation.model");
-const greenhouseModel = require("./models/greenhouse.model");
+async function ensureMaterialIdExists(type, id) {
+    const locationModel = require('./models/locations.model');
+    const populationModel = require("./models/population.model");
+    const treeModel = require("./models/tree.model");
+    const speciesModel = require("./models/species.model");
+    const rametModel = require("./models/ramet.model");
+    const coneModel = require("./models/cone.model");
+    const seedModel = require("./models/seed.model");
+    const initiationModel = require("./models/initiation.model");
+    const maintenanceModel = require("./models/maintenance.model");
+    const acclimationModel = require("./models/acclimation.model");
+    const coldTreatmentModel = require("./models/coldtreatment.model");
+    const germinationModel = require("./models/germination.model");
+    const fieldStationModel = require("./models/fieldstation.model");
+    const maturationModel = require("./models/maturation.model");
+    const greenhouseModel = require("./models/greenhouse.model");
 
-export async function ensureMaterialIdExists(type, id) {
-    switch(type) {
+    switch (type) {
         case 'location':
             return await locationModel.findByPk(id) !== null;
 
@@ -65,3 +65,5 @@ export async function ensureMaterialIdExists(type, id) {
             return false;
     }
 }
+
+module.exports = { ensureMaterialIdExists };
