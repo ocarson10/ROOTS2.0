@@ -53,7 +53,7 @@ async function testModels() {
     const users = await UserModel.findAll();
     let currentDate = new Date();
 
-    let emailContent = `<h1> ${currentDate} - CTG Inventory Report`;
+    let emailContent = `<h1 style="text-align:center;"> ${currentDate.toDateString()} - CTG Inventory Report`;
     emailContent += await seedChecker();
     emailContent += await acclimationChecker();
     emailContent += await coldTreatmentChecker();
@@ -63,6 +63,7 @@ async function testModels() {
     emailContent += await maintenanceChecker();
     emailContent += await maturationChecker();
     emailContent += await rametChecker();
+    emailContent += `<h1 style="text-align:center";>&lt;|º_º|&gt;</h1>·`
 
     //sendEmail(users.toString());
     sendEmail(emailContent);
@@ -101,10 +102,14 @@ async function seedChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Seed Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -139,10 +144,14 @@ async function acclimationChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
-    
+
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Acclimation Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -177,10 +186,14 @@ async function coldTreatmentChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Cold Treatment Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -215,10 +228,14 @@ async function germinationChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Germination Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -253,10 +270,14 @@ async function greenHouseChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Greenhouse Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -291,10 +312,14 @@ async function initiationChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Initiation Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -329,10 +354,14 @@ async function maintenanceChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Maintenance Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -367,10 +396,14 @@ async function maturationChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Maturation Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
@@ -405,10 +438,14 @@ async function rametChecker() {
                   geneticId.geneticId +
                   `_` +
                   geneticId.progenyId;
-            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate} </li>`;
+            materialBody += `<li> ${geneticIdName} pending transfer. Expected transfer by ${element.transferDate.toDateString()} </li>`;
         }
     }
     
+    if (materialBody.length === 0) {
+        return ``;
+    }
+
     let materialHeader = `<h2> Ramet Materials Needing Transfer </h2>`;
     materialHeader += materialBody;
     return materialHeader;
