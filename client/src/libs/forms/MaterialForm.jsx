@@ -54,111 +54,113 @@ function MaterialForm(props) {
 
 	useEffect(() => {
 		async function loadPhotos() {
-		  setPhotos(await getPhotos(id));
+			setPhotos(await getPhotos(id));
 		}
 		async function loadFiles() {
-		  setFiles(await getFiles(id));
+			setFiles(await getFiles(id));
 		}
 		if (id) {
-		  loadPhotos();
-		  loadFiles();
+			loadPhotos();
+			loadFiles();
 		}
-	  }, [id]);
+	}, [id]);
 
 	return (
-		<div className='flex-container'>
-			<div className='flex-child'>
-				{material === 'acclimation' &&
-					<>
-						<AcclimationForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
-					</>
-				}
-				{material === 'cold-treatment' &&
-					<>
-						<ColdTreatmentForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				}
-				{material === 'cones' && (
-					<>
-						<ConeMaterial operation={action} coneId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'fieldstation' && (
-					<>
-						<FieldstationForm operation={action} fieldstationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'genetic-id' && (
-					<>
-						<GeneticIdForm operation={action} geneticId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'germination' && (
-					<>
-						<GerminationForm operation={action} germinationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'greenhouse' && (
-					<>
-						<GreenhouseForm operation={action} greenhouseId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'initiation' && (
-					<>
-						<InitiationForm operation={action} initiationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'location' && (
-					<>
-						<LocationForm operation={action} locationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'maintenance' && (
-					<>
-						<MaintenanceForm operation={action} maintenanceId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'maturation' && (
-					<>
-						<MaturationForm operation={action} maturationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'population' && (
-					<>
-						<PopulationForm operation={action} populationId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'ramet-material' && (
-					<>
-						<RametForm operation={action} rametId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'seeds' && (
-					<>
-						<SeedMaterial operation={action} seedId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'species' && (
-					<>
-						<SpeciesForm operation={action} speciesId={id} handeFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-				{material === 'trees' && (
-					<>
-						<TreeMaterial operation={action} treeId={id} handleFilesSubmit={handleFileSubmit}/>
-					</>
-				)}
-			</div>
-			<div className='flex-child'>
-				<div className='files'>
-					{!!photos && photos.length !== 0 &&
-						<Slideshow photos={photos} updatePhotos={updatePhotos} />
+		<div className='parent-container'>
+			<div className='flex-container'>
+				<div className='flex-child'>
+					{material === 'acclimation' &&
+						<>
+							<AcclimationForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
 					}
-					<ImageUpload onImageSelect={handleImageSelection} />
-					<FileUpload onFileSelect={handleFileSelection} />
-					{!!files && files.length !== 0 &&
-						<FileList files={files} />
+					{material === 'cold-treatment' &&
+						<>
+							<ColdTreatmentForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
 					}
+					{material === 'cones' && (
+						<>
+							<ConeMaterial operation={action} coneId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'fieldstation' && (
+						<>
+							<FieldstationForm operation={action} fieldstationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'genetic-id' && (
+						<>
+							<GeneticIdForm operation={action} geneticId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'germination' && (
+						<>
+							<GerminationForm operation={action} germinationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'greenhouse' && (
+						<>
+							<GreenhouseForm operation={action} greenhouseId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'initiation' && (
+						<>
+							<InitiationForm operation={action} initiationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'location' && (
+						<>
+							<LocationForm operation={action} locationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'maintenance' && (
+						<>
+							<MaintenanceForm operation={action} maintenanceId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'maturation' && (
+						<>
+							<MaturationForm operation={action} maturationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'population' && (
+						<>
+							<PopulationForm operation={action} populationId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'ramet-material' && (
+						<>
+							<RametForm operation={action} rametId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'seeds' && (
+						<>
+							<SeedMaterial operation={action} seedId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'species' && (
+						<>
+							<SpeciesForm operation={action} speciesId={id} handeFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+					{material === 'trees' && (
+						<>
+							<TreeMaterial operation={action} treeId={id} handleFilesSubmit={handleFileSubmit} />
+						</>
+					)}
+				</div>
+				<div className='flex-child'>
+					<div className='files'>
+						{!!photos && photos.length !== 0 &&
+							<Slideshow photos={photos} updatePhotos={updatePhotos} />
+						}
+						<ImageUpload onImageSelect={handleImageSelection} />
+						<FileUpload onFileSelect={handleFileSelection} />
+						{!!files && files.length !== 0 &&
+							<FileList files={files} />
+						}
+					</div>
 				</div>
 			</div>
 		</div>
