@@ -54,10 +54,10 @@ function MaterialForm(props) {
 
 	useEffect(() => {
 		async function loadPhotos() {
-		  setPhotos(await getPhotos(id));
+		  setPhotos(await getPhotos(material, id));
 		}
 		async function loadFiles() {
-		  setFiles(await getFiles(id));
+		  setFiles(await getFiles(material, id));
 		}
 		if (id) {
 		  loadPhotos();

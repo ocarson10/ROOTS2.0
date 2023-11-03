@@ -1,9 +1,9 @@
 import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
-export async function getFiles(geneticId) {
+export async function getFiles(materialType, materialId) {
 	try {
-		const response = await instance.get("files/" + geneticId);
+		const response = await instance.get(`files/${materialType}/${materialId}`);
 		const filesData = response.data;
 	
 		if (filesData && filesData.length > 0) {

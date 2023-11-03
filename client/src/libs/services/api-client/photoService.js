@@ -1,9 +1,9 @@
 import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
-export async function getPhotos(geneticId) {
+export async function getPhotos(materialType, materialId) {
 	try {
-	  const response = await instance.get("photos/" + geneticId);
+	  const response = await instance.get(`photos/${materialType}/${materialId}`);
 	  const photosData = response.data;
   
 	  if (photosData && photosData.length > 0) {
