@@ -22,7 +22,7 @@ async function ensureMaterialIdExists(type, id) {
         case 'population':
             return await populationModel.findByPk(id) !== null;
 
-        case 'tree':
+        case 'trees':
             return await treeModel.findByPk(id) !== null;
 
         case 'species':
