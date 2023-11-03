@@ -28,13 +28,13 @@ async function ensureMaterialIdExists(type, id) {
         case 'species':
             return await speciesModel.findByPk(id) !== null;
 
-        case 'ramet':
+        case 'ramet-material':
             return await rametModel.findByPk(id) !== null;
 
-        case 'cone':
+        case 'cones':
             return await coneModel.findByPk(id) !== null;
 
-        case 'seed':
+        case 'seed-material':
             return await seedModel.findByPk(id) !== null;
 
         case 'initiation':
@@ -46,7 +46,7 @@ async function ensureMaterialIdExists(type, id) {
         case 'acclimation':
             return await acclimationModel.findByPk(id) !== null;
 
-        case 'coldtreatment':
+        case 'cold-treatment':
             return await coldTreatmentModel.findByPk(id) !== null;
 
         case 'germination':

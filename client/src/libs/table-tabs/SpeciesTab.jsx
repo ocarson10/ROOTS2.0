@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {getSpecies} from '../services/api-client/speciesService';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import TableComponent from './TableComponent';
 import "../style/TableTab.css";
 
