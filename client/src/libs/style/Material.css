@@ -29,3 +29,60 @@
     margin: auto;
     margin-top: 25px; /* You can adjust this margin as well */
 }
+
+.form-button {
+    font: "Roboto";
+    padding: 10px;
+    margin-top: 10px;
+    width: 90%;
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    font-size: 14pt;
+    transition-duration: 300ms;
+    font-weight: bold;
+}
+
+.form-button:hover {
+    background-color: white;
+    color:#990100;
+    transition-duration: 300ms;
+}
+.report-button{
+    font: "Roboto";
+    padding: 10px;
+    margin-top: 10px;
+    width: 40%;
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    font-size: 12pt;
+    transition-duration: 300ms;
+    font-weight: bold;
+}
+.report-button:hover {
+    background-color: white;
+    color:#990100;
+    transition-duration: 300ms;
+}
+.input-text{
+    font: "Roboto";
+    color: white;
+}
+input::file-selector-button {
+    font: "Roboto";
+    padding: 10px;
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    transition-duration: 300ms;
+    font-weight: bold;
+}
+input::file-selector-button:hover {
+    background-color: white;
+    color:#990100;
+    transition-duration: 300ms;
+}

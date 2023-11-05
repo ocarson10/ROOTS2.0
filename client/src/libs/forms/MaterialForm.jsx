@@ -166,17 +166,17 @@ function MaterialForm(props) {
 					}
 					{action === 'edit' && (material === 'trees') ? (
 							<Link to={"/report/tree/" + id}>
-								<button>Export</button>
+								<button className='report-button'>Export</button>
          					 </Link>
 						): <div></div>}
 					{action === 'edit' && (material === 'cones') ? (
 						<Link to={"/report/cone/" + id}>
-							<button>Export</button>
+							<button className='report-button'>Export</button>
 							</Link>
 					): <div></div>}
 					{action === 'edit' && (material === 'seeds') ? (
 							<Link to={"/report/seed/" + id}>
-								<button>Export</button>
+								<button className='report-button'> Export</button>
          					 </Link>
 						): <div></div>}
 					</div>
