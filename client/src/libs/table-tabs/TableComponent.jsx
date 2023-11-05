@@ -12,7 +12,8 @@ import {
   faFileCircleMinus,
   faFilePen,
   faFilePdf,
-  faFileExport
+  faFileExport,
+  faFileCsv
 } from "@fortawesome/free-solid-svg-icons";
 import { removeTree } from "../services/api-client/treeService";
 import { removeCone } from "../services/api-client/coneService";
@@ -262,6 +263,39 @@ function TableComponent(props) {
     navigate(props.propagateLink + "/" + selectedRows[0]);
   }
 
+  const exportData = async () => {
+    let data = [
+      ['Plate Label', 'Species', 'Media', 'Date'],
+    ];
+    const filename = 'plateLabel.csv';
+    for(let i = 0; i < selectedRows.length; i++){
+          for(let j = 0; j < props.rows.length; j++){
+            if(props.rows[j].id == selectedRows[i]){
+
+              //pulls file data for selected initiation materials
+               let newRow = [props.rows[j].id, props.rows[j].species, props.rows[j].mediaBatch,props.rows[j].dateMade,];
+                data = data.concat([newRow]);  
+            }
+          }
+    }
+    exportToCSV(data, filename);
+
+  }
+
+  //Exports intiation data into plate lable by converting Data into a csv format
+  function exportToCSV(data, filename) {
+    const csv = data.map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+
+    link.download = filename;
+
+    link.click();
+}
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [user, setUser] = useState({});
 
@@ -302,7 +336,11 @@ function TableComponent(props) {
             <FontAwesomeIcon title="Propagate" className="icon" icon={faFileExport} />
           </a>
         ) : <div></div>}
-      
+      {selectedRows.length >= 1 && props.status !== "archive" && (props.material === "initiation" )  ? ( 
+          <a onClick={exportData}>
+            <FontAwesomeIcon title="Export Label CSV" className="icon" icon={faFileCsv} />
+          </a>
+        ) : <div></div>}
     </div>
   )
 

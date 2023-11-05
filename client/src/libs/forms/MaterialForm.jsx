@@ -23,6 +23,7 @@ import FileList from "./FileList";
 import FileUpload from "./FileUpload";
 import { addFile, getFiles } from "../services/api-client/fileService";
 import '../../libs/style/Material.css';
+import { useNavigate, Link } from "react-router-dom";
 
 function MaterialForm(props) {
 	const { material, action, id } = useParams();
@@ -160,7 +161,26 @@ function MaterialForm(props) {
 						{!!files && files.length !== 0 &&
 							<FileList files={files} />
 						}
+						{action === 'edit' && (material === 'trees' || material === 'cones' || material === 'seeds') &&
+					<h1>View Report</h1>
+					}
+					{action === 'edit' && (material === 'trees') ? (
+							<Link to={"/report/tree/" + id}>
+								<button>Export</button>
+         					 </Link>
+						): <div></div>}
+					{action === 'edit' && (material === 'cones') ? (
+						<Link to={"/report/cone/" + id}>
+							<button>Export</button>
+							</Link>
+					): <div></div>}
+					{action === 'edit' && (material === 'seeds') ? (
+							<Link to={"/report/seed/" + id}>
+								<button>Export</button>
+         					 </Link>
+						): <div></div>}
 					</div>
+					
 				</div>
 			</div>
 		</div>
