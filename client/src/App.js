@@ -10,6 +10,14 @@ import QRCodeReader from "./libs/qr/QRCodeReader";
 import Invalid from "./libs/invalid/Invalid";
 import UserManagement from "./libs/admin/UserManagement/UserManagement";
 import Logs from "./libs/admin/Logs/Logs";
+import MaintenanceForm from "./libs/forms/MaintenanceForm";
+import MaturationForm from "./libs/forms/MaturationForm";
+import ColdTreatmentForm from "./libs/forms/ColdTreatmentForm";
+import GreenhouseForm from "./libs/forms/GreenhouseForm";
+import GerminationForm from "./libs/forms/GerminationForm";
+import AcclimationForm from "./libs/forms/AcclimationForm";
+import FieldstationForm from "./libs/forms/FieldstationForm";
+
 
 // MUI PRO
 import { LicenseInfo } from "@mui/x-license-pro";
@@ -53,6 +61,14 @@ function App() {
                 <Route path="/logs" element={<Logs user={user} />} />
                 <Route path="/invalid" element={<Invalid />} />
                 <Route path="*" element={<Invalid />} />
+                <Route path="/propagate/initiation/:id" element={<MaintenanceForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/maintenance/:id" element={<MaturationForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/maturation/:id" element={<ColdTreatmentForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/cold-treatment/:id" element={<GerminationForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/germination/:id" element={<AcclimationForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/acclimation/:id" element={<GreenhouseForm operation="add" prop="Yes" />} />
+                <Route path="/propagate/greenhouse/:id" element={<FieldstationForm operation="add" prop="Yes" />} />
+
               </Routes>
             </>
           ) : (
