@@ -1,69 +1,31 @@
-async function ensureMaterialIdExists(type, id) {
-    const locationModel = require('../models/locations.model');
-    const populationModel = require("../models/population.model");
-    const treeModel = require("../models/tree.model");
-    const speciesModel = require("../models/species.model");
-    const rametModel = require("../models/ramet.model");
-    const coneModel = require("../models/cone.model");
-    const seedModel = require("../models/seed.model");
-    const initiationModel = require("../models/initiation.model");
-    const maintenanceModel = require("../models/maintenance.model");
-    const acclimationModel = require("../models/acclimation.model");
-    const coldTreatmentModel = require("../models/coldtreatment.model");
-    const germinationModel = require("../models/germination.model");
-    const fieldStationModel = require("../models/fieldstation.model");
-    const maturationModel = require("../models/maturation.model");
-    const greenhouseModel = require("../models/greenhouse.model");
+async function ensureMaterialIdExists(id) {
+    const models = {
+        'location': require('../models/locations.model'),
+        'population': require("../models/population.model"),
+        'trees': require("../models/tree.model"),
+        'species': require("../models/species.model"),
+        'ramet-material': require("../models/ramet.model"),
+        'cones': require("../models/cone.model"),
+        'seed-material': require("../models/seed.model"),
+        'initiation': require("../models/initiation.model"),
+        'maintenance': require("../models/maintenance.model"),
+        'acclimation': require("../models/acclimation.model"),
+        'cold-treatment': require("../models/coldtreatment.model"),
+        'germination': require("../models/germination.model"),
+        'fieldstation': require("../models/fieldstation.model"),
+        'maturation': require("../models/maturation.model"),
+        'greenhouse': require("../models/greenhouse.model"),
+    };
 
-    switch (type) {
-        case 'location':
-            return await locationModel.findByPk(id) !== null;
-
-        case 'population':
-            return await populationModel.findByPk(id) !== null;
-
-        case 'trees':
-            return await treeModel.findByPk(id) !== null;
-
-        case 'species':
-            return await speciesModel.findByPk(id) !== null;
-
-        case 'ramet-material':
-            return await rametModel.findByPk(id) !== null;
-
-        case 'cones':
-            return await coneModel.findByPk(id) !== null;
-
-        case 'seed-material':
-            return await seedModel.findByPk(id) !== null;
-
-        case 'initiation':
-            return await initiationModel.findByPk(id) !== null;
-
-        case 'maintenance':
-            return await maintenanceModel.findByPk(id) !== null;
-
-        case 'acclimation':
-            return await acclimationModel.findByPk(id) !== null;
-
-        case 'cold-treatment':
-            return await coldTreatmentModel.findByPk(id) !== null;
-
-        case 'germination':
-            return await germinationModel.findByPk(id) !== null;
-
-        case 'fieldstation':
-            return await fieldStationModel.findByPk(id) !== null;
-
-        case 'maturation':
-            return await maturationModel.findByPk(id) !== null;
-
-        case 'greenhouse':
-            return await greenhouseModel.findByPk(id) !== null;
-
-        default:
-            return false;
+    for (const type in models) {
+        const model = models[type];
+        const instance = await model.findByPk(id);
+        if (instance !== null) {
+            return true;
+        }
     }
+
+    return false;
 }
 
 module.exports = { ensureMaterialIdExists };

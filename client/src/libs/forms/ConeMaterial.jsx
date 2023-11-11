@@ -80,10 +80,12 @@ function ConeMaterial(props) {
     if (props.operation === "edit") {
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+      // const id = window.location.href.split("/")[5];
+      // console.log("id: " + id);
 
-      getCone(id).then((cone) => {
+      //get cone from id
+      console.log("cone id", props.coneId);
+      getCone(props.coneId).then((cone) => {
       console.log("cone found")
 
         console.log(cone.data.id);

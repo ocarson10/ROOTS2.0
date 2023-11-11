@@ -3,11 +3,11 @@ module.exports = (app) => {
     const GeneticId = require('../models/genetic-id.model');
     let router = require('express').Router();
     const utils = require('./utils');
-
+   
     // Retrieve all file associated with material
-    router.get('/:materialType/:materialId', async (req, res) => {
+    router.get('/:materialId', async (req, res) => {
       const materialId = req.params.materialId;
-      const materialType = req.params.materialType;
+      //const materialType = req.params.materialType;
       const materialExists = await utils.ensureMaterialIdExists(materialId);
       if (materialExists) {
         File.findAll({ 
@@ -27,7 +27,7 @@ module.exports = (app) => {
           res.send(500);
         });
       } else {
-        console.log(materialType + " Id: " + materialId + " not found");
+       // console.log(materialType + " Id: " + materialId + " not found");
         res.sendStatus(404);
       }
     });
@@ -36,14 +36,14 @@ module.exports = (app) => {
     // Add file to material
     router.post('/', async (req, res) => {
       try {
-        const { materialId, materialType, fileData, fileName } = req.body;
+        const { materialId, fileData, fileName } = req.body;
     
-        if (!materialId || !fileData || !materialType || !fileName)
-          return res.status(400).json({ error: 'Missing materialId, materialType, fileName, or fileData' });
+        if (!materialId || !fileData || !fileName)
+          return res.status(400).json({ error: 'Missing materialId, fileName, or fileData' });
 
-        const materialExists = await utils.ensureMaterialIdExists(materialType, materialId);
-        if(!materialExists)
-          return res.status(404).json({error: `${materialType} Id: ${materialId} doesn't exist.`});
+        // const materialExists = await utils.ensureMaterialIdExists(materialType, materialId);
+        // if(!materialExists)
+        //   return res.status(404).json({error: `${materialType} Id: ${materialId} doesn't exist.`});
     
         const file = await File.create({
           associatedMaterial: materialId,

@@ -1,9 +1,9 @@
 import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
-export async function getPhotos(materialType, materialId) {
+export async function getPhotos(materialId) {
 	try {
-	  const response = await instance.get(`photos/${materialType}/${materialId}`);
+	  const response = await instance.get("photos/"+ materialId);
 	  const photosData = response.data;
   
 	  if (photosData && photosData.length > 0) {
@@ -17,7 +17,7 @@ export async function getPhotos(materialType, materialId) {
   
 		return photoURLs;
 	  } else {
-		// Handle the case where no photos were found for the geneticId
+		// Handle the case where no photos were found for the materialId
 		return [];
 	  }
 	} catch (error) {
@@ -26,17 +26,17 @@ export async function getPhotos(materialType, materialId) {
 	}
   }
 
-export async function addPhoto(geneticId, photoData) {
+export async function addPhoto(materialId, photoData) {
 	const reader = new FileReader();
 	reader.onload = function (event) {
 		const base64PhotoData = event.target.result;
-
+		console.log('Photo content:', base64PhotoData);
 		const requestData = {
-			geneticId: geneticId,
+			materialId: materialId,
 			photoData: base64PhotoData,
 		};
 
-		addLogs("Added photo with genetic id: " + geneticId);
+		addLogs("Added photo with material id: " + materialId);
 
 		// Send the JSON data to the server
 		return instance.post("photos", requestData)

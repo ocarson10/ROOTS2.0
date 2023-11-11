@@ -45,20 +45,21 @@ function MaterialForm(props) {
 	};
 
 	const handleFileSubmit = async (materialId) => {
+		
 		if (!!selectedImage) {
 			await addPhoto(materialId, selectedImage.file);
 		}
 		if (!!selectedFile) {
-			await addFile(materialId, selectedFile.file);
+			await addFile(materialId, selectedFile);
 		}
 	};
 
 	useEffect(() => {
 		async function loadPhotos() {
-		  setPhotos(await getPhotos(material, id));
+		  setPhotos(await getPhotos(id));
 		}
 		async function loadFiles() {
-		  setFiles(await getFiles(material, id));
+		  setFiles(await getFiles(id));
 		}
 		if (id) {
 			loadPhotos();

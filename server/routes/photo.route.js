@@ -4,10 +4,10 @@ module.exports = (app) => {
     let utils = require('./utils');
 
     // Retrieve all photos associated with material
-    router.get('/:materialType/:materialId', async (req, res) => {
+    router.get('/:materialId', async (req, res) => {
       const materialId = req.params.materialId;
-      const materialType = req.params.materialType;
-      const materialExists = await utils.ensureMaterialIdExists(materialType, materialId);
+     // const materialType = req.params.materialType;
+     const materialExists = await utils.ensureMaterialIdExists(materialId);
       if (materialExists) {
         Photo.findAll({ 
           where: { 
@@ -34,13 +34,13 @@ module.exports = (app) => {
     // Add photo to material
     router.post('/', async (req, res) => {
       try {
-        const { materialType, materialId, photoData } = req.body;
-        if (!materialId || !photoData || !materialType)
-          return res.status(400).json({ error: 'Missing materialId, materialType, or photoData' });
+        const { materialId, photoData } = req.body;
+        if (!materialId || !photoData )
+          return res.status(400).json({ error: 'Missing materialId or photoData' });
 
-        const materialExists = await utils.ensureMaterialIdExists(materialType, materialId);
-        if(!materialExists)
-          return res.status(404).json({error: `${materialType} Id: ${materialId} doesn't exist.`});
+        // const materialExists = await utils.ensureMaterialIdExists(materialId);
+        // if(!materialExists)
+        //   return res.status(404).json({error: `${materialType} Id: ${materialId} doesn't exist.`});
     
         const photo = await Photo.create({
           associatedMaterial: materialId,
