@@ -13,11 +13,13 @@ const FileList = ({ files }) => {
         <div>
             <h1>File List</h1>
             {files.map((file) => (
-                <div key={file.fileId}>
-                    <a href={`${file.fileData}`} download={`${file.fileName}`}>
+                <div class="upload" key={file.fileId}>
+                    <div class="file-upload">
+                    <a className='file-list-text' href={`${file.fileData}`} download={`${file.fileName}`}>
                         {file.fileName}
                     </a>
-                    <button onClick={() => handleDelete(file)}>Delete</button>
+                     </div>
+                    <button className="file-list-btn" onClick={() => handleDelete(file)}>Delete</button>
                 </div>
             ))}
         </div>

@@ -86,3 +86,54 @@ input::file-selector-button:hover {
     color:#990100;
     transition-duration: 300ms;
 }
+.file-list-text{
+    font: "Roboto";
+    color: white;
+   
+}
+div.upload{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+div.file-upload {
+   white-space: nowrap;
+   width: 200px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+.file-list-text:hover{
+    font: "Roboto";
+    color: black;
+}
+.file-list-btn{
+    font: "Roboto";
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    transition-duration: 300ms;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.file-list-btn:hover{
+    background-color: white;
+    color:#990100;
+    transition-duration: 300ms;
+}
+  
+.delete{
+    font: "Roboto";
+    background-color: #990100;
+    border-color: white;
+    border-style: solid;
+    color: white;
+    transition-duration: 300ms;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.delete:hover{
+    background-color: white;
+    color:#990100;
+
+}
