@@ -31,9 +31,9 @@ function GerminationForm(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getGermination(id).then((response) => {
+      getGermination(props.germinationId).then((response) => {
         getId(response.data.germinationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +

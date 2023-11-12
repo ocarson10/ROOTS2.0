@@ -331,7 +331,7 @@ function TableComponent(props) {
             <FontAwesomeIcon title="View Report" className="icon" icon={faFilePdf} />
           </Link>
         ) : <div></div>}
-      {selectedRows.length === 1 && props.status !== "archive" && (props.material === "seed" || props.material === "initiation" || props.material === "maintenance" || props.material === "maturation" || props.material === "treatment" || props.material === "germination" || props.material === "acclimation" || props.material === "greenhouse" || props.material === "acclimation" || props.material === "fieldstation")  ? ( //TODO: add other materials
+      {selectedRows.length === 1 && props.status !== "archive" && ( props.material === "initiation" || props.material === "maintenance" || props.material === "maturation" || props.material === "treatment" || props.material === "germination" || props.material === "acclimation" || props.material === "greenhouse" || props.material === "acclimation")  ? ( 
           <a onClick={propagateData}>
             <FontAwesomeIcon title="Propagate" className="icon" icon={faFileExport} />
           </a>

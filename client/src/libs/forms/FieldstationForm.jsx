@@ -25,9 +25,9 @@ function FieldstationForm(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getFieldstation(id).then((response) => {
+      getFieldstation(props.fieldStationId).then((response) => {
         getId(response.data.fieldStationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +

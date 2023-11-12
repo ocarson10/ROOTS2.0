@@ -23,9 +23,9 @@ function GreenhouseForm(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getGreenhouse(id).then((response) => {
+      getGreenhouse(props.greenHouseId).then((response) => {
         getId(response.data.greenhouseGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +

@@ -31,8 +31,8 @@ function ColdTreatment(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
-      getColdTreatment(id).then((response) => {
+      //const id = window.location.href.split("/")[5];
+      getColdTreatment(props.coldTreatmentId).then((response) => {
         getId(response.data.coldTreatmentGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +

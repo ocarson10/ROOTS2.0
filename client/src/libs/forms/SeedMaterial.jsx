@@ -98,9 +98,9 @@ function SeedMaterial(props) {
     if(props.operation === "edit"){
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getSeed(id).then((seed) => {
+      getSeed(props.seedId).then((seed) => {
         setSeedId(seed.data.id);
         setLocation(seed.data.locationId);
         setCone(seed.data.coneId);

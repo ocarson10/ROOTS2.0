@@ -31,9 +31,9 @@ function Maturation(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getMaturation(id).then((response) => {
+      getMaturation(props.maturationId).then((response) => {
         getId(response.data.maturationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +

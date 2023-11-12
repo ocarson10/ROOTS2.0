@@ -83,67 +83,67 @@ function MaterialForm(props) {
 					}
 					{material === 'cones' && (
 						<>
-							<ConeMaterial operation={action} coneId={id} handeFilesSubmit={handleFileSubmit} />
+							<ConeMaterial operation={action} coneId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'fieldstation' && (
 						<>
-							<FieldstationForm operation={action} fieldstationId={id} handeFilesSubmit={handleFileSubmit} />
+							<FieldstationForm operation={action} fieldstationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'genetic-id' && (
 						<>
-							<GeneticIdForm operation={action} geneticId={id} handeFilesSubmit={handleFileSubmit} />
+							<GeneticIdForm operation={action} geneticId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'germination' && (
 						<>
-							<GerminationForm operation={action} germinationId={id} handeFilesSubmit={handleFileSubmit} />
+							<GerminationForm operation={action} germinationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'greenhouse' && (
 						<>
-							<GreenhouseForm operation={action} greenhouseId={id} handeFilesSubmit={handleFileSubmit} />
+							<GreenhouseForm operation={action} greenhouseId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'initiation' && (
 						<>
-							<InitiationForm operation={action} initiationId={id} handeFilesSubmit={handleFileSubmit} />
+							<InitiationForm operation={action} initiationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'location' && (
 						<>
-							<LocationForm operation={action} locationId={id} handeFilesSubmit={handleFileSubmit} />
+							<LocationForm operation={action} locationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'maintenance' && (
 						<>
-							<MaintenanceForm operation={action} maintenanceId={id} handeFilesSubmit={handleFileSubmit} />
+							<MaintenanceForm operation={action} maintenanceId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'maturation' && (
 						<>
-							<MaturationForm operation={action} maturationId={id} handeFilesSubmit={handleFileSubmit} />
+							<MaturationForm operation={action} maturationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'population' && (
 						<>
-							<PopulationForm operation={action} populationId={id} handeFilesSubmit={handleFileSubmit} />
+							<PopulationForm operation={action} populationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'ramet-material' && (
 						<>
-							<RametForm operation={action} rametId={id} handeFilesSubmit={handleFileSubmit} />
+							<RametForm operation={action} rametId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'seeds' && (
 						<>
-							<SeedMaterial operation={action} seedId={id} handeFilesSubmit={handleFileSubmit} />
+							<SeedMaterial operation={action} seedId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'species' && (
 						<>
-							<SpeciesForm operation={action} speciesId={id} handeFilesSubmit={handleFileSubmit} />
+							<SpeciesForm operation={action} speciesId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					)}
 					{material === 'trees' && (

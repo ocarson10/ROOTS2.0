@@ -36,10 +36,10 @@ function Initiation(props) {
     if (props.operation === "edit") {
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+      //const id = window.location.href.split("/")[5];
+      //console.log("id: " + id);
 
-      getInitiation(id)
+      getInitiation(props.initiationId)
         .then((response) => {
           setInitiationId(response.data.initiationId);
           setSeedsAndEmbryos(response.data.seedsAndEmbryos);
@@ -67,7 +67,7 @@ function Initiation(props) {
         });
     }
     else if (props.prop === "Yes") {
-      const id = window.location.href.split("/")[5];
+     const id = window.location.href.split("/")[5];
       getSeed(id).then((response) => {
         getId(response.data.seedGeneticId).then((id) => {
           console.log(id.data);
@@ -159,7 +159,7 @@ function Initiation(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-        props.handleFileSubmit(initiationId);
+        props.handleFilesSubmit(initiationId);
     }
     else if (props.operation === "edit") {
       await editInitiation(
@@ -180,6 +180,7 @@ function Initiation(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+        props.handleFilesSubmit(initiationId);
     }
 
 

@@ -33,10 +33,10 @@ function Maintenance(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+      //const id = window.location.href.split("/")[5];
+      //console.log("id: " + id);
 
-      getMaintenance(id)
+      getMaintenance(props.maintenanceId)
         .then((response) => {
           setMaintenanceId(response.data.maintenanceId);
           setNumberOfPlates(response.data.numberOfPlates);
