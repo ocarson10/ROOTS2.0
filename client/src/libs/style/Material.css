@@ -86,11 +86,7 @@ input::file-selector-button:hover {
     color:#990100;
     transition-duration: 300ms;
 }
-.file-list-text{
-    font: "Roboto";
-    color: white;
-   
-}
+
 div.upload{
     display: flex;
     flex-wrap: wrap;
@@ -101,11 +97,23 @@ div.file-upload {
    width: 200px;
    overflow: hidden;
    text-overflow: ellipsis;
+   font: "Roboto";
+    color: white;
+}
+div.file-upload:hover{
+    font: "Roboto";
+    color: black;
+}
+.file-list-text{
+    font: "Roboto";
+    color: white;
+   
 }
 .file-list-text:hover{
     font: "Roboto";
     color: black;
 }
+
 .file-list-btn{
     font: "Roboto";
     background-color: #990100;
