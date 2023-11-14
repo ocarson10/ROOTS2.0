@@ -20,19 +20,20 @@ const MaturationModel = require("./models/maturation.model");
 const GreenHouseModel = require("./models/greenhouse.model");
 const UserModel = require("./models/user.model");
 const LogModel = require("./models/log.model");
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: { //Will replace x and y with the email username & password/app pass for gmail. 
-        user: 'x',
-        pass: 'y',
+        user: process.env.user,
+        pass: process.env.pass,
     },
 });
 
 async function sendEmail(modelResults) {
     const mailOptions = {
-        from: 'rusanchez906@gmail.com',
-        to: 'rusanchez906@gmail.com', // Replace with the recipient's email
+        from: 'groots-chrismastreegenetics@ncsu.edu',
+        to: 'groots-chrismastreegenetics@ncsu.edu', // Replace with the recipient's email
         subject: 'RNS Test Results',
         html: modelResults,
     };
