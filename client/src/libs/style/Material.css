@@ -16,9 +16,6 @@
     margin-right: 25px;
 }
 
-.flex-child:nth-child(2) {
-    margin-right: 0px;
-}
 
 .files {
     display: flex;
