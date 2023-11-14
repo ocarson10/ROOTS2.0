@@ -34,7 +34,7 @@ const ensureTestingGenIdExists = async () => {
     const response = await request(app).get("/genetic-id/1");
 
     if(!response || response.statusCode !== 200) {
-        //Creating geneticId to use with Photos
+        //Creating geneticId to use with files
         const newGeneticId = {
             geneticId: "1",
             progenyId: "A3",
@@ -80,7 +80,7 @@ const ensureTreeExists = async () => {
     }
 }
 
-describe('Photos API', () => {
+describe('files API', () => {
     beforeAll(async () => {
         app = await setUp();
         
@@ -90,7 +90,7 @@ describe('Photos API', () => {
         //Creating Population to use with Genetic Ids
         await ensurePopExists();
 
-        //Creating GeneticId to use with Photos
+        //Creating GeneticId to use with files
         await ensureTestingGenIdExists();
 
         //Creating tree
@@ -105,108 +105,121 @@ describe('Photos API', () => {
     });
 
     test('GET should return 404, geneticId not found', async () => {
-        const response = await request(app).get('/photos/101');
+        const response = await request(app).get('/files/101');
         expect(response.statusCode).toBe(404);
     });
 
-    test('GET should return 200, no photos created yet', async () => {
-        const response = await request(app).get('/photos/1');
+    test('GET should return 200, no files created yet', async () => {
+        const response = await request(app).get('/files/1');
         expect(response.statusCode).toBe(200);
         expect(response.body.length).toBe(0);
     });
 
-    test('POST should return 400, bad request -- no photo data', async () => {
-        const newPhoto = {
+    test('POST should return 400, bad request -- no file data', async () => {
+        const newfile = {
+            materialId: 100,
+            fileName: 'filename.png'
+        };
+
+        const response = await request(app).post('/files').send(newfile);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST should return 400, bad request -- not file data/name', async () => {
+        const newfile = {
             materialId: 100
         };
 
-        const response = await request(app).post('/photos').send(newPhoto);
+        const response = await request(app).post('/files').send(newfile);
         expect(response.statusCode).toBe(400);
     });
 
-    test('POST should return 400, bad request -- not photo/type data', async () => {
-        const newPhoto = {
-            materialId: 100
+    test('POST should return 400, bad request -- no geneticId specified or fileName', async () => {
+        const newfile = {
+            fileData: 'xyzbytesandmorebytesdotfile'
         };
 
-        const response = await request(app).post('/photos').send(newPhoto);
+        const response = await request(app).post('/files').send(newfile);
         expect(response.statusCode).toBe(400);
     });
 
-    test('POST should return 400, bad request -- no geneticId specified', async () => {
-        const newPhoto = {
-            photoData: 'xyzbytesandmorebytesdotphoto'
-        };
-
-        const response = await request(app).post('/photos').send(newPhoto);
-        expect(response.statusCode).toBe(400);
-    });
-
-    test('POST should return 200, succesful creation response', async () => {
-        const newPhoto = {
+    test('POST should return 400, no fileName', async () => {
+        const newfile = {
             materialId: 1,
-            photoData: 'xyzbytesandmorebytesdotphoto', 
+            fileData: 'xyzbytesandmorebytesdotfile', 
         };
 
-        const response = await request(app).post('/photos').send(newPhoto);
+        const response = await request(app).post('/files').send(newfile);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST should return 200, success response', async () => {
+        const newfile = {
+            materialId: 1,
+            fileData: 'xyzbytesandmorebytesdotfile', 
+            fileName: 'testfile.png',
+        };
+
+        const response = await request(app).post('/files').send(newfile);
         expect(response.statusCode).toBe(200);
     });
 
-    test('GET should return 200, should reflect newly added photo', async () => {
-        const response = await request(app).get('/photos/1');
+    test('GET should return 200, should reflect newly added file', async () => {
+        const response = await request(app).get('/files/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
-        expect(response.body[0].photoId).toBe(1);
+        expect(response.body[0].fileId).toBe(1);
     });
 
-    test('POST should return 200, succesful addition of extra photo', async () => {
-        const newPhoto = {
+    test('POST should return 200, succesful addition of extra file', async () => {
+        const newfile = {
             materialId: 1,
-            photoData: 'xyzbytesandmorebytesnumerodosdotphoto'
+            fileData: 'xyzbytesandmorebytesnumerodosdotfile',
+            fileName: 'testfile2.png'
         };
 
-        const response = await request(app).post('/photos').send(newPhoto);
+        const response = await request(app).post('/files').send(newfile);
         expect(response.statusCode).toBe(200);
     });
 
-    test('GET should return 200, should reflect both photos', async () => {
-        const response = await request(app).get('/photos/1');
+    test('GET should return 200, should reflect both files', async () => {
+        const response = await request(app).get('/files/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
-        expect(response.body[0].photoId).toBe(1);
+        expect(response.body[0].fileId).toBe(1);
         expect(response.body[1].associatedMaterial).toBe(1);
-        expect(response.body[1].photoId).toBe(2);
+        expect(response.body[1].fileId).toBe(2);
     });
 
     test('DELETE should return 404, Id not found', async () => {
-        const response = await request(app).delete('/photos/100');
+        const response = await request(app).delete('/files/100');
         expect(response.statusCode).toBe(404);
     });
 
-    test('DELETE should return 200, deleting photo success', async () => {
-        const response = await request(app).delete('/photos/2');
+    test('DELETE should return 200, deleting file success', async () => {
+        const response = await request(app).delete('/files/2');
         expect(response.statusCode).toBe(200);
     });
 
-    test('GET should return 200, should show one photo', async () => {
-        const response = await request(app).get('/photos/1');
+    test('GET should return 200, should show one file', async () => {
+        const response = await request(app).get('/files/1');
         expect(response.statusCode).toBe(200);
         expect(response.body[0].associatedMaterial).toBe(1);
-        expect(response.body[0].photoId).toBe(1);
+        expect(response.body[0].fileId).toBe(1);
     });
 
-    test('DELETE should return 200, deleting photo success', async () => {
-        const response = await request(app).delete('/photos/1');
+    test('DELETE should return 200, deleting file success', async () => {
+        const response = await request(app).delete('/files/1');
         expect(response.statusCode).toBe(200);
     });
 
     test('DELETE should return 404, Id doesn\'t exist in database', async () => {
-        const response = await request(app).delete('/photos/1');
+        const response = await request(app).delete('/files/1');
         expect(response.statusCode).toBe(404);
     });
 
-    test('GET should return 200, empty photos response -- none left', async () => {
-        const response = await request(app).get('/photos/1');
+    test('GET should return 200, empty files response -- none left', async () => {
+        const response = await request(app).get('/files/1');
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual([]);
     });
