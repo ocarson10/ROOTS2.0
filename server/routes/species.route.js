@@ -52,6 +52,11 @@ module.exports = (app) => {
     const reqSpecies = req.body.species;
     const reqShorthand = req.body.shorthand;
 
+    console.log("current: " + reqCurrentSpecies);
+    console.log("new name: " + reqSpecies);
+    console.log("new sh: " + reqShorthand);
+
+
     await db.sync().then(async () => {
       await Species.update(
         {

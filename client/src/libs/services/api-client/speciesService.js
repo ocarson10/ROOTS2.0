@@ -22,7 +22,12 @@ export async function addSpecies(speciesName, speciesShorthand) {
 }
 
   // Update species given it's name and the shorthand abbreviation
-export async function updateSpecies(speciesName, speciesShorthand, currentSpeciesName) {
+export async function updateSpecies(speciesName, speciesShorthand, currentSpeciesName) { 
+  console.log("new name: " + speciesName);
+  console.log("new sh: " + speciesShorthand);
+  console.log("curr name: " + currentSpeciesName);
+
+
   await addLogs(`Updating species with name: ${speciesName}`);
   return await instance.put("species", {
     currentSpeciesName: currentSpeciesName,

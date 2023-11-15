@@ -6,41 +6,42 @@ import SpeciesShorthandHover from "../hover-info/SpeciesShorthandHover";
 import { addSpecies, getSpeciesByName, updateSpecies} from "../services/api-client/speciesService";
 import { useNavigate } from "react-router-dom";
 
-
-
 function SpeciesForm(props) {
   const [speciesForm, setSpeciesForm] = useState({
     species: "",
     shortHand: "",
   });
   const [currentSpeciesForm, setCurrentSpeciesForm] = useState({
-    species: "",
-    shortHand: "",
+    currentSpecies: "",
+    currentshortHand: "",
   });
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (props.operation === "edit") {
-      const speciesName = window.location.href.split("/")[5];
+      const speciesName = window.location.href.split("/")[6];
 
       getSpeciesByName(speciesName).then((response) => {
+        console.log(response.data);
+
         setSpeciesForm({
           species: response.data.species,
-          shortHand: response.data.shortHand,
+          shortHand: response.data.shorthand,
         });
         setCurrentSpeciesForm({
-          species: response.data.species,
-          shortHand: response.data.shortHand,
+          currentSpecies: response.data.species,
+          currentshortHand: response.data.shorthand,
         });
       }).catch((error) => {
         console.log(error);
       });
     }
-  }, [props.operation]);
+  }, [props.operation, currentSpeciesForm.currentSpecies, currentSpeciesForm.currentshortHand]);
 
   const handleSubmit = async (e) => {
+    console.log("operation: " + props.operation);
+    
     if(props.operation === "add") {
       e.preventDefault();
       await addSpecies(speciesForm.species, speciesForm.shortHand)
@@ -51,10 +52,12 @@ function SpeciesForm(props) {
         console.log(error);
       });
     } else if(props.operation === "edit") {
-      await updateSpecies(speciesForm.species, speciesForm.shortHand, currentSpeciesForm.species )
+      console.log("edit operation");
+      await updateSpecies(speciesForm.species, speciesForm.shortHand, currentSpeciesForm.species) //currentSpeciesForm.species
       .then(() => {
+        console.log("\nsuccess editing the species\n");
         clear();
-        navigate("/");
+        //navigate("/");
       }).catch((error) => {
         console.log(error);
       });
