@@ -20,6 +20,7 @@ function GreenhouseTab(props) {
               greenhouseGeneticId: "",
               species: "",
               dateGreenhouse: res.data[greenhouse].dateGreenhouse,
+              transferDate: res.data[greenhouse].transferDate,
               location: res.data[greenhouse].locationId,
               active: res.data[greenhouse].active
             };
@@ -52,6 +53,7 @@ function GreenhouseTab(props) {
     greenhouseGeneticId: row.greenhouseGeneticId,
     species: row.species,
     dateGreenhouse: row.dateGreenhouse.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -60,6 +62,7 @@ function GreenhouseTab(props) {
     { field: "greenhouseGeneticId", headerName: "Genetic ID", width: 200 },
     { field: "species", headerName: "Species", width: 150 },
     { field: "dateGreenhouse", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 
