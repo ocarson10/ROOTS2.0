@@ -19,11 +19,15 @@ module.exports = (app) => {
   //Gets a location by name
   router.get("/:location", async (req, res) => {
     const reqLocation = req.params.location;
-    await Location.findOne({ where: { location: reqLocation } })
+    const location = await Location.findOne({ where: { location: reqLocation } })
       .then((innerRes) => {
-        res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.send(innerRes);
+        if(innerRes) {
+          res.statusCode = 200;
+          res.statusMessage = "OK";
+          res.send(innerRes);
+        } else {
+          res.sendStatus(404);
+        }
       })
       .catch((error) => {
         console.log("Error in fetching location: ", error);
