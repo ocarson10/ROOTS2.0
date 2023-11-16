@@ -63,3 +63,19 @@ export async function addId(geneticId, familyId, progenyId, species, yearPlanted
     yearPlanted: yearPlanted
   });
 }
+
+export async function updateId(dbId, geneticId, familyId, progenyId, species, yearPlanted, population, rametId) {
+  const id = `P${population}_${familyId}_${rametId}_${geneticId}_${progenyId}`;
+  await addLogs("Updated id with geneticId: " + id);
+
+  return await instance.put("genetic-id", {
+    dbId: dbId,
+    geneticId: geneticId,
+    familyId: familyId,
+    rametId: rametId,
+    populationId: population,
+    progenyId: progenyId, 
+    species: species,
+    yearPlanted: yearPlanted
+  });
+}
