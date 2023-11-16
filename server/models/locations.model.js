@@ -1,5 +1,4 @@
-const {Sequelize, DataTypes} = require('sequelize');
-
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require("../database/database");
 
 const Location = sequelize.define("location", {
@@ -10,7 +9,13 @@ const Location = sequelize.define("location", {
   },
   shorthand: {
     type: DataTypes.STRING
+  },
+  uniqueId: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    unique: true
   }
-}, {timestamps: false});
+}, { timestamps: false });
 
 module.exports = Location;
