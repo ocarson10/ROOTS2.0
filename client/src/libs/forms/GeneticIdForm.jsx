@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../libs/style/GeneticIdForm.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import GenericHover from "../hover-info/GenericHover";
@@ -6,10 +6,9 @@ import ProgenyHover from "../hover-info/ProgenyHover";
 import SpeciesHover from "../hover-info/SpeciesHover";
 import YearPlanted from "../hover-info/YearPlanted";
 import PopulationHover from "../hover-info/PopulationHover";
-import { addId, getId, updateId } from "../services/api-client/idService";
+import { addId, updateId } from "../services/api-client/idService";
 
 function GeneticIdForm(props) {
-  const [dbId, setDbId] = useState("");
   const [geneticId, setGeneticId] = useState(null);
   const [familyId, setFamilyId] = useState(null);
   const [rametId, setRametId] = useState(null);
@@ -36,7 +35,7 @@ function GeneticIdForm(props) {
       });
     } else {
       e.preventDefault();
-      await updateId(dbId, geneticId, familyId, progenyId, species, yearPlanted, population, rametId).then(() => {
+      await updateId(props.geneticId, geneticId, familyId, progenyId, species, yearPlanted, population, rametId).then(() => {
         window.location.href = "/";
       });
     }
@@ -51,26 +50,6 @@ function GeneticIdForm(props) {
     setYearPlanted("");
     setPopulation("");
   }
-
-  //On Page Load
-  useEffect(() => {
-    const loadDefaults = async () => {
-      var response = await getId(props.geneticId);      
-      setDbId(props.geneticId);
-      setGeneticId(response.data.geneticId);
-      setRametId(response.data.rametId);
-      setFamilyId(response.data.familyId);
-      setProgenyId(response.data.progenyId);
-      setSpecies(response.data.species);
-      setYearPlanted(response.data.yearPlanted);
-      setPopulation(response.data.populationId);
-    };
-    
-    if(props.operation === 'edit') {
-      //Pulling this geneticId from route & getting pertinent data
-      loadDefaults();
-    }
-  }, [props.operation, props.geneticId]);
   
   return (
     <div className={`form-div ${props.isOpen ? "modal-open" : ""}`}>
