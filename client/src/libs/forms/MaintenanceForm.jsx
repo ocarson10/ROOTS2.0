@@ -134,6 +134,7 @@ function Maintenance(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -141,6 +142,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+
     } else if (props.operation === "edit") {
       await updateMaintenance(
         maintenanceId,
@@ -154,6 +156,7 @@ function Maintenance(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -161,6 +164,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+
     }
 
   };

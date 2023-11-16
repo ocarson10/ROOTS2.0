@@ -114,6 +114,7 @@ function AcclimationForm(props) {
     e.preventDefault();
     if(props.operation === "add") {
       await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
@@ -122,12 +123,14 @@ function AcclimationForm(props) {
       });
     } else if(props.operation === "edit") {
       await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 

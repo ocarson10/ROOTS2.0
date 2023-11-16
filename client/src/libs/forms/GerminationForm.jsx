@@ -119,20 +119,24 @@ function GerminationForm(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+        props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     } else if (props.operation === "edit") {
       await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+        props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 

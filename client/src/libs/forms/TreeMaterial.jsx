@@ -112,6 +112,7 @@ function TreeMaterial(props) {
         treeId
       )
         .then(() => {
+          props.handleFilesSubmit(treeId);
           clear();
           navigate('/');
         })
@@ -119,7 +120,6 @@ function TreeMaterial(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-      props.handleFilesSubmit(treeId);
     } else if (props.operation === "edit") {
       await editTree(
         treeId,
@@ -133,6 +133,7 @@ function TreeMaterial(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(treeId);
           clear();
           navigate('/');
         })
@@ -140,7 +141,6 @@ function TreeMaterial(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-        props.handleFilesSubmit(treeId);
     }
   };
 

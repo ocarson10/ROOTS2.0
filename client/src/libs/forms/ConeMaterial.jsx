@@ -131,6 +131,7 @@ function ConeMaterial(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(coneId);
           clearForm();
           navigate('/');
         })
@@ -138,6 +139,7 @@ function ConeMaterial(props) {
           console.log(error);
           setError(error.response.data.message);
         });
+
     }
     else if(props.operation === "edit") {
       editCone(
@@ -154,6 +156,7 @@ function ConeMaterial(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(coneId);
           clearForm();
           navigate('/');
         })
@@ -161,6 +164,7 @@ function ConeMaterial(props) {
           console.log(error);
           setError(error.response.data.message);
         });
+
     }
   };
 
