@@ -185,14 +185,14 @@ function RametForm(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (id === "" || motherTreeId === "") {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
     if (props.operation === "add") {
-      addRamet(
+      await addRamet(
         id,
         motherTreeId,
         geneticId.value,
