@@ -6,7 +6,7 @@ import ProgenyHover from '../hover-info/ProgenyHover';
 import LocationHover from '../hover-info/LocationHover';
 import GPSHover from '../hover-info/GPSHover';
 import Select from 'react-select';
-import { addRamet, updateRamet } from '../services/api-client/rametService';
+import { addRamet, getRamets, updateRamet } from '../services/api-client/rametService';
 import { getPopulations } from '../services/api-client/populationService';
 import {
   getIdsByPopulation,
@@ -37,6 +37,7 @@ function RametForm(props) {
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
+  const [changeId, setChangeId] = useState(true);
 
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
@@ -86,6 +87,15 @@ function RametForm(props) {
   useEffect(() => {
     getExistingLocations();
   }, []);
+
+  useEffect(() => {
+    if (props.operation === "edit") {
+      setChangeId(false);
+      const allRamets = getRamets();
+      const ramet = allRamets.findOne(x => x.id == props.rametId);
+      setRametId(ramet.id);
+    }
+  },[]);
 
   // function to get the population options
   const getPopulationsOptions = async () => {
@@ -263,6 +273,7 @@ function RametForm(props) {
           <input
             type="text"
             value={id}
+            disabled={!changeId}
             onChange={(e) => {
               setId(e.target.value);
               setError("");
