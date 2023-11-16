@@ -20,6 +20,7 @@ function AcclimationTab(props) {
               acclimationGeneticId: "",
               species: "",
               dateAcclimation: res.data[acclimation].dateAcclimation,
+              transferDate: res.data[acclimation].transferDate,
               location: res.data[acclimation].locationId,
               active: res.data[acclimation].active
             };
@@ -52,6 +53,7 @@ function AcclimationTab(props) {
     acclimationGeneticId: row.acclimationGeneticId,
     species: row.species,
     dateAcclimation: row.dateAcclimation.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -60,6 +62,7 @@ function AcclimationTab(props) {
     { field: "acclimationGeneticId", headerName: "Genetic ID", width: 200 },
     { field: "species", headerName: "Species", width: 150 },
     { field: "dateAcclimation", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 
