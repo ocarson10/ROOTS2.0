@@ -40,8 +40,6 @@ function SpeciesForm(props) {
   }, [props.operation, currentSpeciesForm.currentSpecies, currentSpeciesForm.currentshortHand]);
 
   const handleSubmit = async (e) => {
-    console.log("operation: " + props.operation);
-    
     if(props.operation === "add") {
       e.preventDefault();
       await addSpecies(speciesForm.species, speciesForm.shortHand)
@@ -52,12 +50,10 @@ function SpeciesForm(props) {
         console.log(error);
       });
     } else if(props.operation === "edit") {
-      console.log("edit operation");
-      await updateSpecies(speciesForm.species, speciesForm.shortHand, currentSpeciesForm.species) //currentSpeciesForm.species
+      await updateSpecies(speciesForm.species, speciesForm.shortHand, currentSpeciesForm.currentSpecies)
       .then(() => {
-        console.log("\nsuccess editing the species\n");
         clear();
-        //navigate("/");
+        navigate("/");
       }).catch((error) => {
         console.log(error);
       });
