@@ -6,7 +6,7 @@ import ProgenyHover from '../hover-info/ProgenyHover';
 import LocationHover from '../hover-info/LocationHover';
 import GPSHover from '../hover-info/GPSHover';
 import Select from 'react-select';
-import { addRamet } from '../services/api-client/rametService';
+import { addRamet, updateRamet } from '../services/api-client/rametService';
 import { getPopulations } from '../services/api-client/populationService';
 import {
   getIdsByPopulation,
@@ -191,24 +191,43 @@ function RametForm(props) {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
-    addRamet(
-      id,
-      motherTreeId,
-      geneticId.value,
-      familyId.value,
-      progenyId.value,
-      population.value,
-      rametId.value,
-      location.value,
-      gps
-    ).then((res) => {
-      if (res.status === 200) {
-        clear()
-        window.location.href = "/";
-      }
-    }).catch((error) => {
-      setError(error.response.data.message);
-    })
+    if (props.operation === "add") {
+      addRamet(
+        id,
+        motherTreeId,
+        geneticId.value,
+        familyId.value,
+        progenyId.value,
+        population.value,
+        rametId.value,
+        location.value,
+        gps
+      ).then((res) => {
+        if (res.status === 200) {
+          clear()
+          window.location.href = "/";
+        }
+      }).catch((error) => {
+        setError(error.response.data.message);
+      })
+    } else if (props.operation === "edit") {
+      await updateRamet (
+        id,
+        motherTreeId,
+        progenyId.value,
+        geneticId.value,
+        location.value,
+        gps,
+        true
+      ).then((res) => {
+        if (res.status === 200) {
+          clear();
+          window.location.href = "/";
+        }
+      }).catch((error) => {
+        setError(error.data.message);
+      })
+    }
   };
 
   const clear = () => {
@@ -234,7 +253,10 @@ function RametForm(props) {
   return (
     <div className="form-div">
       <div>
-        <h1>{"Add Ramet Material"}</h1>
+        {props.operation === 'add' ?
+          <h1>Add Ramet</h1> :
+          <h1>Edit Ramet</h1>
+        }
 
         <div className="input-div">
           <label className="entry-label">Ramet ID:</label>
