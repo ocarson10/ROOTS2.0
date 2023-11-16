@@ -173,5 +173,52 @@ module.exports = (app) => {
     }
   });
 
+  router.put('/', async (req, res) => {
+    try {
+      const reqGeneticId = req.body.geneticId;
+      const reqFamilyId = req.body.familyId;
+      const reqProgenyId = req.body.progenyId;
+      const reqRametId = req.body.rametId;
+      const reqSpecies = req.body.species;
+      const reqYearPlanted = req.body.yearPlanted;
+      const reqPopulation = req.body.populationId;
+      const databaseId = req.body.dbId;
+
+      if (
+        reqGeneticId === undefined || reqFamilyId === undefined ||
+        reqProgenyId === undefined || reqRametId === undefined ||
+        reqSpecies === undefined || reqYearPlanted === undefined ||
+        reqPopulation === undefined || databaseId === undefined
+      ) {
+        return res.status(400).json({ error: 'Bad Request, null field passed.' });
+      }
+  
+      // Finding the existing entry in the database using the databaseId
+      const existingEntry = await GeneticId.findByPk(databaseId);
+  
+      // Check if the entry exists
+      if (!existingEntry) {
+        return res.status(404).json({ error: `GeneticId with Id: ${dbId} doesn't exist.` });
+      }
+  
+      // Update the entry with the new values
+      existingEntry.geneticId = reqGeneticId;
+      existingEntry.familyId = reqFamilyId;
+      existingEntry.progenyId = reqProgenyId;
+      existingEntry.rametId = reqRametId;
+      existingEntry.species = reqSpecies;
+      existingEntry.yearPlanted = reqYearPlanted;
+      existingEntry.populationId = reqPopulation;
+  
+      // Save the updated entry
+      await existingEntry.save();
+  
+      return res.status(200).json({ message: 'Entry updated successfully', data: existingEntry });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
   app.use('/genetic-id', router);
 }
