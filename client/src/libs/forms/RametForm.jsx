@@ -92,7 +92,7 @@ function RametForm(props) {
     if (props.operation === "edit") {
       setChangeId(false);
       const allRamets = getRamets();
-      const ramet = allRamets.findOne(x => x.id == props.rametId);
+      const ramet = allRamets.find(x => x.id === props.rametId);
       setRametId(ramet.id);
     }
   },[]);
