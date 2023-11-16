@@ -242,11 +242,14 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Default">
                 Select Active Lab Resource
                 </MenuItem>
+                <MenuItem className="drop-button" value="Initiation">
+                  Initiation
+                </MenuItem>
                 <MenuItem className="drop-button" value="Maintenance">
                   Maintenance
                 </MenuItem>
-                <MenuItem className="drop-button" value="Greenhouse">
-                  Greenhouse
+                <MenuItem className="drop-button" value="Maturation">
+                  Maturation
                 </MenuItem>
                 <MenuItem className="drop-button" value="Cold Treatment">
                   Cold Treatment
@@ -254,14 +257,11 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Germination">
                   Germination
                 </MenuItem>
-                <MenuItem className="drop-button" value="Maturation">
-                  Maturation
-                </MenuItem>
-                <MenuItem className="drop-button" value="Initiation">
-                  Initiation
-                </MenuItem>
                 <MenuItem className="drop-button" value="Acclimation">
                   Acclimation
+                </MenuItem>
+                <MenuItem className="drop-button" value="Greenhouse">
+                  Greenhouse
                 </MenuItem>
                 <MenuItem className="drop-button" value="Field Station">
                   Field Station
