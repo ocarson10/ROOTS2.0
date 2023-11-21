@@ -63,10 +63,8 @@ module.exports = (app) => {
   });
 
   //edit a location
-  router.put("/", async (req, res) => {
-    console.log("current loc: " + req.body.currentLocationName);
+  router.put("/edit/:location", async (req, res) => {
     console.log("loc: " + req.body.location);
-    const reqCurrentLocation = req.body.currentLocationName;
     const reqLocation = req.body.location;
     const reqShorthand = req.body.shorthand;
     // const loc = await Location.findOne({ where: { location: reqCurrentLocation } });
@@ -81,28 +79,45 @@ module.exports = (app) => {
     //   console.log("Location not found")
     //   res.sendStatus(404);
     // }
-
-    await db.sync().then(async () => {
-      await Location.update(
-        {
-          location: reqLocation,
-          shorthand: reqShorthand,
-        },
-        {
-          where: {
-            location: reqCurrentLocation,
-          },
-        }
-      )
-        .then((innerRes) => {
-          res.sendStatus(200);
-        })
-        .catch((error) => {
-          console.log("Error Inserting Record: ", error);
-          res.sendStatus(400);
-        });
-    });
+    const location = await Location.findOne({ where: { location: reqLocation }});
+    if(location) {
+      location.update({location: reqLocation, shorthand: reqShorthand});
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+    // await db.sync().then(async () => {
+    //   await Location.update(
+    //     {
+    //       location: reqLocation,
+    //       shorthand: reqShorthand,
+    //     },
+    //     {
+    //       where: {
+    //         location: reqCurrentLocation,
+    //       },
+    //     }
+    //   )
+    //     .then((innerRes) => {
+    //       res.sendStatus(200);
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error Inserting Record: ", error);
+    //       res.sendStatus(400);
+    //     });
+    // });
   });
-
+  // updates a location as inactive/active
+  router.put('/:id', async (req, res) => {
+    console.log("location id:", req.params.id);
+    const reqLocation = req.body.location;
+    const location = await Location.findOne({ where: { location: reqLocation } });
+    if (location) {
+      location.update({ active: location.active? false : true });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
   app.use("/locations", router);
 };

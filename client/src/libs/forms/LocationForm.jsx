@@ -2,42 +2,52 @@ import React, { useEffect, useState } from "react";
 import "../../libs/style/LocationForm.css";
 import { addLocation, editLocation, getLocationByName } from "../services/api-client/locationService";
 import LocationHover from "../hover-info/LocationHover";
+import { useNavigate } from "react-router-dom";
 import LocationShorthandHover from "../hover-info/LocationShorthandHover";
 
 function LocationForm(props) {
-  const [locationForm, setLocationForm] = useState({
-    location: "",
-    shortHand: "",
-  });
-  const [currentLocationForm, setCurrentLocationForm] = useState({
-    location: "",
-    shortHand: "",
-  });
+  // const [locationForm, setLocationForm] = useState({
+  //   location: "",
+  //   shortHand: "",
+  // });
+  // const [currentLocationForm, setCurrentLocationForm] = useState({
+  //   location: "",
+  //   shortHand: "",
+  // });
+  const [location, setLocation] = useState("");
+  const [shorthand, setShorthand] = useState("");
+  const [error, setError] = useState("");
+  const [changeId, setChangeId] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (props.operation === "edit") {
+      setChangeId(false);
       const locName = window.location.href.split("/")[5];
-      console.log("location: " + locName);
+      //console.log("location: " + props.location);
+      console.log("location: " + props.locationId);
+     // console.log("location: " + props.locationId);
+      //console.log("location: " + props.uniqueId);
 
-      getLocationByName(locName).then((res) => {
+
+
+      getLocationByName(props.locationId).then((res) => {
         console.log(res.data);
-        setLocationForm({
-          location: res.data.location,
-          shortHand: res.data.shorthand,
-        });
-        setCurrentLocationForm({
-          location: res.data.location,
-          shortHand: res.data.shorthand,
-        });
+        setLocation(res.data.location);
+        setShorthand(res.data.shorthand);
+        
       });
       
+    }else{
+      setChangeId(true);
+
     }
   }, [props.operation]);
 
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
-      await addLocation(locationForm.location, locationForm.shortHand)
+      await addLocation(location, shorthand)
         .then(() => {
           clearForm();
           window.location.href = "/";
@@ -49,10 +59,11 @@ function LocationForm(props) {
     else if(props.operation === "edit") {
       console.log("editing");
       e.preventDefault();
-      await editLocation(currentLocationForm.location, locationForm.location, locationForm.shortHand)
+      await editLocation(location, shorthand)
         .then(() => {
           clearForm();
-          window.location.href = "/";
+          //window.location.href = "/";
+          navigate('/');
         })
         .catch((error) => {
           console.log(error);
@@ -61,10 +72,11 @@ function LocationForm(props) {
   };
 
   const clearForm = () => {
-    setLocationForm({
-      location: "",
-      shortHand: "",
-    });
+    if (props.operation === "add") {
+      setLocation("");
+    }
+
+    setShorthand("");
   };
 
   return (
@@ -80,11 +92,12 @@ function LocationForm(props) {
           </label>
           <input
             type="text"
-            value={locationForm.location}
+            value={location}
             id="location"
-            onChange={(e) =>
-              setLocationForm({ ...locationForm, location: e.target.value })
-            }
+            onChange={(e) =>{
+              setLocation(e.target.value );
+              setError("");
+            }}
           />
         </div>
         <div className="input-div">
@@ -93,20 +106,17 @@ function LocationForm(props) {
           </label>
           <input
             type="text"
-            value={locationForm.shortHand}
+            value={shorthand}
             id="shorthand"
-            onChange={(e) =>
-              setLocationForm({ ...locationForm, shortHand: e.target.value })
-            }
+            onChange={(e) =>{
+              setShorthand(e.target.value );
+            }}
           />
         </div>
         <div className="button-div">
-          <input
-            type="submit"
-            className="form-button"
-            id="submit"
-            value="Submit"
-          ></input>
+          <button className="form-button" id="submit" onClick={handleSubmit}>
+            Submit
+          </button>
           <button className="form-button" id="clear" onClick={clearForm}>
             Clear
           </button>

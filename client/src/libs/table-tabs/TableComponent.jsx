@@ -26,7 +26,7 @@ import { removeGermination } from "../services/api-client/germinationService";
 import { removeAcclimation } from "../services/api-client/acclimationService";
 import { removeGreenhouse } from "../services/api-client/greenhouseService";
 import { removeFieldstation } from "../services/api-client/fieldstationService";
-
+import { removeLocation } from "../services/api-client/locationService";
 /**
  * editLink="/edit/tree-material" addLink="/add/tree-material"  status={"active"} material={"tree"} rows={rows} columns={columns} loading={loading1} error={error}
  * @param {*} props broken down into many different parts
@@ -164,7 +164,17 @@ function TableComponent(props) {
           .catch((error) => {
             console.log(error);
           });
-        } 
+        } else if (props.material === "location") {
+          await removeLocation(selectedRows[i]).then(() => {
+            console.log("removed");
+            rows.map((row) => row !== selectedRows[i]);
+            setRows([...rows]);
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
       }
     }
   };
@@ -316,7 +326,7 @@ function TableComponent(props) {
             <FontAwesomeIcon title="Add" className="icon" icon={faFileCirclePlus} />
           </Link>
         ) : (<div></div>)}
-      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "location" && props.material !== "species" && props.material !== "geneticId" && props.material !== "population" ? (
+      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "species" && props.material !== "geneticId" && props.material !== "population" ? (
           <a onClick={archiveData}>
             <FontAwesomeIcon title="Delete" className="icon" icon={faFileCircleMinus} />
           </a>
