@@ -20,11 +20,15 @@ import { useNavigate } from "react-router-dom";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
+import { getMotherTrees } from "../services/api-client/motherTreeService";
+import { getTrees } from "../services/api-client/treeService";
 
 function ConeMaterial(props) {
   const [coneId, setConeId] = useState("");
-  const [motherTreeId, setMotherTreeId] = useState("");
-  const [fatherTreeId, setFatherTreeId] = useState("");
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
+  const [fatherTreeIdOptions, setFatherTreeIdOptions] = useState([]);
+  const [motherTreeId, setMotherTreeId] = useState({value:"", label:""});
+  const [fatherTreeId, setFatherTreeId] = useState({value:"", label:""});
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
   const [rametId, setRametId] = useState({ value: "", label: "" });
@@ -169,8 +173,8 @@ function ConeMaterial(props) {
       setConeId("");
     }
     
-    setMotherTreeId("");
-    setFatherTreeId("");
+    setMotherTreeId({value:"", label:""});
+    setFatherTreeId({value:"", label:""});
     setGeneticId({ value: "", label: "" });
     setFamilyId({ value: "", label: "" });
     setProgenyId({ value: "", label: "" });
@@ -184,6 +188,32 @@ function ConeMaterial(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
+  };
+
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
+  // function to get the father tree options
+  const getFatherTreeOptions = async () => {
+    getTrees().then((fatherTrees) => {
+      const options = fatherTrees.data.map((fatherTree) => {
+        return {
+          value: fatherTree.treeId,
+          label: fatherTree.treeId,
+        };
+      });
+      setFatherTreeIdOptions(options);
+    });
   };
 
   // function to get the population options
@@ -202,6 +232,8 @@ function ConeMaterial(props) {
   // On load, get the population options.
   useEffect(() => {
     getPopulationsOptions();
+    getMotherTreeOptions();
+    getFatherTreeOptions();
   }, []);
 
   // When changing the population, get the family options
@@ -325,19 +357,19 @@ function ConeMaterial(props) {
 
       <div className="input-div">
         <label className="entry-label">Mother Tree ID:</label>
-        <input
-          type="text"
-          value={motherTreeId}
-          onChange={(e) => setMotherTreeId(e.target.value)}
+        <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMotherTreeId({value:e.value,label: e.value})}
+          value={motherTreeId ? motherTreeId : ""}
         />
       </div>
 
       <div className="input-div">
         <label className="entry-label">Father Tree ID:</label>
-        <input
-          type="text"
-          value={fatherTreeId}
-          onChange={(e) => setFatherTreeId(e.target.value)}
+        <Select
+          options={fatherTreeIdOptions}
+          onChange={(e) => setFatherTreeId({value:e.value,label: e.value})}
+          value={fatherTreeId ? fatherTreeId : ""}
         />
       </div>
 

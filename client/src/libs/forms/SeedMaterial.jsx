@@ -22,13 +22,16 @@ import {useNavigate} from "react-router-dom";
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
+import { getTrees } from "../services/api-client/treeService";
 
 function SeedMaterial(props) {
   const [seedId, setSeedId] = useState("");
   const [location, setLocation] = useState("");
   const [cone, setCone] = useState("");
-  const [mother, setMother] = useState("");
-  const [father, setFather] = useState("");
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
+  const [fatherTreeIdOptions, setFatherTreeIdOptions] = useState([]);
+  const [mother, setMother] = useState({value:"", label:""});
+  const [father, setFather] = useState({value:"", label:""});
   const [origin, setOrigin] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
@@ -91,6 +94,8 @@ function SeedMaterial(props) {
 
   useEffect(() => {
     getExistingLocations();
+    getMotherTreeOptions();
+    getFatherTreeOptions();
   }, []);
 
 
@@ -288,7 +293,8 @@ function SeedMaterial(props) {
       setSeedId("");
     }
 
-    setMother("");
+    setMother({value:"", label:""});
+    setFather({value:"", label:""})
     setGeneticId({ value: "", label: "" });
     setFamilyId({ value: "", label: "" });
     setProgenyId({ value: "", label: "" });
@@ -306,6 +312,32 @@ function SeedMaterial(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
+  };
+
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
+  // function to get the father tree options
+  const getFatherTreeOptions = async () => {
+    getTrees().then((fatherTrees) => {
+      const options = fatherTrees.data.map((fatherTree) => {
+        return {
+          value: fatherTree.treeId,
+          label: fatherTree.treeId,
+        };
+      });
+      setFatherTreeIdOptions(options);
+    });
   };
 
   const handleLocationChange = (e) => {
@@ -427,19 +459,19 @@ function SeedMaterial(props) {
 
       <div className="input-div">
         <label className="entry-label">Mother:</label>
-        <input
-          type="text"
-          value={mother}
-          onChange={(e) => setMother(e.target.value)}
+        <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMother({value:e.value,label: e.value})}
+          value={mother ? mother : ""}
         />
       </div>
 
       <div className="input-div">
         <label className="entry-label">Father:</label>
-        <input
-          type="text"
-          value={father}
-          onChange={(e) => setFather(e.target.value)}
+        <Select
+          options={fatherTreeIdOptions}
+          onChange={(e) => setFather({value:e.value,label: e.value})}
+          value={father ? father : ""}
         />
       </div>
 
