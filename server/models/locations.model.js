@@ -15,7 +15,10 @@ const Location = sequelize.define("location", {
     autoIncrement: true,
     allowNull: false,
     unique: true
-  }
+  },
+  active: {
+        type: DataTypes.BOOLEAN,
+    }
 }, { timestamps: false });
 
 module.exports = Location;

@@ -41,10 +41,10 @@ function ArchivedTreeTab(props) {
               .catch((error) => {
                 setError(error);
               });
-            // if(!obj.active) {
-            //   tempArray.push(obj);
-            // }
-            tempArray.push(obj);
+            if(!obj.active) {
+              tempArray.push(obj);
+            }
+            //tempArray.push(obj);
           }
           //console.log(tempArray);
           setData(tempArray);

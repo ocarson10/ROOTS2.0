@@ -165,6 +165,7 @@ function TableComponent(props) {
             console.log(error);
           });
         } else if (props.material === "location") {
+          console.log("location remove: ",selectedRows[i] );
           await removeLocation(selectedRows[i]).then(() => {
             console.log("removed");
             rows.map((row) => row !== selectedRows[i]);

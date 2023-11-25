@@ -17,23 +17,25 @@ export async function getLocationByName(locationName) {
 
 // Add a new location that materials can be located in to the database given a name,
 // and the shorthand abbreviation
-export async function addLocation(locationName, locationShorthand) {
+export async function addLocation(locationName, locationShorthand, active) {
   await addLogs(`Added location with name: ${locationName}`);
   return await instance.post("locations", {
     location: locationName,
-    shorthand: locationShorthand
+    shorthand: locationShorthand,
+    active: active
   });
 }
 
 // Edit a location
-export async function editLocation( locationName, locationShorthand) {
+export async function editLocation( locationName, locationShorthand, active) {
   return await instance.put("locations/edit/"+ locationName, {
     location: locationName,
-    shorthand: locationShorthand
+    shorthand: locationShorthand,
+    active: active
   });
 }
 
-export async function removeLocation(locationId) {
-  await addLogs("Archived Location with id:" + locationId);
-  return await instance.put("locations/" + locationId);
+export async function removeLocation(locationName) {
+  await addLogs("Archived Location with id:" + locationName);
+  await instance.put("locations/" + locationName);
 }

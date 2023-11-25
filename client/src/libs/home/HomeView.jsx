@@ -332,7 +332,7 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Ramet Archive">
                   Ramet Archive
                 </MenuItem>
-                <MenuItem className="drop-button" value="Ramet Archive">
+                <MenuItem className="drop-button" value="Location Archive">
                   Location Archive
                 </MenuItem>
               </Select>

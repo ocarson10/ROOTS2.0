@@ -47,7 +47,7 @@ function LocationForm(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
-      await addLocation(location, shorthand)
+      await addLocation(location, shorthand, true)
         .then(() => {
           clearForm();
           window.location.href = "/";
@@ -59,7 +59,7 @@ function LocationForm(props) {
     else if(props.operation === "edit") {
       console.log("editing");
       e.preventDefault();
-      await editLocation(location, shorthand)
+      await editLocation(location, shorthand, true)
         .then(() => {
           clearForm();
           //window.location.href = "/";

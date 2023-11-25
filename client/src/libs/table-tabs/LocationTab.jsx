@@ -20,8 +20,12 @@ function LocationTab(props) {
             let obj = {
               location: res.data[location].location,
               shorthand: res.data[location].shorthand,
+              active: res.data[location].active
+
             }
-            tempArray.push(obj);
+            if(obj.active){
+              tempArray.push(obj);
+            }
           }
           setData(tempArray);
           setLoading(false);

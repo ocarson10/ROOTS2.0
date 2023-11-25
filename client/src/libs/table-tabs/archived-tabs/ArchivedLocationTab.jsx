@@ -18,8 +18,12 @@ function ArchivedLocationTab(props) {
             let obj = {
               location: res.data[location].location,
               shorthand: res.data[location].shorthand,
+              active: res.data[location].active,
             };
-            tempArray.push(obj);
+            if(!obj.active) {
+              tempArray.push(obj);
+            }
+            //tempArray.push(obj);
           }
           setData(tempArray);
           setLoading1(false);
@@ -33,6 +37,7 @@ function ArchivedLocationTab(props) {
   }, []);
 
   const rows = data.map((row) => ({
+   id: row.location,
    location: row.location,
    shorthand: row.shorthand,
   }));
@@ -62,7 +67,7 @@ function ArchivedLocationTab(props) {
           addLink="/material/location/edit"
           editLink="/material/location/add"
           status={"archive"}
-          material={"tree"}
+          material={"location"}
           rows={rows}
           columns={columns}
           loading={loading1}
