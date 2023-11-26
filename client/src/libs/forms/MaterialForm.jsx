@@ -172,8 +172,10 @@ function MaterialForm(props) {
 						</>
 					)}
 				</div>
+				{(material === 'location' && action === 'edit') || (material !== 'population' && material !== 'species' && material !== 'location' && material !== 'genetic-id') ? (
 				<div className='flex-child'>
 					<div className='files'>
+					
 						{!!photos && photos.length !== 0 &&
 							<Slideshow photos={photos} updatePhotos={updatePhotos} />
 						}
@@ -182,6 +184,7 @@ function MaterialForm(props) {
 						{!!files && files.length !== 0 &&
 							<FileList files={files} />
 						}
+							
 					{action === 'edit' && (material === 'trees' || material === 'cones' || material === 'seeds') &&
 					<h1>View Report</h1>
 					}
@@ -203,6 +206,7 @@ function MaterialForm(props) {
 					</div>
 					
 				</div>
+				): <div></div>}
 			</div>
 		</div>
 	);
