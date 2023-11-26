@@ -16,6 +16,7 @@ function LocationForm(props) {
   // });
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
+  const [uniqueId, setUniqueId] = useState("");
   const [error, setError] = useState("");
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
@@ -24,10 +25,7 @@ function LocationForm(props) {
     if (props.operation === "edit") {
       setChangeId(false);
       const locName = window.location.href.split("/")[5];
-      //console.log("location: " + props.location);
       console.log("location: " + props.locationId);
-     // console.log("location: " + props.locationId);
-      //console.log("location: " + props.uniqueId);
 
 
 
@@ -35,6 +33,7 @@ function LocationForm(props) {
         console.log(res.data);
         setLocation(res.data.location);
         setShorthand(res.data.shorthand);
+        setUniqueId(res.data.uniqueId);
         
       });
       
@@ -47,8 +46,10 @@ function LocationForm(props) {
   const handleSubmit = async (e) => {
     if (props.operation === "add") {
       e.preventDefault();
-      await addLocation(location, shorthand, true)
+      await addLocation(location, shorthand, true);
+      await props.handleFilesSubmit(uniqueId)
         .then(() => {
+          
           clearForm();
           window.location.href = "/";
         })
@@ -61,8 +62,8 @@ function LocationForm(props) {
       e.preventDefault();
       await editLocation(location, shorthand, true)
         .then(() => {
+          props.handleFilesSubmit(uniqueId);
           clearForm();
-          //window.location.href = "/";
           navigate('/');
         })
         .catch((error) => {

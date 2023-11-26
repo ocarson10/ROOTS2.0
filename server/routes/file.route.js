@@ -5,10 +5,12 @@ module.exports = (app) => {
     const utils = require('./utils');
    
     // Retrieve all file associated with material
-    router.get('/:materialId', async (req, res) => {
-      const materialId = req.params.materialId;
+    router.get('/:associatedId', async (req, res) => {
+      const materialId = req.params.associatedId;
+      console.log("material ID", materialId);
+
       //const materialType = req.params.materialType;
-      const materialExists = await utils.ensureMaterialIdExists(materialId);
+     const materialExists = await utils.ensureMaterialIdExists(materialId);
       if (materialExists) {
         File.findAll({ 
           where: { 

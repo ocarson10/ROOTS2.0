@@ -17,8 +17,8 @@ module.exports = (app) => {
   });
 
   //Gets a location by name
-  router.get("/:location", async (req, res) => {
-    const reqLocation = req.params.location;
+  router.get("/:id", async (req, res) => {
+    const reqLocation = req.params.id;
     await Location.findOne({ where: { location: reqLocation } })
       .then((innerRes) => {
         res.statusCode = 200;
@@ -81,11 +81,7 @@ module.exports = (app) => {
 
   // updates a location as inactive/active
   router.put('/:id', async (req, res) => {
-    // console.log("location test 1:", req.body.location);
-    // console.log("location test 2:", req.params.location);
-    // console.log("location test 3:", req.params.id);
     
-      //const reqLocation = req.body.location;
       const reqLocation = req.params.id;
       const location = await Location.findOne({ where: { location: reqLocation } });
   

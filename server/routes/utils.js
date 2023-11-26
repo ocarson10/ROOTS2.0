@@ -18,11 +18,20 @@ async function ensureMaterialIdExists(id) {
     };
 
     for (const type in models) {
+        
         const model = models[type];
+        if (type === 'location'){
+            const locInstatnce = await model.findOne({where: {uniqueId: id} });
+            if(locInstatnce !== null){
+                return true;
+            }
+        }
         const instance = await model.findByPk(id);
         if (instance !== null) {
+            
             return true;
         }
+       
     }
 
     return false;
