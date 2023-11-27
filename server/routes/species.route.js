@@ -37,6 +37,7 @@ module.exports = (app) => {
       await Species.create({
         species: reqSpecies,
         shorthand: reqShorthand,
+        active: true
       }).then((innerRes) => {
         res.sendStatus(200);
       }).catch((error) => {

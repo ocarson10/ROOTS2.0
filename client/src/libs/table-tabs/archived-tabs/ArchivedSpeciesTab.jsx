@@ -18,8 +18,11 @@ function ArchivedSpeciesTab(props) {
             let obj = {
               species: res.data[s].species,
               shorthand: res.data[s].shorthand,
+              active: res.data[s].active
             };
-            tempArray.push(obj);
+            if (!obj.active) {
+              tempArray.push(obj);
+            }
           }
           setData(tempArray);
           setLoading1(false);
@@ -33,6 +36,7 @@ function ArchivedSpeciesTab(props) {
   }, []);
 
   const rows = data.map((row) => ({
+   id: row.species,
    species: row.species,
    shorthand: row.shorthand,
   }));
@@ -58,7 +62,7 @@ function ArchivedSpeciesTab(props) {
           addLink="/material/species/edit"
           editLink="/material/species/add"
           status={"archive"}
-          material={"tree"}
+          material={"species"}
           rows={rows}
           columns={columns}
           loading={loading1}

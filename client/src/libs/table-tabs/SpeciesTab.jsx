@@ -17,8 +17,12 @@ function SpeciesTab(props) {
             let obj = {
               species: res.data[species].species,
               shorthand: res.data[species].shorthand,
+              active:  res.data[species].active
             }
-            tempArray.push(obj)
+            if (obj.active) {
+              console.log("active is true");
+              tempArray.push(obj)
+            }
           }
           setData(tempArray)
           setLoading(false)

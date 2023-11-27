@@ -28,12 +28,13 @@ export async function removeSpecies(species) {
   await instance.put("species/" + species);
 }
 
-// Update species given it's name and the shorthand abbreviation
+// Update species shorthand given its name and the shorthand abbreviation
 export async function updateSpecies(speciesName, speciesShorthand) { 
   await addLogs(`Updating species with name: ${speciesName}`);
 
   return await instance.put("species/edit/" + speciesName, {
     species: speciesName,
-    shorthand: speciesShorthand
+    shorthand: speciesShorthand,
+    active: true
   });
 }
