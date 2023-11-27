@@ -88,12 +88,11 @@ function RametForm(props) {
     getExistingLocations();
   }, []);
 
+
   useEffect(() => {
     if (props.operation === "edit") {
+      setId(props.rametId);
       setChangeId(false);
-      const allRamets = getRamets();
-      const ramet = allRamets.find(x => x.id === props.rametId);
-      setRametId(ramet.id);
     }
   },[]);
 
@@ -197,7 +196,7 @@ function RametForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id === "" || motherTreeId === "") {
+    if (rametId === "" || motherTreeId === "") {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
@@ -226,6 +225,9 @@ function RametForm(props) {
         motherTreeId,
         progenyId.value,
         geneticId.value,
+        familyId.value,
+        rametId.value,
+        population.value,
         location.value,
         gps,
         true
@@ -272,7 +274,7 @@ function RametForm(props) {
           <label className="entry-label">Ramet ID:</label>
           <input
             type="text"
-            value={id}
+            value={props.rametId ?? id}
             disabled={!changeId}
             onChange={(e) => {
               setId(e.target.value);

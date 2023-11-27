@@ -59,13 +59,13 @@ module.exports = (app) => {
     })
   });
 
-  router.put('edit/:id', async (req, res) => {
+  router.put('/edit/:id', async (req, res) => {
     const reqRametId = req.params.id;
-    const reqMotherTreeId = req.params.motherTreeId;
-    const reqLocation = req.params.location;
-    const reqGeneticId = req.params.geneticId;
-    const reqGps = req.params.gps;
-    const reqActive = req.params.active;
+    const reqMotherTreeId = req.body.motherTreeId;
+    const reqLocation = req.body.locationId;
+    const reqGeneticId = req.body.rameteneticId;
+    const reqGps = req.body.gps;
+    const reqActive = req.body.active;
     
     const ramet = await Ramet.findOne({ where: { id: reqRametId } })
     if (ramet) {
