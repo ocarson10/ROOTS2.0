@@ -104,21 +104,25 @@ function GreenhouseForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, transferDate, location, true).then(() => {
+      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+        props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     } else if (props.operation === "edit") {
-      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, transferDate, location, true).then(() => {
+      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+        props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 

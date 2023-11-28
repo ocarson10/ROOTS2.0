@@ -135,6 +135,7 @@ function Initiation(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(initiationId);
           clear();
           navigate("/");
         })
@@ -142,7 +143,6 @@ function Initiation(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-        props.handleFilesSubmit(initiationId);
     }
     else if (props.operation === "edit") {
       await editInitiation(
@@ -157,6 +157,7 @@ function Initiation(props) {
         true
       )
         .then(() => {
+          props.handleFilesSubmit(initiationId);
           clear();
           navigate("/");
         })
@@ -164,7 +165,6 @@ function Initiation(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-        props.handleFilesSubmit(initiationId);
     }
 
 

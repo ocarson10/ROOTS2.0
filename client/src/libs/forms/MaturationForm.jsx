@@ -118,21 +118,25 @@ function Maturation(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, transferDate, location.value, true).then(() => {
+      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true).then(() => {
+        props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     } else if (props.operation === "edit") {
-      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, transferDate, location.value, true).then(() => {
+      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true).then(() => {
+        props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   };
 

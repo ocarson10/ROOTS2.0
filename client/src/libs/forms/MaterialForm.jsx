@@ -97,12 +97,12 @@ function MaterialForm(props) {
 				<div className='flex-child'>
 					{material === 'acclimation' &&
 						<>
-							<AcclimationForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+							<AcclimationForm operation={action} acclimationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					}
 					{material === 'cold-treatment' &&
 						<>
-							<ColdTreatmentForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+							<ColdTreatmentForm operation={action} acclimationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					}
 					{material === 'cones' && (

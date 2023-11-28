@@ -115,7 +115,8 @@ function AcclimationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, transferDate, location.value, true).then(() => {
+      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
@@ -123,13 +124,15 @@ function AcclimationForm(props) {
         setError("An error occured: " + error);
       });
     } else if(props.operation === "edit") {
-      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, transferDate, location.value, true).then(() => {
+      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 

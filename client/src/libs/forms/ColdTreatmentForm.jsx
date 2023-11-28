@@ -111,21 +111,25 @@ function ColdTreatment(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, transferDate, location.value, true).then(() => {
+      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     } else if (props.operation === "edit") {
-      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, transferDate, location.value, true).then(() => {
+      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 
