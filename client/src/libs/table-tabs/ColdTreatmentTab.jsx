@@ -22,6 +22,7 @@ function ColdTreatmentTab(props) {
               duration: res.data[treatment].duration,
               numberEmbryos: res.data[treatment].numberEmbryos,
               dateCold: res.data[treatment].dateCold,
+              transferDate: res.data[treatment].transferDate,
               location: res.data[treatment].locationId,
               active: res.data[treatment].active
             };
@@ -56,6 +57,7 @@ function ColdTreatmentTab(props) {
     duration: row.duration,
     numberEmbryos: row.numberEmbryos,
     dateCold: row.dateCold.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -66,6 +68,7 @@ function ColdTreatmentTab(props) {
     { field: "duration", headerName: "Duration", width: 150 },
     { field: "numberEmbryos", headerName: "Number of Embryos", width: 150 },
     { field: "dateCold", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 

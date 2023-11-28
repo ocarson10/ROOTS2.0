@@ -44,6 +44,10 @@ function MaterialForm(props) {
 		setPhotos(newPhotos);
 	};
 
+	const updateFiles = (newFiles) => {
+		setFiles(newFiles);
+	};
+
 	const handleFileSubmit = async (materialId) => {
 		
 		if (!!selectedImage) {
@@ -182,7 +186,7 @@ function MaterialForm(props) {
 						<ImageUpload onImageSelect={handleImageSelection} />
 						<FileUpload onFileSelect={handleFileSelection} />
 						{!!files && files.length !== 0 &&
-							<FileList files={files} />
+							<FileList files={files} updateFiles={updateFiles}/>
 						}
 							
 					{action === 'edit' && (material === 'trees' || material === 'cones' || material === 'seeds') &&

@@ -14,6 +14,7 @@ function AcclimationForm(props) {
   const [acclimationId, setAcclimationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateAcclimation, setDateAcclimation] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -53,6 +54,7 @@ function AcclimationForm(props) {
         });
         setAcclimationId(response.data.acclimationId);
         setDateAcclimation(response.data.dateAcclimation.substring(0, 10));
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -113,7 +115,7 @@ function AcclimationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, transferDate, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -121,7 +123,7 @@ function AcclimationForm(props) {
         setError("An error occured: " + error);
       });
     } else if(props.operation === "edit") {
-      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, transferDate, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -134,6 +136,7 @@ function AcclimationForm(props) {
   const clear = () => {
     setAcclimationId('');
     setDateAcclimation('');
+    setTransferDate('');
     setLocation({ value: "", label: "" });
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
@@ -199,6 +202,11 @@ function AcclimationForm(props) {
         <div className="input-div">
           <label className="entry-label"><GenericHover text="The date the material was moved to the acclimation stage" />Date:</label>
           <input type="date" value={dateAcclimation} onChange={(e) => { setDateAcclimation(e.target.value); setError("") }} />
+        </div>
+
+        <div className="input-div">
+          <label className="entry-label"><GenericHover text="The date the material is expected to be transferred" /> Transfer Date:</label>
+          <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
         </div>
 
         <div className="input-div">

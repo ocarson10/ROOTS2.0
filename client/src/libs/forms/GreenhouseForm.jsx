@@ -13,6 +13,7 @@ function GreenhouseForm(props) {
   const [greenHouseId, setGreenHouseId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateGreenhouse, setDateGreenhouse] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -42,6 +43,7 @@ function GreenhouseForm(props) {
         });
         setGreenHouseId(response.data.greenhouseId);
         setDateGreenhouse(response.data.dateGreenhouse.substring(0, 10));
+        setTransferDate(response.data.transferDate.substring(0, 10));
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -67,6 +69,7 @@ function GreenhouseForm(props) {
         });
         setGreenHouseId(response.data.greenhouseId);
         setDateGreenhouse(response.data.dateGreenhouse);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.location);
       }).catch((error) => {
         console.log(error);
@@ -101,7 +104,7 @@ function GreenhouseForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, transferDate, location, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -109,7 +112,7 @@ function GreenhouseForm(props) {
         setError("An error occured: " + error);
       });
     } else if (props.operation === "edit") {
-      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, transferDate, location, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -123,6 +126,7 @@ function GreenhouseForm(props) {
     setGreenHouseId("");
     setGeneticId("");
     setDateGreenhouse("");
+    setTransferDate("");
     setLocation("");
     setError("");
     setGenOptions([]);
@@ -176,6 +180,11 @@ function GreenhouseForm(props) {
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The date the material was moved to the greenhouse"/>Date:</label>
         <input type="date" value={dateGreenhouse} onChange={(e) => {setDateGreenhouse(e.target.value); setError("")}} />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label"><GenericHover text="The date the material should be transferred"/>Transfer Date:</label>
+        <input type="date" value={transferDate} onChange={(e) => {setTransferDate(e.target.value); setError("")}} />
       </div>
 
       <div className="input-div">

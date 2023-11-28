@@ -32,6 +32,7 @@ function SeedMaterial(props) {
   const [origin, setOrigin] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
   const [rametId, setRametId] = useState({ value: "", label: "" });
@@ -109,6 +110,7 @@ function SeedMaterial(props) {
         setOrigin(seed.data.origin);
         setQuantity(seed.data.quantity);
         setDate(seed.data.dateMade);
+        setDate(seed.data.transferDate);
 
         getId(seed.data.seedGeneticId).then((id) => {
           setPopulation(id.data.populationId);
@@ -243,6 +245,7 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
+        transferDate,
         location.value
       )
         .then((res) => {
@@ -269,6 +272,7 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
+        transferDate,
         location.value
       )
         .then((res) => {
@@ -299,6 +303,7 @@ function SeedMaterial(props) {
     setOrigin("");
     setQuantity("");
     setDate("");
+    setTransferDate("");
     setError("");
     setPopOptions([]);
     setFamOptions([]);
@@ -473,6 +478,16 @@ function SeedMaterial(props) {
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
+
+      <div className="input-div">
+        <label className="entry-label">Transfer Date:</label>
+        <input
+          type="date"
+          value={transferDate}
+          onChange={(e) => setTransferDate(e.target.value)}
+        />
+      </div>
+
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

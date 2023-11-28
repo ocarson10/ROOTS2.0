@@ -16,6 +16,7 @@ function GerminationForm(props) {
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateGermination, setDateGermination] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -52,6 +53,7 @@ function GerminationForm(props) {
         setNumberEmbryos(response.data.numberEmbryos);
         setMediaBatch(response.data.mediaBatch);
         setDateGermination(response.data.dateGermination.substring(0, 10));
+        setTransferDate(response.data.transferDate.substring(0, 10));
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -79,6 +81,7 @@ function GerminationForm(props) {
           setNumberEmbryos(response.data.numberEmbryos);
           setMediaBatch(response.data.mediaBatch);
           setDateGermination(response.data.dateGermination.substring(0, 10));
+          setTransferDate(response.data.transferDate.substring(0, 10));
           setLocation(response.data.locationId);
         }).catch((error) => {
           console.log(error);
@@ -118,7 +121,7 @@ function GerminationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, transferDate, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -126,7 +129,7 @@ function GerminationForm(props) {
         setError("An error occured: " + error);
       });
     } else if (props.operation === "edit") {
-      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, transferDate, location.value, true).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -141,6 +144,7 @@ function GerminationForm(props) {
     setNumberEmbryos("");
     setMediaBatch("");
     setDateGermination("");
+    setTransferDate("");
     setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
@@ -217,6 +221,11 @@ function GerminationForm(props) {
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The date the material was moved to the germination stage" />Date of Germination:</label>
         <input type="date" value={dateGermination} onChange={(e) => { setDateGermination(e.target.value); setError("") }} />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label"><GenericHover text="The date the material is expected to be transferred" />Transfer Date:</label>
+        <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
       </div>
 
       <div className="input-div">
