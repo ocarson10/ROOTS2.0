@@ -16,6 +16,7 @@ function Maturation(props) {
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateMatured, setDateMatured] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -52,6 +53,7 @@ function Maturation(props) {
         setNumberOfPlates(response.data.numberOfPlates);
         setMediaBatch(response.data.mediaBatch);
         setDateMatured(response.data.dateMatured);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -143,6 +145,7 @@ function Maturation(props) {
     setNumberOfPlates("");
     setMediaBatch("");
     setDateMatured("");
+    setTransferDate("");
     setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds()
@@ -221,6 +224,11 @@ function Maturation(props) {
       <div className="input-div">
         <label className="entry-label"><GenericHover text="Material Maturation Date" />Maturation Date</label>
         <input type="date" value={dateMatured} onChange={(e) => { setDateMatured(e.target.value); setError("") }} />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label"><GenericHover text="Material Transfer Date" />Transfer Date</label>
+        <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
       </div>
 
       <div className="input-div">

@@ -23,6 +23,7 @@ function Initiation(props) {
   const [mediaBatch, setMediaBatch] = useState("");
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [dateMade, setDateMade] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -46,6 +47,7 @@ function Initiation(props) {
           setMediaBatch(response.data.mediaBatch);
           setNumberOfPlates(response.data.numberOfPlates);
           setDateMade(response.data.dateMade);
+          setDateMade(response.data.transferDate);
           setLocation(response.data.locationId);
           getId(response.data.initiationGeneticId).then((id) => {
             setGeneticId({
@@ -118,26 +120,6 @@ function Initiation(props) {
       });
   }, [props.operation, props]);
 
-  // useEffect(() => {
-  //   getId(seedId).then((id) => {
-  //     console.log(id);
-  //     setGeneticId({
-  //       value: id.id, label: "P" +
-  //         id.populationId +
-  //         "_" +
-  //         id.familyId +
-  //         "_" +
-  //         (id.rametId ? id.rametId : "NA") +
-  //         "_" +
-  //         id.geneticId +
-  //         "_" +
-  //         id.progenyId,
-  //     });
-  //   }).catch((error) => {
-  //     setError(error);
-  // });
-  // }, [seedId]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
@@ -148,6 +130,7 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
+        transferDate,
         location,
         true
       )
@@ -169,6 +152,7 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
+        transferDate,
         location,
         true
       )
@@ -192,6 +176,7 @@ function Initiation(props) {
     setMediaBatch("");
     setNumberOfPlates("");
     setDateMade("");
+    setTransferDate("");
     setLocation("");
     setError("");
     setGenOptions([]);
@@ -316,6 +301,21 @@ function Initiation(props) {
           value={dateMade}
           onChange={(e) => {
             setDateMade(e.target.value);
+            setError("");
+          }}
+        />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label">
+          <GenericHover text="The Transfer Date" />
+          Transfer Date:
+        </label>
+        <input
+          type="date"
+          value={transferDate}
+          onChange={(e) => {
+            setTransferDate(e.target.value);
             setError("");
           }}
         />

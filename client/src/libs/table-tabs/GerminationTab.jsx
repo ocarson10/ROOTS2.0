@@ -23,6 +23,7 @@ function GerminationTab(props) {
               germinationGeneticId: "",
               species: "",
               dateGermination: res.data[germination].dateGermination,
+              transferDate: res.data[germination].transferDate,
               location: res.data[germination].locationId,
               active: res.data[germination].active
             };
@@ -58,6 +59,7 @@ function GerminationTab(props) {
     germinationGeneticId: row.germinationGeneticId,
     species: row.species,
     dateGermination: row.dateGermination.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -68,6 +70,7 @@ function GerminationTab(props) {
     { field: "numberEmbryos", headerName: "Number of Plates", width: 150 },
     { field: "mediaBatch", headerName: "Media Batch", width: 150 },
     { field: "dateGermination", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 

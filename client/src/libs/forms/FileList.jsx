@@ -1,8 +1,29 @@
 import { deleteFile } from "../services/api-client/fileService";
+import React, { useState } from 'react';
 
-const FileList = ({ files }) => {
+const FileList = ({ files, updateFiles }) => {
+    const [currentFileIndex, setCurrentFileIndex] = useState(0);
+
     const handleDelete = async (file) => {
-        const response = await deleteFile(file.fileId);
+        
+        if (files.length === 0) {
+            return;
+        }
+
+        let deleteFileId = file.fileId;
+        const newFiles = files.filter((f) => f.fileId !== deleteFileId);
+
+        if (newFiles.length === 0) {
+            setCurrentFileIndex(0);
+        } else {
+            setCurrentFileIndex((prevIndex) =>
+            prevIndex === newFiles.length - 1 ? 0 : prevIndex
+          );
+        }
+
+        updateFiles(newFiles);
+    
+        const response = await deleteFile(deleteFileId);
     
         if(response.status !== 200) {
             console.log(`Error deleting file with id: ${file.fileId}`);
