@@ -6,7 +6,7 @@ import ProgenyHover from '../hover-info/ProgenyHover';
 import LocationHover from '../hover-info/LocationHover';
 import GPSHover from '../hover-info/GPSHover';
 import Select from 'react-select';
-import { addRamet } from '../services/api-client/rametService';
+import { addRamet, getRamets, updateRamet } from '../services/api-client/rametService';
 import { getPopulations } from '../services/api-client/populationService';
 import {
   getIdsByPopulation,
@@ -17,11 +17,13 @@ import {
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
+import { getTrees } from "../services/api-client/treeService";
 
 function RametForm(props) {
   const [id, setId] = useState('');
   const [gps, setGps] = useState('');
-  const [motherTreeId, setMotherTreeId] = useState('');
+  const [motherTreeId, setMotherTreeId] = useState({value:"", label:""});
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
   const [location, setLocation] = useState('');
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
@@ -37,6 +39,7 @@ function RametForm(props) {
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
+  const [changeId, setChangeId] = useState(true);
 
   const handleOpenPopulationForm = () => {
     setPopulationFormOpen(true);
@@ -87,6 +90,14 @@ function RametForm(props) {
     getExistingLocations();
   }, []);
 
+
+  useEffect(() => {
+    if (props.operation === "edit") {
+      setId(props.rametId);
+      setChangeId(false);
+    }
+  },[]);
+
   // function to get the population options
   const getPopulationsOptions = async () => {
     getPopulations().then((populations) => {
@@ -100,9 +111,23 @@ function RametForm(props) {
     });
   };
 
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
   // On load, get the population options.
   useEffect(() => {
     getPopulationsOptions();
+    getMotherTreeOptions();
   }, []);
 
   // When changing the population, get the family options
@@ -185,30 +210,52 @@ function RametForm(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id === "" || motherTreeId === "") {
+    if (rametId === "" || motherTreeId === "") {
       setError("Please enter a ramet ID and Mother Tree Id");
       return;
     }
-    addRamet(
-      id,
-      motherTreeId,
-      geneticId.value,
-      familyId.value,
-      progenyId.value,
-      population.value,
-      rametId.value,
-      location.value,
-      gps
-    ).then((res) => {
-      if (res.status === 200) {
-        clear()
-        window.location.href = "/";
-      }
-    }).catch((error) => {
-      setError(error.response.data.message);
-    })
+    if (props.operation === "add") {
+      await addRamet(
+        id,
+        motherTreeId,
+        geneticId.value,
+        familyId.value,
+        progenyId.value,
+        population.value,
+        rametId.value,
+        location.value,
+        gps
+      ).then((res) => {
+        if (res.status === 200) {
+          clear()
+          window.location.href = "/";
+        }
+      }).catch((error) => {
+        setError(error.response.data.message);
+      })
+    } else if (props.operation === "edit") {
+      await updateRamet (
+        id,
+        motherTreeId,
+        progenyId.value,
+        geneticId.value,
+        familyId.value,
+        rametId.value,
+        population.value,
+        location.value,
+        gps,
+        true
+      ).then((res) => {
+        if (res.status === 200) {
+          clear();
+          window.location.href = "/";
+        }
+      }).catch((error) => {
+        setError(error.data.message);
+      })
+    }
   };
 
   const clear = () => {
@@ -234,13 +281,17 @@ function RametForm(props) {
   return (
     <div className="form-div">
       <div>
-        <h1>{"Add Ramet Material"}</h1>
+        {props.operation === 'add' ?
+          <h1>Add Ramet</h1> :
+          <h1>Edit Ramet</h1>
+        }
 
         <div className="input-div">
           <label className="entry-label">Ramet ID:</label>
           <input
             type="text"
-            value={id}
+            value={props.rametId ?? id}
+            disabled={!changeId}
             onChange={(e) => {
               setId(e.target.value);
               setError("");
@@ -250,7 +301,11 @@ function RametForm(props) {
 
         <div className="input-div">
           <label className="entry-label">Mother Tree ID:</label>
-          <input type="text" value={motherTreeId} onChange={(e) => setMotherTreeId(e.target.value)} />
+          <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMotherTreeId({value:e.value,label: e.value})}
+          value={motherTreeId ? motherTreeId : ""}
+        />
         </div>
 
         <div className="input-div">

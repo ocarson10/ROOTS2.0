@@ -28,6 +28,8 @@ import ArchivedMaturationTab from "../table-tabs/archived-tabs/ArchivedMaturatio
 import ArchivedRametTab from "../table-tabs/archived-tabs/ArchivedRametTab";
 import ArchivedSeedTab from "../table-tabs/archived-tabs/ArchivedSeedTab";
 import ArchivedSpeciesTab from "../table-tabs/archived-tabs/ArchivedSpeciesTab";
+import ArchivedLocationTab from "../table-tabs/archived-tabs/ArchivedLocationTab";
+
 import GreenhouseTab from "../table-tabs/GreenhouseTab";
 import GerminationTab from "../table-tabs/GerminationTab";
 import MaturationTab from "../table-tabs/MaturationTab";
@@ -168,6 +170,8 @@ function HomeView(props) {
       setTableDisplay(<div><ArchivedRametTab user={props.user}/></div>)
     } else if (tab === "Species Archive") {
       setTableDisplay(<div><ArchivedSpeciesTab user={props.user}/></div>)
+    } else if (tab === "Location Archive") {
+      setTableDisplay(<div><ArchivedLocationTab user={props.user}/></div>)
     } else {
       setTableDisplay(<div></div>);
     }
@@ -245,11 +249,14 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Default">
                 Select Active Lab Resource
                 </MenuItem>
+                <MenuItem className="drop-button" value="Initiation">
+                  Initiation
+                </MenuItem>
                 <MenuItem className="drop-button" value="Maintenance">
                   Maintenance
                 </MenuItem>
-                <MenuItem className="drop-button" value="Greenhouse">
-                  Greenhouse
+                <MenuItem className="drop-button" value="Maturation">
+                  Maturation
                 </MenuItem>
                 <MenuItem className="drop-button" value="Cold Treatment">
                   Cold Treatment
@@ -257,14 +264,11 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Germination">
                   Germination
                 </MenuItem>
-                <MenuItem className="drop-button" value="Maturation">
-                  Maturation
-                </MenuItem>
-                <MenuItem className="drop-button" value="Initiation">
-                  Initiation
-                </MenuItem>
                 <MenuItem className="drop-button" value="Acclimation">
                   Acclimation
+                </MenuItem>
+                <MenuItem className="drop-button" value="Greenhouse">
+                  Greenhouse
                 </MenuItem>
                 <MenuItem className="drop-button" value="Field Station">
                   Field Station
@@ -334,6 +338,9 @@ function HomeView(props) {
                 </MenuItem>
                 <MenuItem className="drop-button" value="Species Archive">
                   Species Archive
+                 </MenuItem>
+                <MenuItem className="drop-button" value="Location Archive">
+                  Location Archive
                 </MenuItem>
               </Select>
             </FormControl>

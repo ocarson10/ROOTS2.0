@@ -24,9 +24,9 @@ import FileUpload from "./FileUpload";
 import { addFile, getFiles } from "../services/api-client/fileService";
 import '../../libs/style/Material.css';
 import { useNavigate, Link } from "react-router-dom";
-
+import { getLocationByName } from '../services/api-client/locationService';
 function MaterialForm(props) {
-	const { material, action, id } = useParams();
+	const { material, action, id} = useParams();
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [photos, setPhotos] = useState(null);
 	const [files, setFiles] = useState(null);
@@ -44,6 +44,10 @@ function MaterialForm(props) {
 		setPhotos(newPhotos);
 	};
 
+	const updateFiles = (newFiles) => {
+		setFiles(newFiles);
+	};
+
 	const handleFileSubmit = async (materialId) => {
 		
 		if (!!selectedImage) {
@@ -56,10 +60,30 @@ function MaterialForm(props) {
 
 	useEffect(() => {
 		async function loadPhotos() {
-		  setPhotos(await getPhotos(id));
+			//setPhotos(await getPhotos(id));
+			if(material !== 'location'){
+				setPhotos(await getPhotos(id));
+			} else{
+				
+				const res = await getLocationByName(id);
+				console.log("RES DATA:",res.data);
+				const uniqueId = res.data.uniqueId;
+				console.log("PHOTO UNIQUE ID:", uniqueId);
+				setPhotos(await getPhotos(uniqueId));
+			}
+		  
 		}
 		async function loadFiles() {
-		  setFiles(await getFiles(id));
+			
+		if(material !== 'location'){
+		 setFiles(await getFiles(id));
+		} else{
+			const res = await getLocationByName(id);
+			console.log("RES DATA:",res.data);
+			const uniqueId = res.data.uniqueId;
+			console.log("FILE UNIQUE ID:", uniqueId);
+			  setFiles(await getFiles(uniqueId));	
+		}
 		}
 		if (id) {
 			loadPhotos();
@@ -73,12 +97,12 @@ function MaterialForm(props) {
 				<div className='flex-child'>
 					{material === 'acclimation' &&
 						<>
-							<AcclimationForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+							<AcclimationForm operation={action} acclimationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					}
 					{material === 'cold-treatment' &&
 						<>
-							<ColdTreatmentForm operation={action} acclimationId={id} handeFilesSubmit={handleFileSubmit} />
+							<ColdTreatmentForm operation={action} acclimationId={id} handleFilesSubmit={handleFileSubmit} />
 						</>
 					}
 					{material === 'cones' && (
@@ -152,17 +176,20 @@ function MaterialForm(props) {
 						</>
 					)}
 				</div>
+				{(material === 'location' && action === 'edit') || (material !== 'population' && material !== 'species' && material !== 'location' && material !== 'genetic-id') ? (
 				<div className='flex-child'>
 					<div className='files'>
+					
 						{!!photos && photos.length !== 0 &&
 							<Slideshow photos={photos} updatePhotos={updatePhotos} />
 						}
 						<ImageUpload onImageSelect={handleImageSelection} />
 						<FileUpload onFileSelect={handleFileSelection} />
 						{!!files && files.length !== 0 &&
-							<FileList files={files} />
+							<FileList files={files} updateFiles={updateFiles}/>
 						}
-						{action === 'edit' && (material === 'trees' || material === 'cones' || material === 'seeds') &&
+							
+					{action === 'edit' && (material === 'trees' || material === 'cones' || material === 'seeds') &&
 					<h1>View Report</h1>
 					}
 					{action === 'edit' && (material === 'trees') ? (
@@ -183,6 +210,7 @@ function MaterialForm(props) {
 					</div>
 					
 				</div>
+				): <div></div>}
 			</div>
 		</div>
 	);

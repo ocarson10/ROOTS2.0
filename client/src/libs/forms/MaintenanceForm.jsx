@@ -18,6 +18,7 @@ function Maintenance(props) {
   const [dateCurr, setDateCurr] = useState("");
   const [mediaBatchPrev, setMediaBatchPrev] = useState("");
   const [datePrev, setDatePrev] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -42,6 +43,7 @@ function Maintenance(props) {
           setNumberOfPlates(response.data.numberOfPlates);
           setMediaBatchPrev(response.data.mediaBatchCurr);
           setDatePrev(response.data.dateCurr.subString(0, 10));
+          setTransferDate(response.data.transferDate.subString(0, 10));
           setLocation(response.data.locationId);
           getId(response.data.maintenanceGeneticId).then((id) => {
             setGeneticId({
@@ -68,6 +70,7 @@ function Maintenance(props) {
         .then((response) => {
           setNumberOfPlates(response.data.numberOfPlates);
           setDatePrev(response.data.dateMade);
+          setTransferDate(response.data.transferDate);
           setMediaBatchPrev(response.data.mediaBatch);
           setLocation(response.data.location);
           console.log("got genetic id: " + response.data.initiationGeneticId);
@@ -130,10 +133,12 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
+        transferDate,
         location.value,
         true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -141,6 +146,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+
     } else if (props.operation === "edit") {
       await updateMaintenance(
         maintenanceId,
@@ -150,10 +156,12 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
+        transferDate,
         location.value,
         true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -161,6 +169,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+
     }
 
   };
@@ -172,6 +181,7 @@ function Maintenance(props) {
     setDateCurr("");
     setMediaBatchPrev("");
     setDatePrev("");
+    setTransferDate("");
     setLocation("");
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
@@ -329,6 +339,21 @@ function Maintenance(props) {
           value={datePrev}
           onChange={(e) => {
             setDatePrev(e.target.value);
+            setError("");
+          }}
+        />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label">
+          <GenericHover text="The Material's Transfer Date" />
+          Transfer Date:
+        </label>
+        <input
+          type="date"
+          value={transferDate}
+          onChange={(e) => {
+            setTransferDate(e.target.value);
             setError("");
           }}
         />

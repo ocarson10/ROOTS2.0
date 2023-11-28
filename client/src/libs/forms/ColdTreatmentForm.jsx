@@ -16,6 +16,7 @@ function ColdTreatment(props) {
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [dateCold, setDateCold] = useState("");
   const [duration, setDuration] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -51,6 +52,7 @@ function ColdTreatment(props) {
         setNumberEmbryos(response.data.numberEmbryos);
         setDateCold(response.data.dateCold.substring(0, 10));
         setDuration(response.data.duration);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -110,20 +112,24 @@ function ColdTreatment(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     } else if (props.operation === "edit") {
       await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 
@@ -132,6 +138,7 @@ function ColdTreatment(props) {
     setNumberEmbryos("");
     setDateCold("");
     setDuration("");
+    setTransferDate("");
     setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
@@ -211,6 +218,11 @@ function ColdTreatment(props) {
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The Duration For Cold Treatment" />Duration Of Cold Treatment:</label>
         <input type="text" value={duration} onChange={(e) => { setDuration(e.target.value); setError("") }} />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label"><GenericHover text="The Transfer Date For Materials" />Transfer Date:</label>
+        <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
       </div>
 
       <div className="input-div">

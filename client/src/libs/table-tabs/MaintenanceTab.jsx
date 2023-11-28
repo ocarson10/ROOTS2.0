@@ -24,6 +24,7 @@ function MaintenanceTab(props) {
               dateCurr: res.data[maintenance].dateCurr,
               mediaBatchPrev: res.data[maintenance].mediaBatchPrev,
               datePrev: res.data[maintenance].datePrev,
+              transferDate: res.data[maintenance].transferDate,
               location: res.data[maintenance].locationId,
               active: res.data[maintenance].active
             };
@@ -59,6 +60,8 @@ function MaintenanceTab(props) {
     dateCurr: row.dateCurr.substring(0, 10),
     mediaBatchPrev: row.mediaBatchPrev ? row.mediaBatchPrev : "N/A",
     datePrev: row.datePrev ? row.datePrev.substring(0, 10) : "N/A",
+    transferDate: row.transferDate.substring(0, 10),
+
     location: row.location
   }));
 
@@ -71,6 +74,7 @@ function MaintenanceTab(props) {
     { field: "dateCurr", headerName: "Current Date", width: 150 },
     { field: "mediaBatchPrev", headerName: "Previous Media Batch", width: 150 },
     { field: "datePrev", headerName: "Previous Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 
