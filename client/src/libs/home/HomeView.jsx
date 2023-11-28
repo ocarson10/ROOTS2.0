@@ -27,7 +27,9 @@ import ArchivedMaintenanceTab from "../table-tabs/archived-tabs/ArchivedMaintena
 import ArchivedMaturationTab from "../table-tabs/archived-tabs/ArchivedMaturationTab";
 import ArchivedRametTab from "../table-tabs/archived-tabs/ArchivedRametTab";
 import ArchivedSeedTab from "../table-tabs/archived-tabs/ArchivedSeedTab";
+import ArchivedSpeciesTab from "../table-tabs/archived-tabs/ArchivedSpeciesTab";
 import ArchivedLocationTab from "../table-tabs/archived-tabs/ArchivedLocationTab";
+
 import GreenhouseTab from "../table-tabs/GreenhouseTab";
 import GerminationTab from "../table-tabs/GerminationTab";
 import MaturationTab from "../table-tabs/MaturationTab";
@@ -166,6 +168,8 @@ function HomeView(props) {
       setTableDisplay(<div><ArchivedGeneticIdTab user={props.user}/></div>)
     } else if (tab === "Ramet Archive") {
       setTableDisplay(<div><ArchivedRametTab user={props.user}/></div>)
+    } else if (tab === "Species Archive") {
+      setTableDisplay(<div><ArchivedSpeciesTab user={props.user}/></div>)
     } else if (tab === "Location Archive") {
       setTableDisplay(<div><ArchivedLocationTab user={props.user}/></div>)
     } else {
@@ -332,6 +336,9 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Ramet Archive">
                   Ramet Archive
                 </MenuItem>
+                <MenuItem className="drop-button" value="Species Archive">
+                  Species Archive
+                 </MenuItem>
                 <MenuItem className="drop-button" value="Location Archive">
                   Location Archive
                 </MenuItem>

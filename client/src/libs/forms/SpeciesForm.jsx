@@ -6,44 +6,35 @@ import SpeciesShorthandHover from "../hover-info/SpeciesShorthandHover";
 import { addSpecies, getSpeciesByName, updateSpecies} from "../services/api-client/speciesService";
 import { useNavigate } from "react-router-dom";
 
-
-
 function SpeciesForm(props) {
-  const [speciesForm, setSpeciesForm] = useState({
-    species: "",
-    shortHand: "",
-  });
-  const [currentSpeciesForm, setCurrentSpeciesForm] = useState({
-    species: "",
-    shortHand: "",
-  });
-
+  const [species, setSpecies] = useState("");
+  const [shorthand, setShorthand] = useState("");
+  const [error, setError] = useState("");
+  const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (props.operation === "edit") {
-      const speciesName = window.location.href.split("/")[5];
+      setChangeId(false);
+      const speciesName = window.location.href.split("/")[6];
 
       getSpeciesByName(speciesName).then((response) => {
-        setSpeciesForm({
-          species: response.data.species,
-          shortHand: response.data.shortHand,
-        });
-        setCurrentSpeciesForm({
-          species: response.data.species,
-          shortHand: response.data.shortHand,
-        });
+        console.log(response.data);
+
+        setSpecies(response.data.species);
+        setShorthand(response.data.shorthand);
       }).catch((error) => {
         console.log(error);
       });
+    } else {
+      setChangeId(true);
     }
   }, [props.operation]);
 
   const handleSubmit = async (e) => {
     if(props.operation === "add") {
       e.preventDefault();
-      await addSpecies(speciesForm.species, speciesForm.shortHand)
+      await addSpecies(species, shorthand, true)
       .then(() => {
         clear();
         navigate("/");
@@ -51,7 +42,12 @@ function SpeciesForm(props) {
         console.log(error);
       });
     } else if(props.operation === "edit") {
-      await updateSpecies(speciesForm.species, speciesForm.shortHand, currentSpeciesForm.species )
+      console.log("operation: " + props.operation);
+      console.log(species);
+      console.log(shorthand);
+      e.preventDefault();
+
+      await updateSpecies(species, shorthand)
       .then(() => {
         clear();
         navigate("/");
@@ -62,10 +58,11 @@ function SpeciesForm(props) {
   }
 
   const clear = () => {
-    setSpeciesForm({
-      species: "",
-      shortHand: "",
-    });
+    if (props.operation === "add") {
+      setSpecies("");
+    }
+
+    setShorthand("");
   };
 
   return (
@@ -82,11 +79,12 @@ function SpeciesForm(props) {
         </label>
         <input 
         type="text"
-        value={speciesForm.species}
+        value={species}
         id="species"
-        onChange={(e) =>
-          setSpeciesForm({ ...speciesForm, species: e.target.value })
-        }
+        onChange={(e) =>{
+          setSpecies(e.target.value);
+          setError("");
+        }}
         />
       </div>
       <div className="input-div">
@@ -95,11 +93,11 @@ function SpeciesForm(props) {
         </label>
         <input 
         type="text" 
-        value={speciesForm.shortHand}
+        value={shorthand}
         id="shorthand"
-        onChange={(e) =>
-          setSpeciesForm({ ...speciesForm, shortHand: e.target.value })
-        }
+        onChange={(e) =>{
+          setShorthand(e.target.value);
+        }}
         />
       </div>
       <div className="button-div">
@@ -108,6 +106,7 @@ function SpeciesForm(props) {
             className="form-button"
             id="submit"
             value="Submit"
+            onClick={handleSubmit}
           ></input>
           <button className="form-button" id="clear" onClick={clear}>
             Clear

@@ -20,7 +20,8 @@ describe("tests species API", () => {
     test("POST /species success", async()=>{
       const newSpecies = {
         species: "Fraser Fir",
-        shorthand: "FR"
+        shorthand: "FR",
+        active: true
       };
       const response = await request(app).post("/species").send(newSpecies);
       expect(response.statusCode).toBe(200);
@@ -29,7 +30,8 @@ describe("tests species API", () => {
     test("POST /species failure", async()=>{
       const newSpecies = {
         species: "Fraser Fir",
-        shorthand: "FR"
+        shorthand: "FR",
+        active: true
       };
       const response = await request(app).post("/species").send(newSpecies);
       expect(response.statusCode).toBe(400);

@@ -37,6 +37,7 @@ module.exports = (app) => {
       await Species.create({
         species: reqSpecies,
         shorthand: reqShorthand,
+        active: true
       }).then((innerRes) => {
         res.sendStatus(200);
       }).catch((error) => {
@@ -46,32 +47,30 @@ module.exports = (app) => {
     })
   });
 
+  // updates a species as inactive/active
+  router.put('/:species', async (req, res) => {
+    const reqSpecies = req.params.species;
+    const species = await Species.findOne({ where: { species: reqSpecies } });
+    if (species) {
+      species.update({ active: species.active? false : true });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   //edit a species
-  router.put("/", async (req, res) => {
-    const reqCurrentSpecies = req.body.currentSpeciesName;
+  router.put('/edit/:species', async (req, res) => {
     const reqSpecies = req.body.species;
     const reqShorthand = req.body.shorthand;
 
-    await db.sync().then(async () => {
-      await Species.update(
-        {
-          species: reqSpecies,
-          shorthand: reqShorthand,
-        },
-        {
-          where: {
-            species: reqCurrentSpecies,
-          },
-        }
-      )
-        .then((innerRes) => {
-          res.sendStatus(200);
-        })
-        .catch((error) => {
-          console.log("Error Inserting Record: ", error);
-          res.sendStatus(400);
-        });
-    });
+    const species = await Species.findOne({ where: {species: reqSpecies}});
+    if (species) {
+      species.update({species:reqSpecies, shorthand: reqShorthand, active: true});
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
   });
 
   // Delete a speecies from the database
