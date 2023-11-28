@@ -19,15 +19,14 @@ module.exports = (app) => {
   //Gets a location by name
   router.get("/:id", async (req, res) => {
     const reqLocation = req.params.id;
-    await Location.findOne({ where: { location: reqLocation } })
-      .then((innerRes) => {
+    const location = await Location.findOne({ where: { location: reqLocation } });
+     if(location) {
         res.statusCode = 200;
         res.statusMessage = "OK";
-        res.send(innerRes);
-      })
-      .catch((error) => {
-        console.log("Error in fetching location: ", error);
-      });
+        res.send(location);
+      } else{
+        res.sendStatus(404);
+      }
   });
 
   // Posts a location to the database
