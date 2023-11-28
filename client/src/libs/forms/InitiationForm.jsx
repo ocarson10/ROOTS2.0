@@ -3,6 +3,7 @@ import "../../libs/style/Initiation.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { addInitiation, getInitiation, editInitiation } from "../services/api-client/initiationService";
 import Select from "react-select";
 import { getIds, getId } from "../services/api-client/idService";
@@ -24,6 +25,7 @@ function Initiation(props) {
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [changeId, setChangeId] = useState(true);
   const [changeGen, setChangeGen] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,7 +145,8 @@ function Initiation(props) {
         numberOfPlates,
         dateMade,
         location,
-        true
+        true, 
+        expectedTransferDate
       )
         .then(() => {
           clear();
@@ -164,7 +167,7 @@ function Initiation(props) {
         numberOfPlates,
         dateMade,
         location,
-        true
+        true, expectedTransferDate
       )
         .then(() => {
           clear();
@@ -175,8 +178,6 @@ function Initiation(props) {
           setError("An error occured: " + error);
         });
     }
-
-
   };
 
   const clear = () => {
@@ -208,6 +209,7 @@ function Initiation(props) {
           });
         });
         setGenOptions(options);
+        setExpectedTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -324,6 +326,19 @@ function Initiation(props) {
           }}
         />
       </div>
+
+      <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
       <ImageUpload></ImageUpload>
       <FileUpload></FileUpload>
       <div className="button-div">

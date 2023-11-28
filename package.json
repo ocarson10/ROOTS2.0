@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "buffer": "^6.0.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
   }
 }

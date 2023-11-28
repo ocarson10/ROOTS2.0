@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addGreenhouse, getGreenhouse, updateGreenhouse } from "../services/api-client/greenhouseService";
 import { getId, getIds } from "../services/api-client/idService";
@@ -20,6 +21,7 @@ function GreenhouseForm(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -103,7 +105,7 @@ function GreenhouseForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "Add") {
-      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, expectedTransferDate).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -111,7 +113,7 @@ function GreenhouseForm(props) {
         setError("An error occured: " + error);
       });
     } else if (props.operation === "Edit") {
-      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, expectedTransferDate).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -128,6 +130,7 @@ function GreenhouseForm(props) {
     setLocation("");
     setError("");
     setGenOptions([]);
+    setExpectedTransferDate(null);
     getIds().then((response) => {
       const options = response.data.map((id) => {
         return {
@@ -181,6 +184,19 @@ function GreenhouseForm(props) {
         <label className="entry-label"><LocationHover /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("")}} />
       </div>      
+
+      <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
       <ImageUpload></ImageUpload>
       <FileUpload></FileUpload>
       <div className="button-div">
