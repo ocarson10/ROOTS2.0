@@ -6,14 +6,7 @@ import { useNavigate } from "react-router-dom";
 import LocationShorthandHover from "../hover-info/LocationShorthandHover";
 
 function LocationForm(props) {
-  // const [locationForm, setLocationForm] = useState({
-  //   location: "",
-  //   shortHand: "",
-  // });
-  // const [currentLocationForm, setCurrentLocationForm] = useState({
-  //   location: "",
-  //   shortHand: "",
-  // });
+
   const [location, setLocation] = useState("");
   const [shorthand, setShorthand] = useState("");
   const [uniqueId, setUniqueId] = useState("");
@@ -26,9 +19,6 @@ function LocationForm(props) {
       setChangeId(false);
       const locName = window.location.href.split("/")[5];
       console.log("location: " + props.locationId);
-
-
-
       getLocationByName(props.locationId).then((res) => {
         console.log(res.data);
         setLocation(res.data.location);
@@ -39,7 +29,6 @@ function LocationForm(props) {
       
     }else{
       setChangeId(true);
-
     }
   }, [props.operation]);
 
@@ -49,7 +38,6 @@ function LocationForm(props) {
       await addLocation(location, shorthand, true);
       await props.handleFilesSubmit(uniqueId)
         .then(() => {
-          
           clearForm();
           window.location.href = "/";
         })
