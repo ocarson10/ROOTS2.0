@@ -169,6 +169,14 @@ function TableComponent(props) {
 
         } else if (props.material === "species") {
           await removeSpecies(selectedRows[i]).then(() => {
+            console.log("removed");
+            rows.map((row) => row !== selectedRows[i]);
+            setRows([...rows]);
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         } else if (props.material === "location") {
           console.log("location remove: ",selectedRows[i] );
           await removeLocation(selectedRows[i]).then(() => {
@@ -273,8 +281,14 @@ function TableComponent(props) {
             console.log(error);
           });
         } else if (props.material === "species") {
-          console.log("species");
           await removeSpecies(selectedRows[i]).then(() => {
+            console.log("removed");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        } else if (props.material === "location") {
+          await removeLocation(selectedRows[i]).then(() => {
             console.log("removed");
           })
           .catch((error) => {
@@ -340,7 +354,7 @@ function TableComponent(props) {
             <FontAwesomeIcon title="Add" className="icon" icon={faFileCirclePlus} />
           </Link>
         ) : (<div></div>)}
-      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "species" && props.material !== "location" && props.material !== "geneticId" && props.material !== "population" ? (
+      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "geneticId" && props.material !== "population" ? (
           <a onClick={archiveData}>
             <FontAwesomeIcon title="Delete" className="icon" icon={faFileCircleMinus} />
           </a>
