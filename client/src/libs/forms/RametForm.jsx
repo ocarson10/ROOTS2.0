@@ -17,11 +17,13 @@ import {
 import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
+import { getTrees } from "../services/api-client/treeService";
 
 function RametForm(props) {
   const [id, setId] = useState('');
   const [gps, setGps] = useState('');
-  const [motherTreeId, setMotherTreeId] = useState('');
+  const [motherTreeId, setMotherTreeId] = useState({value:"", label:""});
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
   const [location, setLocation] = useState('');
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
@@ -109,9 +111,23 @@ function RametForm(props) {
     });
   };
 
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
   // On load, get the population options.
   useEffect(() => {
     getPopulationsOptions();
+    getMotherTreeOptions();
   }, []);
 
   // When changing the population, get the family options
@@ -285,7 +301,11 @@ function RametForm(props) {
 
         <div className="input-div">
           <label className="entry-label">Mother Tree ID:</label>
-          <input type="text" value={motherTreeId} onChange={(e) => setMotherTreeId(e.target.value)} />
+          <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMotherTreeId({value:e.value,label: e.value})}
+          value={motherTreeId ? motherTreeId : ""}
+        />
         </div>
 
         <div className="input-div">
