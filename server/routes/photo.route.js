@@ -4,8 +4,9 @@ module.exports = (app) => {
     let utils = require('./utils');
 
     // Retrieve all photos associated with material
-    router.get('/:materialId', async (req, res) => {
-      const materialId = req.params.materialId;
+    router.get('/:associatedId', async (req, res) => {
+      const materialId = req.params.associatedId;
+      console.log("material ID", materialId);
      const materialExists = await utils.ensureMaterialIdExists(materialId);
       if (materialExists) {
         Photo.findAll({ 
@@ -25,7 +26,7 @@ module.exports = (app) => {
           res.send(500);
         });
       } else {
-        console.log("Id: " + materialId + " not found");
+        console.log(" Id: " + materialId + " not found");
         res.sendStatus(404);
       }
     });

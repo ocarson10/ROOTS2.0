@@ -7,7 +7,7 @@ export async function getLocations() {
   return locations;
 }
 
-//get location by locationName
+//get location from name
 export async function getLocationByName(locationName) {
   const location = await instance.get(`locations/${locationName}`);
   console.log("Location: " + location);
@@ -17,20 +17,25 @@ export async function getLocationByName(locationName) {
 
 // Add a new location that materials can be located in to the database given a name,
 // and the shorthand abbreviation
-export async function addLocation(locationName, locationShorthand) {
+export async function addLocation(locationName, locationShorthand, active) {
   await addLogs(`Added location with name: ${locationName}`);
   return await instance.post("locations", {
     location: locationName,
-    shorthand: locationShorthand
+    shorthand: locationShorthand,
+    active: active
   });
 }
 
 // Edit a location
-export async function editLocation(currentLocationName, locationName, locationShorthand) {
-  return await instance.put("locations", {
-    currentLocationName: currentLocationName,
+export async function editLocation( locationName, locationShorthand, active) {
+  return await instance.put("locations/edit/"+ locationName, {
     location: locationName,
-    shorthand: locationShorthand
+    shorthand: locationShorthand,
+    active: active
   });
 }
 
+export async function removeLocation(locationName) {
+  await addLogs("Archived Location with id:" + locationName);
+  await instance.put("locations/" + locationName);
+}
