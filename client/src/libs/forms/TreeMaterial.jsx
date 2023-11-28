@@ -18,9 +18,11 @@ import {
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import { addPhoto, getPhoto } from "../services/api-client/photoService";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import FileUpload from "./FileUpload";
-import { addFile, getFile } from "../services/api-client/fileService";
+import { addFile, getFiles } from "../services/api-client/fileService";
 
 function TreeMaterial(props) {
   const [treeId, setTreeId] = useState("");
@@ -40,6 +42,8 @@ function TreeMaterial(props) {
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [files, setFiles] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
   // Function to receive the selected image from child component
@@ -49,6 +53,24 @@ function TreeMaterial(props) {
   const handleFileSelection = (file) => {
     setSelectedFile(file);
   };
+
+  const updatePhotos = (newPhotos) => {
+    setPhotos(newPhotos);
+  };
+
+  useEffect(() => {
+    async function loadPhotos() {
+      setPhotos(await getPhotos(geneticId));
+    }
+    async function loadFiles() {
+      setFiles(await getFiles(geneticId));
+    }
+    if(geneticId) {
+      loadPhotos();
+      loadFiles();
+    }
+  }, [geneticId]);
+
   useEffect(() => {
     //If editing, set the values to the current values
     if (props.operation === "Edit") {
@@ -103,6 +125,12 @@ function TreeMaterial(props) {
         });
     } else if (props.operation === "Edit") {
       e.preventDefault();
+      if(!!selectedImage) {
+        await addPhoto(geneticId.value, selectedImage.file);
+      }
+      if(!!selectedFile) {
+        await addFile(geneticId.value, selectedFile);
+      }
       await editTree(
         treeId,
         progenyId.value,
@@ -223,7 +251,7 @@ function TreeMaterial(props) {
   const handleGeneticChange = async (e) => {
     setError("");
     setGeneticId({ value: e.value, label: e.value });
-    props.sendGeneticIdToParent(e.value);
+    //props.sendGeneticIdToParent(e.value);
 
     await getIdsByPopulationAndFamilyAndRametAndGenetic(
       population?.value,
@@ -349,8 +377,15 @@ function TreeMaterial(props) {
             }}
           />
         </div>
-        <ImageUpload onImageSelect={handleImageSelection}></ImageUpload>
-        <FileUpload onFileSelect={handleFileSelection}/>
+        {!!photos && photos.length !== 0 &&
+          <Slideshow photos={photos} updatePhotos={updatePhotos} />
+        }
+        <ImageUpload onImageSelect={handleImageSelection} />
+        <FileUpload onFileSelect={handleFileSelection} />
+        {!!files && files.length !== 0 &&
+          <FileList files={files} />
+        }
+
         <div className="button-div">
           <button className="form-button" id="submit" onClick={handleSubmit}>
             Submit

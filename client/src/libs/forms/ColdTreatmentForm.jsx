@@ -3,6 +3,7 @@ import "../../libs/style/ColdTreatmentForm.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addColdTreatment, getColdTreatment, updateColdTreatment } from "../services/api-client/coldTreatmentService";
 import { getId, getIds } from "../services/api-client/idService";
@@ -22,6 +23,7 @@ function ColdTreatment(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -105,7 +107,7 @@ function ColdTreatment(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "Add") {
-      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true, expectedTransferDate).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -113,7 +115,7 @@ function ColdTreatment(props) {
         setError("An error occured: " + error);
       });
     } else if (props.operation === "Edit") {
-      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true, expectedTransferDate).then(() => {
         clear();
         navigate("/");
       }).catch((error) => {
@@ -148,6 +150,7 @@ function ColdTreatment(props) {
         };
       });
       setGenOptions(options);
+      setExpectedTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -192,6 +195,19 @@ function ColdTreatment(props) {
         <label className="entry-label"><LocationHover text="Location of Maintenance" /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
       </div>
+
+      <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
       <ImageUpload/>
       <FileUpload/>
       <div className="button-div">
