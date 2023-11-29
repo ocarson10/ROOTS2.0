@@ -386,6 +386,7 @@ function SeedMaterial(props) {
               isOpen={isPopulationFormOpen}
               onClose={handleClosePopulationForm}
               addPopOption={addPopulationOption}
+              operation={"add"}
             />
           }
           {isGeneticIdFormOpen && 
@@ -393,6 +394,7 @@ function SeedMaterial(props) {
               isOpen={isGeneticIdFormOpen}
               onClose={handleCloseGenIdForm}
               addGenIdOption={addGenIdOption}
+              operation={"add"}
             />
           }
       </div>

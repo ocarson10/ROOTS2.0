@@ -392,6 +392,7 @@ function ConeMaterial(props) {
             isOpen={isPopulationFormOpen}
             onClose={handleClosePopulationForm}
             addPopOption={addPopulationOption}
+            operation={"add"}
           />
         }
         {isGeneticIdFormOpen && 
@@ -399,6 +400,7 @@ function ConeMaterial(props) {
             isOpen={isGeneticIdFormOpen}
             onClose={handleCloseGenIdForm}
             addGenIdOption={addGenIdOption}
+            operation={"add"}
           />
         }
       </div>
