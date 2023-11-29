@@ -34,7 +34,7 @@ function ConeMaterial(props) {
   const [rametId, setRametId] = useState({ value: "", label: "" });
   const [progenyId, setProgenyId] = useState({ value: "", label: "" });
   const [population, setPopulation] = useState({ value: "", label: "" });
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [dateHarvested, setDateHarvested] = useState("");
   const [error, setError] = useState("");
   const [popOptions, setPopOptions] = useState([]);
@@ -123,8 +123,8 @@ function ConeMaterial(props) {
     if (props.operation === "add") {
       addCone(
         coneId,
-        motherTreeId,
-        fatherTreeId,
+        motherTreeId.value,
+        fatherTreeId.value,
         rametId.value,
         geneticId.value,
         familyId.value,
@@ -148,8 +148,8 @@ function ConeMaterial(props) {
     else if(props.operation === "edit") {
       editCone(
         coneId,
-        motherTreeId,
-        fatherTreeId,
+        motherTreeId.value,
+        fatherTreeId.value,
         rametId.value,
         geneticId.value,
         familyId.value,
@@ -185,7 +185,7 @@ function ConeMaterial(props) {
     setPopulation({ value: "", label: "" });
     setRametId({ value: "", label: "" });
     setDateHarvested("");
-    setLocation("");
+    setLocation({ value: "", label: "" });
     setPopOptions([]);
     setFamOptions([]);
     setRametOptions([]);

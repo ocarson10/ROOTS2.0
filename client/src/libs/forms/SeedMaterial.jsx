@@ -239,9 +239,9 @@ function SeedMaterial(props) {
       }
       addSeed(
         seedId,
-        mother,
+        mother.value,
         cone,
-        father,
+        father.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
@@ -255,6 +255,7 @@ function SeedMaterial(props) {
       )
         .then((res) => {
           if (res.status === 200) {
+            props.handleFilesSubmit(seedId);
             clear();
             navigate('/');
           }
@@ -266,9 +267,9 @@ function SeedMaterial(props) {
     else if (props.operation === "edit") {
       editSeed(
         seedId,
-        mother,
+        mother.value,
         cone,
-        father,
+        father.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
@@ -282,6 +283,7 @@ function SeedMaterial(props) {
       )
         .then((res) => {
           if (res.status === 200) {
+            props.handleFilesSubmit(seedId);
             clear();
             navigate('/');
           }

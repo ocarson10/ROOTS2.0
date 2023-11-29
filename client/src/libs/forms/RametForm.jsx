@@ -217,44 +217,51 @@ function RametForm(props) {
       return;
     }
     if (props.operation === "add") {
-      await addRamet(
-        id,
-        motherTreeId,
-        geneticId.value,
-        familyId.value,
-        progenyId.value,
-        population.value,
-        rametId.value,
-        location.value,
-        gps
-      ).then((res) => {
+      try {
+        const res = await addRamet(
+          id,
+          motherTreeId.value,
+          geneticId.value,
+          familyId.value,
+          progenyId.value,
+          population.value,
+          rametId.value,
+          location.value,
+          gps
+        );
+    
         if (res.status === 200) {
-          clear()
-          window.location.href = "/";
-        }
-      }).catch((error) => {
-        setError(error.response.data.message);
-      })
-    } else if (props.operation === "edit") {
-      await updateRamet (
-        id,
-        motherTreeId,
-        progenyId.value,
-        geneticId.value,
-        familyId.value,
-        rametId.value,
-        population.value,
-        location.value,
-        gps,
-        true
-      ).then((res) => {
-        if (res.status === 200) {
+          await props.handleFilesSubmit(id);
           clear();
           window.location.href = "/";
         }
-      }).catch((error) => {
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    } else if (props.operation === "edit") {
+      try {
+        const res = await updateRamet(
+          id,
+          motherTreeId.value,
+          progenyId.value,
+          geneticId.value,
+          familyId.value,
+          rametId.value,
+          population.value,
+          location.value,
+          gps,
+          true
+        );
+    
+        if (res.status === 200) {
+          await props.handleFilesSubmit(id);
+          clear();
+          window.location.href = "/";
+        }
+      } catch (error) {
         setError(error.data.message);
-      })
+      }
+    
     }
   };
 
