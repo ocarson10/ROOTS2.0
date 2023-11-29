@@ -9,13 +9,13 @@ import PopulationHover from "../hover-info/PopulationHover";
 import { addId, updateId } from "../services/api-client/idService";
 
 function GeneticIdForm(props) {
-  const [geneticId, setGeneticId] = useState(null);
-  const [familyId, setFamilyId] = useState(null);
-  const [rametId, setRametId] = useState(null);
-  const [progenyId, setProgenyId] = useState(null);
-  const [species, setSpecies] = useState(null);
-  const [yearPlanted, setYearPlanted] = useState(null);
-  const [population, setPopulation] = useState(null);
+  const [geneticId, setGeneticId] = useState('');
+  const [familyId, setFamilyId] = useState('');
+  const [rametId, setRametId] = useState('');
+  const [progenyId, setProgenyId] = useState('');
+  const [species, setSpecies] = useState('');
+  const [yearPlanted, setYearPlanted] = useState('');
+  const [population, setPopulation] = useState('');
   const [fromForm, setFromForm] = useState(props.isOpen ? props.isOpen : false);
 
   const handleSubmit = async (e) => {
