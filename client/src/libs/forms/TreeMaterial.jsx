@@ -322,6 +322,7 @@ function TreeMaterial(props) {
               isOpen={isPopulationFormOpen}
               onClose={handleClosePopulationForm}
               addPopOption={addPopulationOption}
+              operation={"add"}
             />
           }
           {isGeneticIdFormOpen &&
@@ -329,6 +330,7 @@ function TreeMaterial(props) {
               isOpen={isGeneticIdFormOpen}
               onClose={handleCloseGenIdForm}
               addGenIdOption={addGenIdOption}
+              operation={"add"}
             />
           }
         </div>

@@ -330,6 +330,7 @@ function RametForm(props) {
               isOpen={isPopulationFormOpen}
               onClose={handleClosePopulationForm}
               addPopOption={addPopulationOption}
+              operation={"add"}
             />
           }
           {isGeneticIdFormOpen &&
@@ -337,6 +338,7 @@ function RametForm(props) {
               isOpen={isGeneticIdFormOpen}
               onClose={handleCloseGenIdForm}
               addGenIdOption={addGenIdOption}
+              operation={"add"}
             />
           }
         </div>
