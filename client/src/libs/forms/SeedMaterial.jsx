@@ -8,7 +8,6 @@ import GenericHover from "../hover-info/GenericHover";
 import GeneticHover from "../hover-info/GeneticHover";
 import ProgenyHover from "../hover-info/ProgenyHover";
 import PopulationHover from "../hover-info/PopulationHover";
-import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { addSeed, getSeed, editSeed } from "../services/api-client/seedService";
 import Select from "react-select";
 import { getPopulations } from "../services/api-client/populationService";
@@ -49,7 +48,6 @@ function SeedMaterial(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
@@ -321,7 +319,6 @@ function SeedMaterial(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
-    setExpectedTransferDate(null);
   };
 
   // function to get the mother tree options
@@ -457,19 +454,6 @@ function SeedMaterial(props) {
             value={location ? location : ""}
           />
       </div>
-
-      <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
 
       <div className="input-div">
         <label className="entry-label">
