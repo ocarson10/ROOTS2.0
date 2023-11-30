@@ -19,13 +19,12 @@ function Maintenance(props) {
   const [dateCurr, setDateCurr] = useState("");
   const [mediaBatchPrev, setMediaBatchPrev] = useState("");
   const [datePrev, setDatePrev] = useState("");
-  const [transferDate, setTransferDate] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -36,8 +35,6 @@ function Maintenance(props) {
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
-      //const id = window.location.href.split("/")[5];
-      //console.log("id: " + id);
 
       getMaintenance(props.maintenanceId)
         .then((response) => {
@@ -171,9 +168,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-
     }
-
   };
 
   const clear = () => {
@@ -183,7 +178,6 @@ function Maintenance(props) {
     setDateCurr("");
     setMediaBatchPrev("");
     setDatePrev("");
-    setTransferDate("");
     setLocation("");
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
@@ -207,7 +201,7 @@ function Maintenance(props) {
           });
         });
         setGenOptions(options);
-        setExpectedTransferDate(null);
+        setTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -359,17 +353,6 @@ function Maintenance(props) {
             setTransferDate(e.target.value);
             setError("");
           }}
-        />
-      </div>
-
-      <div className="input-div">
-        <label className="entry-label">
-          <LocationHover text="Location of Maintenance" /> Location:
-        </label>
-        <Select
-            options={locationOptions}
-            onChange={handleLocationChange}
-            value={location ? location : ""}
         />
       </div>
       <div className="button-div">

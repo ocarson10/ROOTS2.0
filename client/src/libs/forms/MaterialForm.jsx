@@ -49,7 +49,6 @@ function MaterialForm(props) {
 	};
 
 	const handleFileSubmit = async (materialId) => {
-		
 		if (!!selectedImage) {
 			await addPhoto(materialId, selectedImage.file);
 		}

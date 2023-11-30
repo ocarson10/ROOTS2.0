@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { getColdTreatment } from "../services/api-client/coldTreatmentService";
 import Select from "react-select";
 import { getLocations } from "../services/api-client/locationService";
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload"
 
 function GerminationForm(props) {
   const [germinationId, setGerminationId] = useState("");
@@ -17,13 +19,12 @@ function GerminationForm(props) {
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateGermination, setDateGermination] = useState("");
-  const [transferDate, setTransferDate] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -123,7 +124,7 @@ function GerminationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, expectedTransferDate).then(() => {
+      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
@@ -133,7 +134,7 @@ function GerminationForm(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, expectedTransferDate).then(() => {
+      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
@@ -171,7 +172,7 @@ function GerminationForm(props) {
         };
       });
       setGenOptions(options);
-      setExpectedTransferDate(null);
+      setTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -245,18 +246,6 @@ function GerminationForm(props) {
             value={location ? location : ""}
           />
       </div>
-      <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
       <ImageUpload></ImageUpload>
       <FileUpload></FileUpload>
       <div className="button-div">

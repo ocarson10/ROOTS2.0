@@ -24,14 +24,13 @@ function Initiation(props) {
   const [mediaBatch, setMediaBatch] = useState("");
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [dateMade, setDateMade] = useState("");
-  const [transferDate, setTransferDate] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [changeId, setChangeId] = useState(true);
   const [changeGen, setChangeGen] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
 
 
@@ -135,7 +134,7 @@ function Initiation(props) {
         transferDate,
         location,
         true, 
-        expectedTransferDate
+        transferDate
       )
         .then(() => {
           props.handleFilesSubmit(initiationId);
@@ -157,7 +156,8 @@ function Initiation(props) {
         dateMade,
         transferDate,
         location,
-        true, expectedTransferDate
+        true, 
+        transferDate
       )
         .then(() => {
           props.handleFilesSubmit(initiationId);
@@ -177,7 +177,6 @@ function Initiation(props) {
     setMediaBatch("");
     setNumberOfPlates("");
     setDateMade("");
-    setTransferDate("");
     setLocation("");
     setError("");
     setGenOptions([]);
@@ -201,7 +200,7 @@ function Initiation(props) {
           });
         });
         setGenOptions(options);
-        setExpectedTransferDate(null);
+        setTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -336,19 +335,6 @@ function Initiation(props) {
           }}
         />
       </div>
-
-      <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

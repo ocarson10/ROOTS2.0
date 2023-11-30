@@ -35,7 +35,7 @@ function SeedMaterial(props) {
   const [origin, setOrigin] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
-  const [transferDate, setTransferDate] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
   const [rametId, setRametId] = useState({ value: "", label: "" });
@@ -311,7 +311,7 @@ function SeedMaterial(props) {
     setOrigin("");
     setQuantity("");
     setDate("");
-    setTransferDate("");
+    setTransferDate(null);
     setError("");
     setPopOptions([]);
     setFamOptions([]);

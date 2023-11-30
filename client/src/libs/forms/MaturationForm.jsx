@@ -17,13 +17,12 @@ function Maturation(props) {
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateMatured, setDateMatured] = useState("");
-  const [transferDate, setTransferDate] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const [locationOptions, setLocationOptions] = useState([]);
   const navigate = useNavigate();
 
@@ -120,7 +119,7 @@ function Maturation(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, expectedTransferDate).then(() => {
+      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
@@ -130,7 +129,7 @@ function Maturation(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, expectedTransferDate).then(() => {
+      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
@@ -147,7 +146,6 @@ function Maturation(props) {
     setNumberOfPlates("");
     setMediaBatch("");
     setDateMatured("");
-    setTransferDate("");
     setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds()
@@ -170,7 +168,7 @@ function Maturation(props) {
           });
         });
         setGenOptions(options);
-        setExpectedTransferDate(null);
+        setTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -243,19 +241,6 @@ function Maturation(props) {
             onChange={handleLocationChange}
             value={location ? location : ""}
           />
-      </div>
-
-      <div className="input-div">
-        <label className="entry-label">
-          <ExpectedTransferDateHover /> Expected Transfer Date:
-        </label>
-        <input
-          type="text"
-          value={expectedTransferDate}
-          onChange={(e) => {
-            setExpectedTransferDate(e.target.value);
-          }}
-        />
       </div>
 
       <div className="button-div">

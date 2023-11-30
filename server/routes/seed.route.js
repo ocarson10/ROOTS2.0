@@ -28,6 +28,7 @@ module.exports = (app) => {
         const reqLocationId = req.body.locationId;
         const reqTransferDate = req.body.transferDate;
 
+        console.log(reqDateMade + '\n' + reqTransferDate);
 
         db.sync().then(() => {
             Seed.create({
@@ -90,7 +91,6 @@ module.exports = (app) => {
         const reqLocationId = req.body.locationId;
         const reqTransferDate = req.body.transferDate;
 
-        
         const seed = await Seed.findOne({ where: { id: reqId } });
         if (seed) {
 

@@ -10,6 +10,8 @@ import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getMaturation } from "../services/api-client/maturationService";
 import { getLocations } from "../services/api-client/locationService";
+import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload"
 
 function ColdTreatment(props) {
   const [coldTreatmentId, setColdTreatmentId] = useState("");
@@ -23,7 +25,6 @@ function ColdTreatment(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
-  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -113,7 +114,7 @@ function ColdTreatment(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, expectedTransferDate).then(() => {
+      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
@@ -123,7 +124,7 @@ function ColdTreatment(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, expectedTransferDate).then(() => {
+      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
@@ -140,7 +141,6 @@ function ColdTreatment(props) {
     setNumberEmbryos("");
     setDateCold("");
     setDuration("");
-    setTransferDate("");
     setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
@@ -161,7 +161,7 @@ function ColdTreatment(props) {
         };
       });
       setGenOptions(options);
-      setExpectedTransferDate(null);
+      setTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -238,20 +238,8 @@ function ColdTreatment(props) {
             value={location ? location : ""}
           />
       </div>
-      <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
-      <ImageUpload/>
-      <FileUpload/>
+      <ImageUpload />
+      <FileUpload />
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
