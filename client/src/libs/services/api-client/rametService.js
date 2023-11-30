@@ -34,7 +34,8 @@ export async function updateRamet(
   rametId,
   population,
   location, 
-  gps, 
+  gps,
+  expectedTransferDate,
   active
   ) {
   const response = await getSingleId(geneticId, familyId, progenyId, population, rametId);
@@ -44,6 +45,7 @@ export async function updateRamet(
     locationId: location,
     rametGeneticId: response.data.id,
     gps: gps,
+    transferDate: expectedTransferDate,
     active: active
   });
 }

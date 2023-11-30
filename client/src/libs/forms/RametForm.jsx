@@ -229,7 +229,8 @@ function RametForm(props) {
           population.value,
           rametId.value,
           location.value,
-          gps
+          gps,
+          expectedTransferDate
         );
     
         if (res.status === 200) {
@@ -252,6 +253,7 @@ function RametForm(props) {
           population.value,
           location.value,
           gps,
+          expectedTransferDate,
           true
         );
     
@@ -404,17 +406,13 @@ function RametForm(props) {
         </div>
 
         <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
+        <label className="entry-label">Transfer Date:</label>
+        <input
+          type="date"
+          value={expectedTransferDate}
+          onChange={(e) => setExpectedTransferDate(e.target.value)}
+        />
+      </div>
 
         <div className="input-div">
           <label className="entry-label">

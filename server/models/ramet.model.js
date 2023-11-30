@@ -14,6 +14,9 @@ const Ramet = sequelize.define("ramets", {
   gps: {
     type: DataTypes.STRING,
   },
+  transferDate: {
+    type: DataTypes.DATE,
+  },
   active: {
     type: DataTypes.BOOLEAN,
   }
