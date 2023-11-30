@@ -418,19 +418,6 @@ function RametForm(props) {
 
         <div className="input-div">
           <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
-
-        <div className="input-div">
-          <label className="entry-label">
             <GPSHover /> GPS:
           </label>
           <input
