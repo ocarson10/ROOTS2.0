@@ -20,6 +20,7 @@ export async function updateMaintenance(
   dateCurr,
   mediaBatchPrev,
   datePrev,
+  transferDate,
   location,
   active, 
   expectedTransferDate
@@ -33,6 +34,7 @@ export async function updateMaintenance(
     dateCurr: dateCurr,
     mediaBatchPrev: mediaBatchPrev,
     datePrev: datePrev,
+    transferDate: transferDate,
     locationId: location,
     active: active,
     transferDate: expectedTransferDate
@@ -50,6 +52,7 @@ export async function addMaintenance(
   dateCurr,
   mediaBatchPrev,
   datePrev,
+  transferDate,
   location,
   active, 
   expectedTransferDate
@@ -63,6 +66,7 @@ export async function addMaintenance(
     dateCurr: dateCurr,
     mediaBatchPrev: mediaBatchPrev,
     datePrev: datePrev,
+    transferDate: transferDate,
     locationId: location,
     active: active,
     transferDate: expectedTransferDate

@@ -19,6 +19,7 @@ export async function updateAcclimation(acclimationId, acclimationGeneticId, dat
       acclimationId: acclimationId,
       acclimationGeneticId: acclimationGeneticId,
       dateAcclimation: dateAcclimation,
+      transferDate: transferDate,
       locationId: location,
       active: active, 
       transferDate: expectedTransferDate
@@ -32,6 +33,7 @@ export async function addAcclimation(acclimationId, acclimationGeneticId, dateAc
     acclimationId: acclimationId,
     acclimationGeneticId: acclimationGeneticId,
     dateAcclimation: dateAcclimation,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

@@ -22,6 +22,7 @@ function MaturationTab(props) {
               mediaBatch: res.data[maturation].mediaBatch,
               numberOfPlates: res.data[maturation].numberOfPlates,
               dateMatured: res.data[maturation].dateMatured,
+              transferDate: res.data[maturation].transferDate,
               location: res.data[maturation].locationId,
               active: res.data[maturation].active
             };
@@ -56,6 +57,7 @@ function MaturationTab(props) {
     mediaBatch: row.mediaBatch,
     numberOfPlates: row.numberOfPlates,
     dateMatured: row.dateMatured.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -66,6 +68,7 @@ function MaturationTab(props) {
     { field: "mediaBatch", headerName: "Media Batch", width: 150 },
     { field: "numberOfPlates", headerName: "Number of Plates", width: 150 },
     { field: "dateMatured", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 
@@ -73,7 +76,7 @@ function MaturationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/maturation" editLink= "/edit/maturation" addLink="/add/maturation" status={"active"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/maturation" editLink= "/material/maturation/edit" addLink="/material/maturation/add" status={"active"} material={"maturation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

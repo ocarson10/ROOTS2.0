@@ -77,7 +77,7 @@ function ArchivedInitiationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/initiation" addLink="/add/initiation" status={"archive"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/initiation/edit" addLink="/material/initiation/add" status={"archive"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

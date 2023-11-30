@@ -2,16 +2,23 @@ import React, { useState } from "react";
 import "../../libs/style/PopulationForm.css";
 import { addPopulation } from "../services/api-client/populationService";
 
-function PopulationForm() {
+function PopulationForm(props) {
   const [populationForm, setPopulationForm] = useState({
     id: "",
   });
+  const [fromForm, setFromForm] = useState(props.isOpen ? props.isOpen : false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addPopulation(populationForm.id).then(() => {
       clearForm();
-      window.location.href = "/";
+      if (fromForm) {
+        props.addPopOption(populationForm.id);
+        props.onClose();
+      }
+      else {
+        window.location.href = "/";
+      }
     }).catch((error) => {
       console.log(error);
     });
@@ -21,12 +28,18 @@ function PopulationForm() {
     setPopulationForm({
       id: "",
     })
+    if (fromForm) {
+      props.onClose();
+    }
   }
 
 
   return (
-    <div className="form-div">
-      <h1>Add Population</h1>
+    <div className={`form-div ${props.isOpen ? "modal-open" : ""}`}>
+      {props.operation === 'add' ?
+        <h1>Add Population</h1> :
+        <h1>Edit Population</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">Population:</label>

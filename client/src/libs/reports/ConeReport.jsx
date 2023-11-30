@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { getCone } from "../services/api-client/coneService";
 import { getId } from "../services/api-client/idService";
 import QRCodeGenerator from "../qr/QRGenerator";
+import { getFiles } from "../services/api-client/fileService";
+import FileList from "../forms/FileList";
 
 function ConeReport(props) {
   //get a cone from the database
   const [cone, setCone] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+	const [files, setFiles] = useState(null);
 
   useEffect(() => {
 
@@ -57,6 +60,17 @@ function ConeReport(props) {
     loadCone();
   }, [props.id]);
 
+  useEffect(() => {
+
+		async function loadFiles() {
+		  setFiles(await getFiles(props.id));
+		}
+		if (props.id) {
+			
+			loadFiles();
+		}
+	}, [props.id]);
+
 //   if (loading) {
 //     return <div>Loading...</div>;
 //   }
@@ -98,6 +112,20 @@ function ConeReport(props) {
           <div className="param">
             <h3 className="h3-report">Active: {cone.active ? '✔' : '✖'}</h3>
           </div>
+          {!!files && files.length !== 0 &&
+           // <FileList files={files} />
+           <div className="param">
+            <h3 className="h3-report">File List</h3>
+            {files.map((file) => (
+                <div key={file.fileId}>
+                    <a href={`${file.fileData}`} download={`${file.fileName}`}>
+                        {file.fileName}
+                    </a>
+                    
+                </div>
+            ))}
+            </div>
+          } 
         </div>
         <div className="info-box qr-box">
           <QRCodeGenerator className="qrcode" id={props.id} type={props.type}/>

@@ -27,6 +27,7 @@ function SeedTab(props) {
               origin: res.data[seed].origin,
               quantity: res.data[seed].quantity,
               dateMade: res.data[seed].dateMade,
+              transferDate: res.data[seed].transferDate,
               locationId: res.data[seed].locationId,
               active: res.data[seed].active
             };
@@ -73,6 +74,7 @@ function SeedTab(props) {
     origin: row.origin,
     quantity: row.quantity,
     dateMade: row.dateMade.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     locationId: row.locationId
   }));
 
@@ -86,6 +88,7 @@ function SeedTab(props) {
     { field: "origin", headerName: "Origin", width: 150 },
     { field: "quantity", headerName: "Quantity", width: 150 },
     { field: "dateMade", headerName: "Date Made", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "locationId", headerName: "Location", width: 150 }
   ];
 

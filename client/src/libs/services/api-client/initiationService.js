@@ -22,6 +22,7 @@ export async function editInitiation(initiationId, geneticId, seedsAndEmbryos, m
     mediaBatch: mediaBatch,
     numberOfPlates: numberOfPlates,
     dateMade: dateMade,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     tansferDate: expectedTransferDate
@@ -39,6 +40,7 @@ export async function addInitiation(initiationId, geneticId, seedsAndEmbryos, me
     mediaBatch: mediaBatch,
     numberOfPlates: numberOfPlates,
     dateMade: dateMade,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

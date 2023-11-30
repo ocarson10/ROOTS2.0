@@ -20,6 +20,7 @@ export async function updateMaturation(maturationId, geneticId, numberOfPlates, 
     numberOfPlates: numberOfPlates,
     mediaBatch: mediaBatch,
     dateMatured: dateMatured,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate
@@ -36,6 +37,7 @@ export async function addMaturation(maturationId, geneticId, numberOfPlates, med
     numberOfPlates: numberOfPlates,
     mediaBatch: mediaBatch,
     dateMatured: dateMatured,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

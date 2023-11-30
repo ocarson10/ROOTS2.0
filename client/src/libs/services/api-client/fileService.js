@@ -1,9 +1,10 @@
 import { instance } from './apiClient';
 import { addLogs } from './logsService';
 
-export async function getFiles(geneticId) {
+export async function getFiles(materialId) {
 	try {
-		const response = await instance.get("files/" + geneticId);
+		//const response = await instance.get(`files/${materialType}/${materialId}`);
+		const response = await instance.get("files/"+ materialId);
 		const filesData = response.data;
 	
 		if (filesData && filesData.length > 0) {
@@ -12,7 +13,7 @@ export async function getFiles(geneticId) {
 			  return {
 				fileData: file.fileData,
 				fileId: file.fileId,
-				fileName: file.fileName
+				fileName: file.fileName,
 			  }
 		  });
 	
@@ -27,19 +28,21 @@ export async function getFiles(geneticId) {
 	  }
 }
 
-export async function addFile(geneticId, fileData) {
+export async function addFile(materialId, fileData) {
 	const reader = new FileReader();
+	//console.log("fileData name:",fileData);
+	//console.log("fileData", fileData);
 	const fileName = fileData.name;
 	reader.onload = function (event) {
 	  const base64FileData = event.target.result;
 	  console.log('File content:', base64FileData);
 	  const requestData = {
-		geneticId: geneticId,
+		materialId: materialId,
 		fileData: base64FileData,
-		fileName: fileName
+		fileName: fileName,
 	  };
   
-	  addLogs("Added file with genetic id: " + geneticId);
+	  addLogs("Added file with material id: " + materialId);
   
 	  // Send the JSON data to the server
 	  return instance.post("files", requestData)

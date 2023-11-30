@@ -14,6 +14,20 @@ module.exports = (app) => {
     })
   });
 
+  //Gets a specific species by name
+  router.get("/:species", async (req, res) => {
+    const reqSpecies = req.params.species;
+    await Species.findOne({ where: { species: reqSpecies } })
+      .then((innerRes) => {
+        res.statusCode = 200;
+        res.statusMessage = "OK";
+        res.send(innerRes);
+      })
+      .catch((error) => {
+        console.log("Error in fetching species: ", error);
+      });
+  });
+
   // Posts a species to the database
   router.post('/', async (req, res) => {
     const reqSpecies = req.body.species;
@@ -22,7 +36,8 @@ module.exports = (app) => {
     await db.sync().then( async() => {
       await Species.create({
         species: reqSpecies,
-        shorthand: reqShorthand
+        shorthand: reqShorthand,
+        active: true
       }).then((innerRes) => {
         res.sendStatus(200);
       }).catch((error) => {
@@ -32,9 +47,35 @@ module.exports = (app) => {
     })
   });
 
+  // updates a species as inactive/active
+  router.put('/:species', async (req, res) => {
+    const reqSpecies = req.params.species;
+    const species = await Species.findOne({ where: { species: reqSpecies } });
+    if (species) {
+      species.update({ active: species.active? false : true });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
+  //edit a species
+  router.put('/edit/:species', async (req, res) => {
+    const reqSpecies = req.body.species;
+    const reqShorthand = req.body.shorthand;
+
+    const species = await Species.findOne({ where: {species: reqSpecies}});
+    if (species) {
+      species.update({species:reqSpecies, shorthand: reqShorthand, active: true});
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   // Delete a speecies from the database
   router.delete('/', async (req, res) => {
-    const deleted = req.body.species
+    const deleted = req.body.species;
     const spec = await Species.findOne({ where: { species: deleted } });
     if (spec) {
       spec.destroy();

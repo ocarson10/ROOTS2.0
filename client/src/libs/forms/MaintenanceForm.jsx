@@ -9,9 +9,8 @@ import Select from "react-select";
 import { addMaintenance, updateMaintenance, getMaintenance } from "../services/api-client/maintenanceService";
 import { getIds, getId } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
+import { getLocations } from "../services/api-client/locationService";
+
 function Maintenance(props) {
   const [maintenanceId, setMaintenanceId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
@@ -20,25 +19,33 @@ function Maintenance(props) {
   const [dateCurr, setDateCurr] = useState("");
   const [mediaBatchPrev, setMediaBatchPrev] = useState("");
   const [datePrev, setDatePrev] = useState("");
-  const [location, setLocation] = useState("");
+  const [transferDate, setTransferDate] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (props.operation === "Edit") {
-      setChangeId(false);
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+  const [locationOptions, setLocationOptions] = useState([]);
 
-      getMaintenance(id)
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+  useEffect(() => {
+    if (props.operation === "edit") {
+      setChangeId(false);
+      //const id = window.location.href.split("/")[5];
+      //console.log("id: " + id);
+
+      getMaintenance(props.maintenanceId)
         .then((response) => {
           setMaintenanceId(response.data.maintenanceId);
           setNumberOfPlates(response.data.numberOfPlates);
           setMediaBatchPrev(response.data.mediaBatchCurr);
           setDatePrev(response.data.dateCurr.subString(0, 10));
+          setTransferDate(response.data.transferDate.subString(0, 10));
           setLocation(response.data.locationId);
           getId(response.data.maintenanceGeneticId).then((id) => {
             setGeneticId({
@@ -65,6 +72,7 @@ function Maintenance(props) {
         .then((response) => {
           setNumberOfPlates(response.data.numberOfPlates);
           setDatePrev(response.data.dateMade);
+          setTransferDate(response.data.transferDate);
           setMediaBatchPrev(response.data.mediaBatch);
           setLocation(response.data.location);
           console.log("got genetic id: " + response.data.initiationGeneticId);
@@ -118,7 +126,7 @@ function Maintenance(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addMaintenance(
         maintenanceId,
         geneticId.value,
@@ -127,11 +135,12 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
-        location,
-        true, 
-        expectedTransferDate
+        transferDate,
+        location.value,
+        true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -139,7 +148,8 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
-    } else if (props.operation === "Edit") {
+
+    } else if (props.operation === "edit") {
       await updateMaintenance(
         maintenanceId,
         geneticId.value,
@@ -148,11 +158,12 @@ function Maintenance(props) {
         dateCurr,
         mediaBatchPrev === "" ? null : mediaBatchPrev,
         datePrev === "" ? null : datePrev,
-        location,
-        true, 
-        expectedTransferDate
+        transferDate,
+        location.value,
+        true
       )
         .then(() => {
+          props.handleFilesSubmit(maintenanceId);
           clear();
           navigate('/');
         })
@@ -160,6 +171,7 @@ function Maintenance(props) {
           console.log(error);
           setError("An error occured: " + error);
         });
+
     }
 
   };
@@ -171,6 +183,7 @@ function Maintenance(props) {
     setDateCurr("");
     setMediaBatchPrev("");
     setDatePrev("");
+    setTransferDate("");
     setLocation("");
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
@@ -206,9 +219,30 @@ function Maintenance(props) {
     setError("");
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
-      <h1>Add Maintenance Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Maintenance</h1> :
+        <h1>Edit Maintenance</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">
@@ -315,32 +349,29 @@ function Maintenance(props) {
 
       <div className="input-div">
         <label className="entry-label">
-          <LocationHover text="Location of Maintenance" /> Location:
+          <GenericHover text="The Material's Transfer Date" />
+          Transfer Date:
         </label>
         <input
-          type="text"
-          value={location}
+          type="date"
+          value={transferDate}
           onChange={(e) => {
-            setLocation(e.target.value);
+            setTransferDate(e.target.value);
             setError("");
           }}
         />
       </div>
 
       <div className="input-div">
-          <label className="entry-label">
-            <ExpectedTransferDateHover /> Expected Transfer Date:
-          </label>
-          <input
-            type="text"
-            value={expectedTransferDate}
-            onChange={(e) => {
-              setExpectedTransferDate(e.target.value);
-            }}
-          />
-        </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+        <label className="entry-label">
+          <LocationHover text="Location of Maintenance" /> Location:
+        </label>
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+        />
+      </div>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

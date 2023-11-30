@@ -72,7 +72,7 @@ function ArchivedColdTreatmentTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/coldtreatment" addLink="/add/coldtreatment" status={"archive"} material={"treatment"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/cold-treatment/edit" addLink="/material/cold-treatment/add" status={"archive"} material={"treatment"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

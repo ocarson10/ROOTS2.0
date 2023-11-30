@@ -21,6 +21,7 @@ export async function updateGermination(germinationId, geneticId, numberEmbryos,
       numberEmbryos: numberEmbryos,
       mediaBatch: mediaBatch,
       dateGermination: dateGermination,
+      transferDate: transferDate,
       locationId: location,
       active: active, 
       transferDate: expectedTransferDate
@@ -37,6 +38,7 @@ export async function addGermination(germinationId, geneticId, numberEmbryos, me
     numberEmbryos: numberEmbryos,
     mediaBatch: mediaBatch,
     dateGermination: dateGermination,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

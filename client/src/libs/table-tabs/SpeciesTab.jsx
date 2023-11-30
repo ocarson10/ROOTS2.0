@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {getSpecies} from '../services/api-client/speciesService';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import TableComponent from './TableComponent';
 import "../style/TableTab.css";
 
@@ -19,8 +17,12 @@ function SpeciesTab(props) {
             let obj = {
               species: res.data[species].species,
               shorthand: res.data[species].shorthand,
+              active:  res.data[species].active
             }
-            tempArray.push(obj)
+            if (obj.active) {
+              console.log("active is true");
+              tempArray.push(obj)
+            }
           }
           setData(tempArray)
           setLoading(false)
@@ -54,7 +56,7 @@ function SpeciesTab(props) {
 
   return (
     <div>
-      {data ? <TableComponent editLink="/edit/species" addLink="/add/species" status={"active"} material={"species"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
+      {data ? <TableComponent editLink="/material/species/edit" addLink="/material/species/add" status={"active"} material={"species"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
     </div>
   )
 }

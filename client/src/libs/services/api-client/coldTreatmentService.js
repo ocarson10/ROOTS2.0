@@ -22,6 +22,7 @@ export async function addColdTreatment(coldtreatmentId, geneticId, numberEmbryos
       numberEmbryos: numberEmbryos,
       dateCold: dateCold,
       duration: duration,
+      transferDate: transferDate,
       locationId: location,
       active: active, 
       transferDate: expectedTransferDate
@@ -37,6 +38,7 @@ export async function updateColdTreatment(coldtreatmentId, geneticId, numberEmbr
     numberEmbryos: numberEmbryos,
     dateCold: dateCold,
     duration: duration,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

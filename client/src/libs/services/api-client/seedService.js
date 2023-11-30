@@ -20,6 +20,8 @@ export async function addSeed(seedId, motherId, coneId, fatherTreeId, geneticId,
   familyId, progenyId, population, ramet,  origin, quantity, dateMade, location, expectedTransferDate) {
     const response = await getSingleId(geneticId, familyId, progenyId, population, ramet);
     await addLogs("Added seed with id: " + seedId);
+    console.log("Added seed with id: " + seedId);
+
     return await instance.post("seeds", {
     id: seedId,
     motherTreeId: motherId ? motherId : null,
@@ -29,6 +31,7 @@ export async function addSeed(seedId, motherId, coneId, fatherTreeId, geneticId,
     origin: origin,
     quantity: quantity,
     dateMade: dateMade,
+    transferDate: transferDate,
     locationId: location,
     active: true,
     transferDate: expectedTransferDate
@@ -49,6 +52,7 @@ export async function editSeed(seedId, motherId, coneId, fatherTreeId, geneticId
     origin: origin,
     quantity: quantity,
     dateMade: dateMade,
+    transferDate: transferDate,
     locationId: location,
     active: active,
     transferDate: expectedTransferDate

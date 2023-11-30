@@ -92,7 +92,7 @@ function TreeTab(props) {
 
   return (
     <div>
-        {data ? <TableComponent editLink="/edit/tree-material" addLink="/material/trees/add"  status={"active"} material={"tree"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} /> : <p></p>}
+        {data ? <TableComponent editLink="/material/trees/edit" addLink="/material/trees/add"  status={"active"} material={"tree"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user} /> : <p></p>}
     </div>
 
   );

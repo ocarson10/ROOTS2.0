@@ -20,17 +20,23 @@ import {
 } from "../services/api-client/idService";
 import {getId} from "../services/api-client/idService";
 import {useNavigate} from "react-router-dom";
-import ImageUpload from "./ImageUpload";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
+import { getTrees } from "../services/api-client/treeService";
 
 function SeedMaterial(props) {
   const [seedId, setSeedId] = useState("");
   const [location, setLocation] = useState("");
   const [cone, setCone] = useState("");
-  const [mother, setMother] = useState("");
-  const [father, setFather] = useState("");
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
+  const [fatherTreeIdOptions, setFatherTreeIdOptions] = useState([]);
+  const [mother, setMother] = useState({value:"", label:""});
+  const [father, setFather] = useState({value:"", label:""});
   const [origin, setOrigin] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
+  const [transferDate, setTransferDate] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
   const [rametId, setRametId] = useState({ value: "", label: "" });
@@ -45,14 +51,64 @@ function SeedMaterial(props) {
   const [changeId, setChangeId] = useState(true);
   const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
 
   useEffect(() => {
-    if(props.operation === "Edit"){
+    getExistingLocations();
+    getMotherTreeOptions();
+    getFatherTreeOptions();
+  }, []);
+
+
+  useEffect(() => {
+    if(props.operation === "edit"){
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getSeed(id).then((seed) => {
+      getSeed(props.seedId).then((seed) => {
         setSeedId(seed.data.id);
         setLocation(seed.data.locationId);
         setCone(seed.data.coneId);
@@ -61,6 +117,7 @@ function SeedMaterial(props) {
         setOrigin(seed.data.origin);
         setQuantity(seed.data.quantity);
         setDate(seed.data.dateMade);
+        setDate(seed.data.transferDate);
 
         getId(seed.data.seedGeneticId).then((id) => {
           setPopulation(id.data.populationId);
@@ -93,18 +150,22 @@ function SeedMaterial(props) {
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({ value: e.value, label: e.value });
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -171,18 +232,18 @@ function SeedMaterial(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
-  const handleSubmit = (e) => {
-    if (props.operation === "Add") {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (props.operation === "add") {
       if (seedId === "") {
         setError("Please enter a seed ID");
         return;
       }
       addSeed(
         seedId,
-        mother,
+        mother.value,
         cone,
-        father,
+        father.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
@@ -191,11 +252,12 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
-        location, 
-        expectedTransferDate
+        transferDate,
+        location.value
       )
         .then((res) => {
           if (res.status === 200) {
+            props.handleFilesSubmit(seedId);
             clear();
             navigate('/');
           }
@@ -204,13 +266,12 @@ function SeedMaterial(props) {
           setError(error.response.data.message);
         });
     }
-    else if (props.operation === "Edit") {
-      e.preventDefault();
+    else if (props.operation === "edit") {
       editSeed(
         seedId,
-        mother,
+        mother.value,
         cone,
-        father,
+        father.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
@@ -219,11 +280,12 @@ function SeedMaterial(props) {
         origin,
         quantity,
         date,
-        location, 
-        expectedTransferDate
+        transferDate,
+        location.value
       )
         .then((res) => {
           if (res.status === 200) {
+            props.handleFilesSubmit(seedId);
             clear();
             navigate('/');
           }
@@ -235,11 +297,12 @@ function SeedMaterial(props) {
   };
 
   const clear = () => {
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       setSeedId("");
     }
 
-    setMother("");
+    setMother({value:"", label:""});
+    setFather({value:"", label:""})
     setGeneticId({ value: "", label: "" });
     setFamilyId({ value: "", label: "" });
     setProgenyId({ value: "", label: "" });
@@ -250,6 +313,7 @@ function SeedMaterial(props) {
     setOrigin("");
     setQuantity("");
     setDate("");
+    setTransferDate("");
     setError("");
     setPopOptions([]);
     setFamOptions([]);
@@ -260,9 +324,43 @@ function SeedMaterial(props) {
     setExpectedTransferDate(null);
   };
 
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
+  // function to get the father tree options
+  const getFatherTreeOptions = async () => {
+    getTrees().then((fatherTrees) => {
+      const options = fatherTrees.data.map((fatherTree) => {
+        return {
+          value: fatherTree.treeId,
+          label: fatherTree.treeId,
+        };
+      });
+      setFatherTreeIdOptions(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
-      <h1>Add Seed Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Seed</h1> :
+        <h1>Edit Seed</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">
@@ -282,12 +380,27 @@ function SeedMaterial(props) {
           Population ID:
         </label>
         <Select
-          options={popOptions}
+          options={[newPopulationButtonOption, ...popOptions]}
           onChange={handlePopulationChange}
           value={population ? population : ""}
         />
+        {isPopulationFormOpen &&
+            <PopulationForm 
+              isOpen={isPopulationFormOpen}
+              onClose={handleClosePopulationForm}
+              addPopOption={addPopulationOption}
+              operation={"add"}
+            />
+          }
+          {isGeneticIdFormOpen && 
+            <GeneticIdForm
+              isOpen={isGeneticIdFormOpen}
+              onClose={handleCloseGenIdForm}
+              addGenIdOption={addGenIdOption}
+              operation={"add"}
+            />
+          }
       </div>
-
       <div className="input-div">
         <label className="entry-label">
           <GenericHover text="The family ID of the genetic ID" />
@@ -338,11 +451,11 @@ function SeedMaterial(props) {
         <label className="entry-label">
           <LocationHover /> Location:
         </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
       </div>
 
       <div className="input-div">
@@ -371,19 +484,19 @@ function SeedMaterial(props) {
 
       <div className="input-div">
         <label className="entry-label">Mother:</label>
-        <input
-          type="text"
-          value={mother}
-          onChange={(e) => setMother(e.target.value)}
+        <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMother({value:e.value,label: e.value})}
+          value={mother ? mother : ""}
         />
       </div>
 
       <div className="input-div">
         <label className="entry-label">Father:</label>
-        <input
-          type="text"
-          value={father}
-          onChange={(e) => setFather(e.target.value)}
+        <Select
+          options={fatherTreeIdOptions}
+          onChange={(e) => setFather({value:e.value,label: e.value})}
+          value={father ? father : ""}
         />
       </div>
 
@@ -417,7 +530,16 @@ function SeedMaterial(props) {
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
-      <ImageUpload></ImageUpload>
+
+      <div className="input-div">
+        <label className="entry-label">Transfer Date:</label>
+        <input
+          type="date"
+          value={transferDate}
+          onChange={(e) => setTransferDate(e.target.value)}
+        />
+      </div>
+
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

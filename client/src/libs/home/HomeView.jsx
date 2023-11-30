@@ -27,6 +27,9 @@ import ArchivedMaintenanceTab from "../table-tabs/archived-tabs/ArchivedMaintena
 import ArchivedMaturationTab from "../table-tabs/archived-tabs/ArchivedMaturationTab";
 import ArchivedRametTab from "../table-tabs/archived-tabs/ArchivedRametTab";
 import ArchivedSeedTab from "../table-tabs/archived-tabs/ArchivedSeedTab";
+import ArchivedSpeciesTab from "../table-tabs/archived-tabs/ArchivedSpeciesTab";
+import ArchivedLocationTab from "../table-tabs/archived-tabs/ArchivedLocationTab";
+
 import GreenhouseTab from "../table-tabs/GreenhouseTab";
 import GerminationTab from "../table-tabs/GerminationTab";
 import MaturationTab from "../table-tabs/MaturationTab";
@@ -36,12 +39,16 @@ import FieldstationTab from "../table-tabs/FieldstationTab";
 import ColdTreatmentTab from "../table-tabs/ColdTreatmentTab";
 
 function HomeView(props) {
+  console.log("props: " + JSON.stringify(props));
   const [tableDisplay, setTableDisplay] = useState(<div></div>);
-  const [currentTab, setCurrentTab] = useState("Default");
+  const [currentFieldTab, setCurrentFieldTab] = useState("Default");
+  const [currentLabTab, setCurrentLabTab] = useState("Default");
+
   const [currentArchiveTab, setCurrentArchiveTab] = useState("Default");
 
-  function showTab(event) {
-    setCurrentTab(event.target.value);
+  function showFieldResourceTab(event) {
+    setCurrentFieldTab(event.target.value);
+    setCurrentLabTab("Default");
     setCurrentArchiveTab("Default");
 
     let tab = event.target.value;
@@ -63,7 +70,28 @@ function HomeView(props) {
           <SeedTab user={props.user}/>
         </div>
       );
-    } else if (tab === "Maintenance") {
+    } else if (tab === "Location") {
+      setTableDisplay(<div><LocationTab user={props.user}/></div>);
+    } else if (tab === "Genetic ID") {
+      setTableDisplay(<div><GeneticIdTab user={props.user}/></div>);
+    } else if (tab === "Population") {
+      setTableDisplay(<div><PopulationTab user={props.user}/></div>);
+    } else if (tab === "Ramet") {
+      setTableDisplay(<div><RametTab user={props.user}/></div>);
+    } else if (tab === "Species") {
+      setTableDisplay(<div><SpeciesTab user={props.user}/></div>)
+    } else {
+      setTableDisplay(<div></div>);
+    }
+  }
+
+  function showLabResourceTab(event) {
+    setCurrentLabTab(event.target.value);
+    setCurrentFieldTab("Default");
+    setCurrentArchiveTab("Default");
+
+    let tab = event.target.value;
+    if (tab === "Maintenance") {
       setTableDisplay(
         <div>
           <MaintenanceTab user={props.user}/>
@@ -93,19 +121,21 @@ function HomeView(props) {
       setTableDisplay(<div><GeneticIdTab user={props.user}/></div>);
     } else if (tab === "Population") {
       setTableDisplay(<div><PopulationTab user={props.user}/></div>);
-    } else if (tab === "Ramet") {
-      setTableDisplay(<div><RametTab user={props.user}/></div>);
     } else if (tab === "Species") {
       setTableDisplay(<div><SpeciesTab user={props.user}/></div>)
     } else {
       setTableDisplay(<div></div>);
     }
   }
+
+  
   
   // Archive Tabs
   function showArchiveTab(event) {
     setCurrentArchiveTab(event.target.value);
-    setCurrentTab("Default");
+    setCurrentFieldTab("Default");
+    setCurrentLabTab("Default");
+
 
     var tab = event.target.value;
     if (tab === "Trees Archive") {
@@ -138,6 +168,10 @@ function HomeView(props) {
       setTableDisplay(<div><ArchivedGeneticIdTab user={props.user}/></div>)
     } else if (tab === "Ramet Archive") {
       setTableDisplay(<div><ArchivedRametTab user={props.user}/></div>)
+    } else if (tab === "Species Archive") {
+      setTableDisplay(<div><ArchivedSpeciesTab user={props.user}/></div>)
+    } else if (tab === "Location Archive") {
+      setTableDisplay(<div><ArchivedLocationTab user={props.user}/></div>)
     } else {
       setTableDisplay(<div></div>);
     }
@@ -164,19 +198,17 @@ function HomeView(props) {
 
         <div className="tabs-div">
           
-
-          <div className="dropdown">
+          <div className="fielddropdown" id="field-dropdown">
             <FormControl className="drop-form"  variant="standard">
-              {/* <InputLabel id="dropdown-label">Select a Tab</InputLabel> */}
 
               <Select
                 className="select"
-                label="Select Active Data"
-                onChange={showTab}
-                value={currentTab}
+                label="Select Active Field Resource"
+                onChange={showFieldResourceTab}
+                value={currentFieldTab}
               >
-                <MenuItem className="drop-button" value="Default">
-                Select Active Data
+                <MenuItem className="drop-buton" value="Default">
+                Select Active Field Resource
                 </MenuItem>
                 <MenuItem className="drop-button" value="Trees">
                   Trees
@@ -187,11 +219,44 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Seeds">
                   Seeds
                 </MenuItem>
+                <MenuItem className="drop-button" value="Ramet">
+                  Ramet
+                </MenuItem>
+                <MenuItem className="drop-button" value="Location">
+                  Location
+                </MenuItem>
+                <MenuItem className="drop-button" value="Genetic ID">
+                  Genetic ID
+                </MenuItem>
+                <MenuItem className="drop-button" value="Population">
+                  Population
+                </MenuItem>
+                <MenuItem className="drop-button" value="Species">
+                  Species
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          <div className="labdropdown" id="lab-dropdown">
+            <FormControl className="drop-form"  variant="standard">
+              <Select
+                className="select"
+                label="Select Active Lab Resource"
+                onChange={showLabResourceTab}
+                value={currentLabTab}
+              >
+                <MenuItem className="drop-button" value="Default">
+                Select Active Lab Resource
+                </MenuItem>
+                <MenuItem className="drop-button" value="Initiation">
+                  Initiation
+                </MenuItem>
                 <MenuItem className="drop-button" value="Maintenance">
                   Maintenance
                 </MenuItem>
-                <MenuItem className="drop-button" value="Greenhouse">
-                  Greenhouse
+                <MenuItem className="drop-button" value="Maturation">
+                  Maturation
                 </MenuItem>
                 <MenuItem className="drop-button" value="Cold Treatment">
                   Cold Treatment
@@ -199,14 +264,11 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Germination">
                   Germination
                 </MenuItem>
-                <MenuItem className="drop-button" value="Maturation">
-                  Maturation
-                </MenuItem>
-                <MenuItem className="drop-button" value="Initiation">
-                  Initiation
-                </MenuItem>
                 <MenuItem className="drop-button" value="Acclimation">
                   Acclimation
+                </MenuItem>
+                <MenuItem className="drop-button" value="Greenhouse">
+                  Greenhouse
                 </MenuItem>
                 <MenuItem className="drop-button" value="Field Station">
                   Field Station
@@ -220,20 +282,15 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Population">
                   Population
                 </MenuItem>
-                <MenuItem className="drop-button" value="Ramet">
-                  Ramet
-                </MenuItem>
                 <MenuItem className="drop-button" value="Species">
                   Species
                 </MenuItem>
               </Select>
             </FormControl>
-          </div>
+  </div>
 
           <div className="dropdown" id="archived-dropdown">
             <FormControl className="drop-form"  variant="standard">
-              {/* <InputLabel id="dropdown-label">Select a Tab</InputLabel> */}
-
               <Select
                 className="select"
                 label="Select Archived Data"
@@ -276,21 +333,15 @@ function HomeView(props) {
                 <MenuItem className="drop-button" value="Field Station Archive">
                   Field Station Archive
                 </MenuItem>
-                {/* <MenuItem className="drop-button" value="Location Archive">
-                  Location Archive
-                </MenuItem>
-                <MenuItem className="drop-button" value="Genetic ID Archive">
-                  Genetic ID Archive
-                </MenuItem>
-                <MenuItem className="drop-button" value="Population Archive">
-                  Population Archive
-                </MenuItem> */}
                 <MenuItem className="drop-button" value="Ramet Archive">
                   Ramet Archive
                 </MenuItem>
-                {/* <MenuItem className="drop-button" value="Species Archive">
+                <MenuItem className="drop-button" value="Species Archive">
                   Species Archive
-                </MenuItem> */}
+                 </MenuItem>
+                <MenuItem className="drop-button" value="Location Archive">
+                  Location Archive
+                </MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -305,5 +356,3 @@ function HomeView(props) {
 }
 
 export default HomeView;
-
-//Initiation, Acclimation ,Field Station, locatiion, geneticid, population, ramet, species

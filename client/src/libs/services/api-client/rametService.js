@@ -25,13 +25,24 @@ export async function addRamet(id, motherTreeId, geneticId, familyId, progenyId,
 }
 
 // Update a ramet via a put request
-export async function updateRamet(id, motherTreeId, progenyId, geneticId, location, gps, active) {
+export async function updateRamet(
+  id, 
+  motherTreeId, 
+  progenyId, 
+  geneticId,
+  familyId,
+  rametId,
+  population,
+  location, 
+  gps, 
+  active
+  ) {
+  const response = await getSingleId(geneticId, familyId, progenyId, population, rametId);
   await addLogs("Updated ramet with id: " + id);
-  return await instance.put(`ramets/${id}`, {
+  return await instance.put("ramets/edit/" + id, {
     motherTreeId: motherTreeId,
-    location: location,
-    progenyId: progenyId,
-    geneticId: geneticId,
+    locationId: location,
+    rametGeneticId: response.data.id,
     gps: gps,
     active: active
   });

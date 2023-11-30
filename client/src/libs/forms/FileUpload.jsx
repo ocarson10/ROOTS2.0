@@ -10,7 +10,7 @@ function FileUpload(props) {
   return (
     <div>
       <h1>File Upload</h1>
-      <input type="file" accept = ".csv, .xlsx, .pdf" onChange={handleFileChange} />
+      <input className='input-text' type="file" accept = ".csv, .xlsx, .pdf" onChange={handleFileChange} />
     </div>
   );
 }

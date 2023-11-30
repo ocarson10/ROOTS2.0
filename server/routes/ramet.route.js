@@ -38,15 +38,12 @@ module.exports = (app) => {
     const reqMotherTreeId = req.body.motherTreeId;
     const reqRametGeneticId = req.body.rametGeneticId;
     const reqLocationId = req.body.locationId;
-    const reqTransferDate = req.body.transferDate;
-
 
     db.sync().then(() => {
       Ramet.create({
         id: reqRametId,
         motherTreeId: reqMotherTreeId,
         rametGeneticId: reqRametGeneticId,
-        transferDate: reqTransferDate,
         gps: reqGPS,
         locationId: reqLocationId,
         active: true
@@ -59,8 +56,31 @@ module.exports = (app) => {
     })
   });
 
+  router.put('/edit/:id', async (req, res) => {
+    const reqRametId = req.params.id;
+    const reqMotherTreeId = req.body.motherTreeId;
+    const reqLocation = req.body.locationId;
+    const reqGeneticId = req.body.rameteneticId;
+    const reqGps = req.body.gps;
+    const reqActive = req.body.active;
+    
+    const ramet = await Ramet.findOne({ where: { id: reqRametId } })
+    if (ramet) {
+      ramet.update({
+        motherTreeId: reqMotherTreeId,
+        locationId: reqLocation,
+        rametGeneticId: reqGeneticId,
+        gps: reqGps,
+        active: reqActive
+      });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   // updates a ramet as inactive/active
-  router.put('/:id', async (req, res) => {
+  router.delete('/:id', async (req, res) => {
     const reqRametId = req.params.id;
     
     Ramet.findOne({ where: { id: reqRametId } }).then((innerRes) => {
@@ -75,21 +95,6 @@ module.exports = (app) => {
       console.log("Error in updating ramet: ", error);
       res.send(400);
     });
-  });
-
-  // Deletes a ramet, for testing
-  router.delete('/:id', async (req, res) => {
-    const reqRametId = req.params.id;
-    Ramet.destroy({ where: { id: reqRametId } }).then((innerRes) => {
-      if(innerRes) {
-        res.sendStatus(200);
-      } else {
-        res.sendStatus(404);
-      }
-    }).catch((error) => {
-      console.log("Error in deleting ramet: ", error);
-      res.send(400);
-    })
   });
   
   app.use('/ramets', router);

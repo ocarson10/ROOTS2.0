@@ -18,6 +18,7 @@ export async function updateGreenhouse(greenhouseId, greenhouseGeneticId, dateGr
       greenhouseId: greenhouseId,
       greenhouseGeneticId: greenhouseGeneticId,
       dateGreenhouse: dateGreenhouse,
+      transferDate: transferDate,
       locationId: location,
       active: active, 
       transferDate: expectedTransferDate
@@ -32,6 +33,7 @@ export async function addGreenhouse(greenhouseId, greenhouseGeneticId, dateGreen
     greenhouseId: greenhouseId,
     greenhouseGeneticId: greenhouseGeneticId,
     dateGreenhouse: dateGreenhouse,
+    transferDate: transferDate,
     locationId: location,
     active: active, 
     transferDate: expectedTransferDate

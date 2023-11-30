@@ -12,7 +12,8 @@ import {
   faFileCircleMinus,
   faFilePen,
   faFilePdf,
-  faFileExport
+  faFileExport,
+  faFileCsv
 } from "@fortawesome/free-solid-svg-icons";
 import { removeTree } from "../services/api-client/treeService";
 import { removeCone } from "../services/api-client/coneService";
@@ -25,6 +26,8 @@ import { removeGermination } from "../services/api-client/germinationService";
 import { removeAcclimation } from "../services/api-client/acclimationService";
 import { removeGreenhouse } from "../services/api-client/greenhouseService";
 import { removeFieldstation } from "../services/api-client/fieldstationService";
+import { removeSpecies } from "../services/api-client/speciesService";
+import { removeLocation } from "../services/api-client/locationService";
 
 /**
  * editLink="/edit/tree-material" addLink="/add/tree-material"  status={"active"} material={"tree"} rows={rows} columns={columns} loading={loading1} error={error}
@@ -163,7 +166,29 @@ function TableComponent(props) {
           .catch((error) => {
             console.log(error);
           });
-        } 
+
+        } else if (props.material === "species") {
+          await removeSpecies(selectedRows[i]).then(() => {
+            console.log("removed");
+            rows.map((row) => row !== selectedRows[i]);
+            setRows([...rows]);
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        } else if (props.material === "location") {
+          console.log("location remove: ",selectedRows[i] );
+          await removeLocation(selectedRows[i]).then(() => {
+            console.log("removed");
+            rows.map((row) => row !== selectedRows[i]);
+            setRows([...rows]);
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
       }
     }
   };
@@ -255,12 +280,59 @@ function TableComponent(props) {
           .catch((error) => {
             console.log(error);
           });
-        } 
+        } else if (props.material === "species") {
+          await removeSpecies(selectedRows[i]).then(() => {
+            console.log("removed");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        } else if (props.material === "location") {
+          await removeLocation(selectedRows[i]).then(() => {
+            console.log("removed");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
       }
     }
 
     navigate(props.propagateLink + "/" + selectedRows[0]);
   }
+
+  const exportData = async () => {
+    let data = [
+      ['Plate Label', 'Species', 'Media', 'Date'],
+    ];
+    const filename = 'plateLabel.csv';
+    for(let i = 0; i < selectedRows.length; i++){
+          for(let j = 0; j < props.rows.length; j++){
+            if(props.rows[j].id == selectedRows[i]){
+
+              //pulls file data for selected initiation materials
+               let newRow = [props.rows[j].id, props.rows[j].species, props.rows[j].mediaBatch,props.rows[j].dateMade,];
+                data = data.concat([newRow]);  
+            }
+          }
+    }
+    exportToCSV(data, filename);
+
+  }
+
+  //Exports intiation data into plate lable by converting Data into a csv format
+  function exportToCSV(data, filename) {
+    const csv = data.map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+
+    link.download = filename;
+
+    link.click();
+}
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [user, setUser] = useState({});
@@ -282,7 +354,7 @@ function TableComponent(props) {
             <FontAwesomeIcon title="Add" className="icon" icon={faFileCirclePlus} />
           </Link>
         ) : (<div></div>)}
-      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "location" && props.material !== "species" && props.material !== "geneticId" && props.material !== "population" ? (
+      {selectedRows.length >= 1 && props.status !== "archive" && props.material !== "geneticId" && props.material !== "population" ? (
           <a onClick={archiveData}>
             <FontAwesomeIcon title="Delete" className="icon" icon={faFileCircleMinus} />
           </a>
@@ -297,12 +369,16 @@ function TableComponent(props) {
             <FontAwesomeIcon title="View Report" className="icon" icon={faFilePdf} />
           </Link>
         ) : <div></div>}
-      {selectedRows.length === 1 && props.status !== "archive" && (props.material === "seed" || props.material === "initiation" || props.material === "maintenance" || props.material === "maturation" || props.material === "treatment" || props.material === "germination" || props.material === "acclimation" || props.material === "greenhouse" || props.material === "acclimation" || props.material === "fieldstation")  ? ( //TODO: add other materials
+      {selectedRows.length === 1 && props.status !== "archive" && ( props.material === "initiation" || props.material === "maintenance" || props.material === "maturation" || props.material === "treatment" || props.material === "germination" || props.material === "acclimation" || props.material === "greenhouse" || props.material === "acclimation")  ? ( 
           <a onClick={propagateData}>
             <FontAwesomeIcon title="Propagate" className="icon" icon={faFileExport} />
           </a>
         ) : <div></div>}
-      
+      {selectedRows.length >= 1 && props.status !== "archive" && (props.material === "initiation" )  ? ( 
+          <a onClick={exportData}>
+            <FontAwesomeIcon title="Export Label CSV" className="icon" icon={faFileCsv} />
+          </a>
+        ) : <div></div>}
     </div>
   )
 
