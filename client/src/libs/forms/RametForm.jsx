@@ -37,7 +37,7 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
-  const [transferDate, settransferDate] = useState(null);
+  const [transferDate, setTransferDate] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
@@ -286,7 +286,7 @@ function RametForm(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
-    settransferDate(null);
+    setTransferDate(null);
   };
 
 
@@ -410,7 +410,7 @@ function RametForm(props) {
         <input
           type="date"
           value={transferDate}
-          onChange={(e) => settransferDate(e.target.value)}
+          onChange={(e) => setTransferDate(e.target.value)}
         />
       </div>
 
