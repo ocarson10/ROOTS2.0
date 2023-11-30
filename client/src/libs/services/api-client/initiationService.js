@@ -13,7 +13,7 @@ export async function getInitiation(initiationId) {
 }
 
 // Update a material in the initiation table via a put request
-export async function editInitiation(initiationId, geneticId, seedsAndEmbryos, mediaBatch, numberOfPlates, dateMade, transferDate, location, active) {
+export async function editInitiation(initiationId, geneticId, seedsAndEmbryos, mediaBatch, numberOfPlates, dateMade, location, active, expectedTransferDate) {
   await addLogs(`Updated initiation with id: ${initiationId}`);
   return await instance.put("initiations/edit/" + initiationId, {
     initiationId: initiationId,
@@ -24,13 +24,14 @@ export async function editInitiation(initiationId, geneticId, seedsAndEmbryos, m
     dateMade: dateMade,
     transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    tansferDate: expectedTransferDate
   });
 }
 
 // Add a new material to the initiation table given the seeds and embryos, media batch, number of plates,
 // the date made, the location, and whether or not it's active
-export async function addInitiation(initiationId, geneticId, seedsAndEmbryos, mediaBatch, numberOfPlates, dateMade, transferDate, location, active) {
+export async function addInitiation(initiationId, geneticId, seedsAndEmbryos, mediaBatch, numberOfPlates, dateMade, location, active, expectedTransferDate) {
   await addLogs(`Added initiation with id: ${initiationId}`);
   return await instance.post("initiations", {
     initiationId: initiationId,
@@ -41,7 +42,8 @@ export async function addInitiation(initiationId, geneticId, seedsAndEmbryos, me
     dateMade: dateMade,
     transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    transferDate: expectedTransferDate
   });
 }
 

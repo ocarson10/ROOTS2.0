@@ -3,6 +3,7 @@ import "../../libs/style/GerminationMaterial.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { addGermination, getGermination, updateGermination } from "../services/api-client/germinationService";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,7 @@ function GerminationForm(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -121,7 +123,7 @@ function GerminationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+      await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
@@ -131,7 +133,7 @@ function GerminationForm(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true).then(() => {
+      await updateGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(germinationId);
         clear();
         navigate("/");
@@ -169,6 +171,7 @@ function GerminationForm(props) {
         };
       });
       setGenOptions(options);
+      setExpectedTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -242,6 +245,20 @@ function GerminationForm(props) {
             value={location ? location : ""}
           />
       </div>
+      <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
+      <ImageUpload></ImageUpload>
+      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

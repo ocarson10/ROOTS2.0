@@ -13,7 +13,7 @@ export async function getAcclimation(id) {
 }
 
 // Perform a post request on an entry in the acclimation table given it's id
-export async function updateAcclimation(acclimationId, acclimationGeneticId, dateAcclimation, transferDate, location, active) {
+export async function updateAcclimation(acclimationId, acclimationGeneticId, dateAcclimation, location, active, expectedTransferDate) {
   addLogs("Updated acclimation with id: " + acclimationId);
     return await instance.put("acclimations/update/" + acclimationId, {
       acclimationId: acclimationId,
@@ -21,12 +21,13 @@ export async function updateAcclimation(acclimationId, acclimationGeneticId, dat
       dateAcclimation: dateAcclimation,
       transferDate: transferDate,
       locationId: location,
-      active: active
+      active: active, 
+      transferDate: expectedTransferDate
     });
   }
 
 // Post a new object into the acclimation table given an id, date, location, and whether it's active
-export async function addAcclimation(acclimationId, acclimationGeneticId, dateAcclimation, transferDate, location, active) {
+export async function addAcclimation(acclimationId, acclimationGeneticId, dateAcclimation, location, active, expectedTransferDate) {
   addLogs("Added acclimation with id: " + acclimationId);
   return await instance.post("acclimations", {
     acclimationId: acclimationId,
@@ -34,7 +35,8 @@ export async function addAcclimation(acclimationId, acclimationGeneticId, dateAc
     dateAcclimation: dateAcclimation,
     transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    transferDate: expectedTransferDate
   });
 }
 

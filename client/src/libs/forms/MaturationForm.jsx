@@ -3,6 +3,7 @@ import "../../libs/style/MaturationForm.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addMaturation, getMaturation, updateMaturation } from "../services/api-client/maturationService";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,7 @@ function Maturation(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const [locationOptions, setLocationOptions] = useState([]);
   const navigate = useNavigate();
 
@@ -118,7 +120,7 @@ function Maturation(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true).then(() => {
+      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
@@ -128,7 +130,7 @@ function Maturation(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true).then(() => {
+      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
@@ -168,6 +170,7 @@ function Maturation(props) {
           });
         });
         setGenOptions(options);
+        setExpectedTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -241,6 +244,20 @@ function Maturation(props) {
             value={location ? location : ""}
           />
       </div>
+
+      <div className="input-div">
+        <label className="entry-label">
+          <ExpectedTransferDateHover /> Expected Transfer Date:
+        </label>
+        <input
+          type="text"
+          value={expectedTransferDate}
+          onChange={(e) => {
+            setExpectedTransferDate(e.target.value);
+          }}
+        />
+      </div>
+
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

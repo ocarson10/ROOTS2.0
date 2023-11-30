@@ -13,7 +13,7 @@ export async function getGermination(germinationId) {
 }
 
 // Update a material in the germination table via a put request
-export async function updateGermination(germinationId, geneticId, numberEmbryos, mediaBatch, dateGermination, transferDate, location, active) {
+export async function updateGermination(germinationId, geneticId, numberEmbryos, mediaBatch, dateGermination, location, active, expectedTransferDate) {
   await addLogs(`Updated germination with id: ${germinationId}`);
     return await instance.put("germinations/update/" + germinationId, {
       germinationId: germinationId,
@@ -23,13 +23,14 @@ export async function updateGermination(germinationId, geneticId, numberEmbryos,
       dateGermination: dateGermination,
       transferDate: transferDate,
       locationId: location,
-      active: active
+      active: active, 
+      transferDate: expectedTransferDate
     });
   }
 
 // Add a material to the germination table given a previous id, number of embryos, the media batch,
 // the date of germination, the location, and whether or not it's active
-export async function addGermination(germinationId, geneticId, numberEmbryos, mediaBatch, dateGermination, transferDate, location, active) {
+export async function addGermination(germinationId, geneticId, numberEmbryos, mediaBatch, dateGermination, location, active, expectedTransferDate) {
   await addLogs(`Added germination with id: ${germinationId}`);
   return await instance.post("germinations", {
     germinationId: germinationId,
@@ -39,7 +40,8 @@ export async function addGermination(germinationId, geneticId, numberEmbryos, me
     dateGermination: dateGermination,
     transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    transferDate: expectedTransferDate
   });
 }
 

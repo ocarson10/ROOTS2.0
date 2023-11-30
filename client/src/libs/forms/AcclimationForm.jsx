@@ -3,6 +3,7 @@ import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
 import GeneticHover from "../hover-info/GeneticHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
@@ -20,6 +21,7 @@ function AcclimationForm(props) {
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const navigate = useNavigate();
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -115,7 +117,7 @@ function AcclimationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
@@ -124,7 +126,7 @@ function AcclimationForm(props) {
         setError("An error occured: " + error);
       });
     } else if(props.operation === "edit") {
-      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true).then(() => {
+      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true, expectedTransferDate).then(() => {
         props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
@@ -161,6 +163,7 @@ function AcclimationForm(props) {
         };
       });
       setGenOptions(options);
+      setExpectedTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -213,14 +216,18 @@ function AcclimationForm(props) {
         </div>
 
         <div className="input-div">
-          <label className="entry-label"><LocationHover /> Location:
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
           </label>
-          <Select
-            options={locationOptions}
-            onChange={handleLocationChange}
-            value={location ? location : ""}
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
           />
         </div>
+
         <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

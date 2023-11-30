@@ -18,6 +18,7 @@ import PopulationForm from "./PopulationForm";
 import GeneticIdForm from "./GeneticIdForm";
 import { getLocations } from "../services/api-client/locationService";
 import { getTrees } from "../services/api-client/treeService";
+import ExpectedTransferDateHover from '../hover-info/ExpectedTransferDateHover';
 
 function RametForm(props) {
   const [id, setId] = useState('');
@@ -36,6 +37,7 @@ function RametForm(props) {
   const [rametOptions, setRametOptions] = useState([]);
   const [genOptions, setGenOptions] = useState([]);
   const [proOptions, setProOptions] = useState([]);
+  const [expectedTransferDate, setExpectedTransferDate] = useState(null);
   const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
   const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
   const [locationOptions, setLocationOptions] = useState([]);
@@ -282,6 +284,7 @@ function RametForm(props) {
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
+    setExpectedTransferDate(null);
   };
 
 
@@ -397,6 +400,32 @@ function RametForm(props) {
             options={locationOptions}
             onChange={handleLocationChange}
             value={location ? location : ""}
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="entry-label">
+            <ExpectedTransferDateHover /> Expected Transfer Date:
+          </label>
+          <input
+            type="text"
+            value={expectedTransferDate}
+            onChange={(e) => {
+              setExpectedTransferDate(e.target.value);
+            }}
           />
         </div>
 

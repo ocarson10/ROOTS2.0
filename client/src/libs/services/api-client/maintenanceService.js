@@ -22,7 +22,8 @@ export async function updateMaintenance(
   datePrev,
   transferDate,
   location,
-  active
+  active, 
+  expectedTransferDate
 ) {
   await addLogs(`Updated maintenance with id: ${maintenanceId}`);
   return await instance.put("maintenances/update/" + maintenanceId, {
@@ -36,6 +37,7 @@ export async function updateMaintenance(
     transferDate: transferDate,
     locationId: location,
     active: active,
+    transferDate: expectedTransferDate
   });
 }
 
@@ -52,7 +54,8 @@ export async function addMaintenance(
   datePrev,
   transferDate,
   location,
-  active
+  active, 
+  expectedTransferDate
 ) {
   await addLogs(`Added maintenance with id: ${maintenanceId}`);
   return await instance.post("maintenances", {
@@ -66,6 +69,7 @@ export async function addMaintenance(
     transferDate: transferDate,
     locationId: location,
     active: active,
+    transferDate: expectedTransferDate
   });
 }
 
