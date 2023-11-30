@@ -8,7 +8,6 @@ import GenericHover from "../hover-info/GenericHover";
 import GeneticHover from "../hover-info/GeneticHover";
 import ProgenyHover from "../hover-info/ProgenyHover";
 import PopulationHover from "../hover-info/PopulationHover";
-import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { addSeed, getSeed, editSeed } from "../services/api-client/seedService";
 import Select from "react-select";
 import { getPopulations } from "../services/api-client/populationService";
