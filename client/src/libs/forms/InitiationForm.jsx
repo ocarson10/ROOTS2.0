@@ -48,7 +48,7 @@ function Initiation(props) {
           setMediaBatch(response.data.mediaBatch);
           setNumberOfPlates(response.data.numberOfPlates);
           setDateMade(response.data.dateMade);
-          setDateMade(response.data.transferDate);
+          setTransferDate(response.data.transferDate);
           setLocation(response.data.locationId);
           getId(response.data.initiationGeneticId).then((id) => {
             setGeneticId({
@@ -131,7 +131,6 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
-        transferDate,
         location,
         true, 
         transferDate
@@ -154,7 +153,6 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
-        transferDate,
         location,
         true, 
         transferDate
