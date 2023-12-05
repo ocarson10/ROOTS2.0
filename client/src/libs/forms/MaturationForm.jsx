@@ -120,7 +120,9 @@ function Maturation(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, transferDate).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(maturationId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {

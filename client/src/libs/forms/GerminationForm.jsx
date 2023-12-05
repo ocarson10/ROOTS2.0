@@ -125,7 +125,9 @@ function GerminationForm(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addGermination(germinationId, geneticId.value, numberEmbryos, mediaBatch, dateGermination, location.value, true, transferDate).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(germinationId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {

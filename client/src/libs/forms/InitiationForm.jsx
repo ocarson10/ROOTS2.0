@@ -143,12 +143,14 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
-        location,
+        location.value,
         true, 
         transferDate
       )
         .then(() => {
+          if (props.prop !== "Yes"){
           props.handleFilesSubmit(initiationId);
+          }
           clear();
           navigate("/");
         })
@@ -165,7 +167,7 @@ function Initiation(props) {
         mediaBatch,
         numberOfPlates,
         dateMade,
-        location,
+        location.value,
         true, 
         transferDate
       )

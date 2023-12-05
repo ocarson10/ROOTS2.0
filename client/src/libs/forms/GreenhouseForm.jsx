@@ -118,7 +118,9 @@ function GreenhouseForm(props) {
     e.preventDefault();
     if(props.operation === "add") {
       await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location.value, true, transferDate).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(greenHouseId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {

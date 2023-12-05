@@ -108,7 +108,9 @@ function FieldstationForm(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addFieldstation(fieldStationId, geneticId.value, datePlanted, location.value, true).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(fieldStationId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {

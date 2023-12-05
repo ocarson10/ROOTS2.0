@@ -117,7 +117,9 @@ function AcclimationForm(props) {
     e.preventDefault();
     if(props.operation === "add") {
       await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true, transferDate).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(acclimationId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {

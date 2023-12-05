@@ -137,7 +137,9 @@ function Maintenance(props) {
         true
       )
         .then(() => {
-          props.handleFilesSubmit(maintenanceId);
+          if (props.prop !== "Yes"){
+            props.handleFilesSubmit(maintenanceId);
+          }
           clear();
           navigate('/');
         })

@@ -113,7 +113,9 @@ function ColdTreatment(props) {
     e.preventDefault();
     if (props.operation === "add") {
       await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, transferDate).then(() => {
+        if (props.prop !== "Yes"){
         props.handleFilesSubmit(coldTreatmentId);
+        }
         clear();
         navigate("/");
       }).catch((error) => {
