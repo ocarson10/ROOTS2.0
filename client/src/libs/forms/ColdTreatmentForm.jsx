@@ -10,8 +10,6 @@ import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getMaturation } from "../services/api-client/maturationService";
 import { getLocations } from "../services/api-client/locationService";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload"
 
 function ColdTreatment(props) {
   const [coldTreatmentId, setColdTreatmentId] = useState("");
