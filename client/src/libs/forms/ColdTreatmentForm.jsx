@@ -10,8 +10,6 @@ import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getMaturation } from "../services/api-client/maturationService";
 import { getLocations } from "../services/api-client/locationService";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload"
 
 function ColdTreatment(props) {
   const [coldTreatmentId, setColdTreatmentId] = useState("");
@@ -238,8 +236,6 @@ function ColdTreatment(props) {
             value={location ? location : ""}
           />
       </div>
-      <ImageUpload />
-      <FileUpload />
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
