@@ -17,21 +17,25 @@ import {
   getIdsByPopulationAndFamilyAndRametAndGenetic,
 } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
+import PopulationForm from "./PopulationForm";
+import GeneticIdForm from "./GeneticIdForm";
+import { getLocations } from "../services/api-client/locationService";
+import { getMotherTrees } from "../services/api-client/motherTreeService";
+import { getTrees } from "../services/api-client/treeService";
+
 function ConeMaterial(props) {
   const [coneId, setConeId] = useState("");
-  const [motherTreeId, setMotherTreeId] = useState("");
-  const [fatherTreeId, setFatherTreeId] = useState("");
+  const [motherTreeIdOptions, setMotherTreeIdOptions] = useState([]);
+  const [fatherTreeIdOptions, setFatherTreeIdOptions] = useState([]);
+  const [motherTreeId, setMotherTreeId] = useState({value:"", label:""});
+  const [fatherTreeId, setFatherTreeId] = useState({value:"", label:""});
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [familyId, setFamilyId] = useState({ value: "", label: "" });
   const [rametId, setRametId] = useState({ value: "", label: "" });
   const [progenyId, setProgenyId] = useState({ value: "", label: "" });
   const [population, setPopulation] = useState({ value: "", label: "" });
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [dateHarvested, setDateHarvested] = useState("");
-
   const [error, setError] = useState("");
   const [popOptions, setPopOptions] = useState([]);
   const [famOptions, setFamOptions] = useState([]);
@@ -40,14 +44,52 @@ function ConeMaterial(props) {
   const [proOptions, setProOptions] = useState([]);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [isPopulationFormOpen, setPopulationFormOpen] = useState(false);
+  const [isGeneticIdFormOpen, setGeneticIdFormOpen] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
+  
+  const handleOpenPopulationForm = () => {
+    setPopulationFormOpen(true);
+  };
+
+  const handleClosePopulationForm = () => {
+    setPopulationFormOpen(false);
+  };
+
+  const addPopulationOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setPopOptions([...popOptions, newValue]);
+    setGeneticIdFormOpen(true);
+  };
+
+  const newPopulationButtonOption = { label: "Add new population", value: "add" };
+
+  const handleCloseGenIdForm = () => {
+    setGeneticIdFormOpen(false);
+  };
+
+  const addGenIdOption = (newOption) => {
+    // Update the options with the newly added value
+    let newValue = {value: newOption, label: newOption}
+    setGenOptions([...genOptions, newValue]);
+  };
+
   useEffect(() => {
-    if (props.operation === "Edit") {
+    getExistingLocations();
+  }, []);
+
+
+  useEffect(() => {
+    if (props.operation === "edit") {
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+      // const id = window.location.href.split("/")[5];
+      // console.log("id: " + id);
 
-      getCone(id).then((cone) => {
+      //get cone from id
+      console.log("cone id", props.coneId);
+      getCone(props.coneId).then((cone) => {
       console.log("cone found")
 
         console.log(cone.data.id);
@@ -76,23 +118,24 @@ function ConeMaterial(props) {
     }
   }, [props.operation]);
 
-  const handleSubmit = (e) => {
-    if (props.operation === "Add") {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (props.operation === "add") {
       addCone(
         coneId,
-        motherTreeId,
-        fatherTreeId,
+        motherTreeId.value,
+        fatherTreeId.value,
         rametId.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
         population.value,
         dateHarvested,
-        location,
+        location.value,
         true
       )
         .then(() => {
+          props.handleFilesSubmit(coneId);
           clearForm();
           navigate('/');
         })
@@ -100,23 +143,24 @@ function ConeMaterial(props) {
           console.log(error);
           setError(error.response.data.message);
         });
+
     }
-    else if(props.operation === "Edit") {
-      e.preventDefault();
+    else if(props.operation === "edit") {
       editCone(
         coneId,
-        motherTreeId,
-        fatherTreeId,
+        motherTreeId.value,
+        fatherTreeId.value,
         rametId.value,
         geneticId.value,
         familyId.value,
         progenyId.value,
         population.value,
         dateHarvested,
-        location,
+        location.value,
         true
       )
         .then(() => {
+          props.handleFilesSubmit(coneId);
           clearForm();
           navigate('/');
         })
@@ -124,29 +168,56 @@ function ConeMaterial(props) {
           console.log(error);
           setError(error.response.data.message);
         });
+
     }
   };
 
   const clearForm = () => {
-    if(props.operation === "Add") {
+    if(props.operation === "add") {
       setConeId("");
     }
     
-    setMotherTreeId("");
-    setFatherTreeId("");
+    setMotherTreeId({value:"", label:""});
+    setFatherTreeId({value:"", label:""});
     setGeneticId({ value: "", label: "" });
     setFamilyId({ value: "", label: "" });
     setProgenyId({ value: "", label: "" });
     setPopulation({ value: "", label: "" });
     setRametId({ value: "", label: "" });
     setDateHarvested("");
-    setLocation("");
+    setLocation({ value: "", label: "" });
     setPopOptions([]);
     setFamOptions([]);
     setRametOptions([]);
     setGenOptions([]);
     setProOptions([]);
     getPopulationsOptions();
+  };
+
+  // function to get the mother tree options
+  const getMotherTreeOptions = async () => {
+    getTrees().then((motherTrees) => {
+      const options = motherTrees.data.map((motherTree) => {
+        return {
+          value: motherTree.treeId,
+          label: motherTree.treeId,
+        };
+      });
+      setMotherTreeIdOptions(options);
+    });
+  };
+
+  // function to get the father tree options
+  const getFatherTreeOptions = async () => {
+    getTrees().then((fatherTrees) => {
+      const options = fatherTrees.data.map((fatherTree) => {
+        return {
+          value: fatherTree.treeId,
+          label: fatherTree.treeId,
+        };
+      });
+      setFatherTreeIdOptions(options);
+    });
   };
 
   // function to get the population options
@@ -165,22 +236,28 @@ function ConeMaterial(props) {
   // On load, get the population options.
   useEffect(() => {
     getPopulationsOptions();
+    getMotherTreeOptions();
+    getFatherTreeOptions();
   }, []);
 
   // When changing the population, get the family options
   const handlePopulationChange = async (e) => {
-    setError("");
-    setPopulation({ value: e.value, label: e.value });
-
-    await getIdsByPopulation(e.value).then((ids) => {
-      const options = ids.data.map((id) => {
-        return {
-          value: id.familyId,
-          label: id.familyId,
-        };
+    if (e.value === "add") {
+      handleOpenPopulationForm();
+    }
+    else {
+      setError("");
+      setPopulation({ value: e.value, label: e.value });
+      await getIdsByPopulation(e.value).then((ids) => {
+        const options = ids.data.map((id) => {
+          return {
+            value: id.familyId,
+            label: id.familyId,
+          };
+        });
+        setFamOptions(options);
       });
-      setFamOptions(options);
-    });
+    }
   };
 
   // When changing the family, get the ramet options
@@ -247,9 +324,30 @@ function ConeMaterial(props) {
     setProgenyId({ value: e.value, label: e.value });
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
   return (
     <div className="form-div">
-      <h1>Add Cone Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Cone</h1> :
+        <h1>Edit Cone</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">Cone ID:</label>
@@ -263,19 +361,19 @@ function ConeMaterial(props) {
 
       <div className="input-div">
         <label className="entry-label">Mother Tree ID:</label>
-        <input
-          type="text"
-          value={motherTreeId}
-          onChange={(e) => setMotherTreeId(e.target.value)}
+        <Select
+          options={motherTreeIdOptions}
+          onChange={(e) => setMotherTreeId({value:e.value,label: e.value})}
+          value={motherTreeId ? motherTreeId : ""}
         />
       </div>
 
       <div className="input-div">
         <label className="entry-label">Father Tree ID:</label>
-        <input
-          type="text"
-          value={fatherTreeId}
-          onChange={(e) => setFatherTreeId(e.target.value)}
+        <Select
+          options={fatherTreeIdOptions}
+          onChange={(e) => setFatherTreeId({value:e.value,label: e.value})}
+          value={fatherTreeId ? fatherTreeId : ""}
         />
       </div>
 
@@ -285,10 +383,26 @@ function ConeMaterial(props) {
           Population ID:
         </label>
         <Select
-          options={popOptions}
+          options={[newPopulationButtonOption, ...popOptions]}
           onChange={handlePopulationChange}
           value={population ? population : ""}
         />
+        {isPopulationFormOpen &&
+          <PopulationForm 
+            isOpen={isPopulationFormOpen}
+            onClose={handleClosePopulationForm}
+            addPopOption={addPopulationOption}
+            operation={"add"}
+          />
+        }
+        {isGeneticIdFormOpen && 
+          <GeneticIdForm
+            isOpen={isGeneticIdFormOpen}
+            onClose={handleCloseGenIdForm}
+            addGenIdOption={addGenIdOption}
+            operation={"add"}
+          />
+        }
       </div>
 
       <div className="input-div">
@@ -352,14 +466,12 @@ function ConeMaterial(props) {
         <label className="entry-label">
           <LocationHover /> Location:
         </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

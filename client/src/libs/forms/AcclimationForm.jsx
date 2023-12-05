@@ -3,29 +3,42 @@ import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
 import GeneticHover from "../hover-info/GeneticHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { getGermination } from "../services/api-client/germinationService";
 import { addAcclimation, getAcclimation, updateAcclimation } from "../services/api-client/acclimationService";
+import { getLocations } from "../services/api-client/locationService";
 
 function AcclimationForm(props) {
   const [acclimationId, setAcclimationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateAcclimation, setDateAcclimation] = useState("");
-  const [location, setLocation] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [locationOptions, setLocationOptions] = useState([]);
 
   useEffect(() => {
-    if (props.operation === "Edit") {
-      setChangeId(false);
-      const id = window.location.href.split("/")[5];
+    getExistingLocations();
+  }, []);
 
-      getAcclimation(id).then((response) => {
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
+  useEffect(() => {
+    if (props.operation === "edit") {
+      setChangeId(false);
+     // const id = window.location.href.split("/")[5];
+
+      getAcclimation(props.acclimationId).then((response) => {
         getId(response.data.acclimationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +
@@ -42,6 +55,7 @@ function AcclimationForm(props) {
         });
         setAcclimationId(response.data.acclimationId);
         setDateAcclimation(response.data.dateAcclimation.substring(0, 10));
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -101,29 +115,32 @@ function AcclimationForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(props.operation === "Add") {
-      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
+    if(props.operation === "add") {
+      await addAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if(props.operation === "Edit") {
-      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location, true).then(() => {
+    } else if(props.operation === "edit") {
+      await updateAcclimation(acclimationId, geneticId.value, dateAcclimation, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(acclimationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 
   const clear = () => {
     setAcclimationId('');
     setDateAcclimation('');
-    setLocation('');
+    setLocation({ value: "", label: "" });
     setGeneticId({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
@@ -144,6 +161,7 @@ function AcclimationForm(props) {
         };
       });
       setGenOptions(options);
+      setTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
@@ -155,9 +173,25 @@ function AcclimationForm(props) {
     setError("");
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
   return (
     <div className="form-div">
-        <h1>Add Acclimation Material</h1>
+        {props.operation === 'add' ?
+        <h1>Add Acclimation</h1> :
+        <h1>Edit Acclimation</h1>
+      }
 
         <div className="input-div">
           <label className="entry-label"><GenericHover text="The ID of the material in the Acclimation stage" />Acclimation ID:</label>
@@ -175,8 +209,8 @@ function AcclimationForm(props) {
         </div>
 
         <div className="input-div">
-          <label className="entry-label"><LocationHover /> Location:</label>
-          <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
+          <label className="entry-label"><GenericHover text="The date the material is expected to be transferred" /> Transfer Date:</label>
+          <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
         </div>
 
         <div className="button-div">

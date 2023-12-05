@@ -9,6 +9,9 @@ const Species = sequelize.define("species", {
   },
   shorthand: {
     type: DataTypes.STRING
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
   }
 }, {timestamps: false})
 

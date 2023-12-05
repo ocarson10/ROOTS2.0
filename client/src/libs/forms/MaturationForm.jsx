@@ -3,34 +3,39 @@ import "../../libs/style/MaturationForm.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addMaturation, getMaturation, updateMaturation } from "../services/api-client/maturationService";
 import { useNavigate } from "react-router-dom";
 import { getMaintenance } from "../services/api-client/maintenanceService";
 import { getId, getIds } from "../services/api-client/idService";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
-function Maturation(props) {
+import { getLocations } from "../services/api-client/locationService";
 
+function Maturation(props) {
   const [maturationId, setMaturationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [mediaBatch, setMediaBatch] = useState("");
   const [dateMatured, setDateMatured] = useState("");
-  const [location, setLocation] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
+  const [locationOptions, setLocationOptions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
-      setChangeId(false);
-      const id = window.location.href.split("/")[5];
+    getExistingLocations();
+  }, []);
 
-      getMaturation(id).then((response) => {
+  useEffect(() => {
+    if (props.operation === "edit") {
+      setChangeId(false);
+      //const id = window.location.href.split("/")[5];
+
+      getMaturation(props.maturationId).then((response) => {
         getId(response.data.maturationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +
@@ -49,6 +54,7 @@ function Maturation(props) {
         setNumberOfPlates(response.data.numberOfPlates);
         setMediaBatch(response.data.mediaBatch);
         setDateMatured(response.data.dateMatured);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -112,22 +118,26 @@ function Maturation(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
-      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location, true).then(() => {
+    if (props.operation === "add") {
+      await addMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
-      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location, true).then(() => {
+
+    } else if (props.operation === "edit") {
+      await updateMaturation(maturationId, geneticId.value, numberOfPlates, mediaBatch, dateMatured, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(maturationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   };
 
@@ -136,7 +146,7 @@ function Maturation(props) {
     setNumberOfPlates("");
     setMediaBatch("");
     setDateMatured("");
-    setLocation("");
+    setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds()
       .then((response) => {
@@ -158,6 +168,7 @@ function Maturation(props) {
           });
         });
         setGenOptions(options);
+        setTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -167,6 +178,24 @@ function Maturation(props) {
   const handleGenChange = (e) => {
     setGeneticId({ value: e.value, label: e.label });
     setError("");
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
   };
 
   return (
@@ -199,11 +228,21 @@ function Maturation(props) {
       </div>
 
       <div className="input-div">
-        <label className="entry-label"><LocationHover text="Location of Maintenance" /> Location:</label>
-        <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
+        <label className="entry-label"><GenericHover text="Material Transfer Date" />Transfer Date</label>
+        <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
+
+      <div className="input-div">
+        <label className="entry-label">
+          <LocationHover text="Location of Maintenance" /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+      </div>
+
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

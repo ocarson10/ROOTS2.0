@@ -3,14 +3,20 @@ import "../../libs/style/Initiation.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import { addInitiation, getInitiation, editInitiation } from "../services/api-client/initiationService";
 import Select from "react-select";
 import { getIds, getId } from "../services/api-client/idService";
 import { getSeed } from "../services/api-client/seedService";
 import { useNavigate } from "react-router-dom";
+import Slideshow from "./Slideshow";
+import FileList from "./FileList";
 import ImageUpload from "./ImageUpload";
+import { addPhoto, getPhotos } from "../services/api-client/photoService";
+import { addFile, getFiles } from "../services/api-client/fileService";
 import FileUpload from "./FileUpload";
 import "../../libs/style/ImageUpload.css";
+
 function Initiation(props) {
   const [initiationId, setInitiationId] = useState("");
   const [seedId, setSeedId] = useState("");
@@ -18,6 +24,7 @@ function Initiation(props) {
   const [mediaBatch, setMediaBatch] = useState("");
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [dateMade, setDateMade] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -26,20 +33,22 @@ function Initiation(props) {
   const [changeGen, setChangeGen] = useState(true);
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
 
-      const id = window.location.href.split("/")[5];
-      console.log("id: " + id);
+      //const id = window.location.href.split("/")[5];
+      //console.log("id: " + id);
 
-      getInitiation(id)
+      getInitiation(props.initiationId)
         .then((response) => {
           setInitiationId(response.data.initiationId);
           setSeedsAndEmbryos(response.data.seedsAndEmbryos);
           setMediaBatch(response.data.mediaBatch);
           setNumberOfPlates(response.data.numberOfPlates);
           setDateMade(response.data.dateMade);
+          setTransferDate(response.data.transferDate);
           setLocation(response.data.locationId);
           getId(response.data.initiationGeneticId).then((id) => {
             setGeneticId({
@@ -61,7 +70,7 @@ function Initiation(props) {
         });
     }
     else if (props.prop === "Yes") {
-      const id = window.location.href.split("/")[5];
+     const id = window.location.href.split("/")[5];
       getSeed(id).then((response) => {
         getId(response.data.seedGeneticId).then((id) => {
           console.log(id.data);
@@ -112,29 +121,9 @@ function Initiation(props) {
       });
   }, [props.operation, props]);
 
-  // useEffect(() => {
-  //   getId(seedId).then((id) => {
-  //     console.log(id);
-  //     setGeneticId({
-  //       value: id.id, label: "P" +
-  //         id.populationId +
-  //         "_" +
-  //         id.familyId +
-  //         "_" +
-  //         (id.rametId ? id.rametId : "NA") +
-  //         "_" +
-  //         id.geneticId +
-  //         "_" +
-  //         id.progenyId,
-  //     });
-  //   }).catch((error) => {
-  //     setError(error);
-  // });
-  // }, [seedId]);
-
   const handleSubmit = async (e) => {
-    if (props.operation === "Add") {
-      e.preventDefault();
+    e.preventDefault();
+    if (props.operation === "add") {
       await addInitiation(
         initiationId,
         geneticId.value,
@@ -143,9 +132,11 @@ function Initiation(props) {
         numberOfPlates,
         dateMade,
         location,
-        true
+        true, 
+        transferDate
       )
         .then(() => {
+          props.handleFilesSubmit(initiationId);
           clear();
           navigate("/");
         })
@@ -154,8 +145,7 @@ function Initiation(props) {
           setError("An error occured: " + error);
         });
     }
-    else if (props.operation === "Edit") {
-      e.preventDefault();
+    else if (props.operation === "edit") {
       await editInitiation(
         initiationId,
         geneticId.value,
@@ -164,9 +154,11 @@ function Initiation(props) {
         numberOfPlates,
         dateMade,
         location,
-        true
+        true, 
+        transferDate
       )
         .then(() => {
+          props.handleFilesSubmit(initiationId);
           clear();
           navigate("/");
         })
@@ -175,8 +167,6 @@ function Initiation(props) {
           setError("An error occured: " + error);
         });
     }
-
-
   };
 
   const clear = () => {
@@ -208,6 +198,7 @@ function Initiation(props) {
           });
         });
         setGenOptions(options);
+        setTransferDate(null);
       })
       .catch((error) => {
         setError(error);
@@ -221,7 +212,10 @@ function Initiation(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Initiation Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Initiation</h1> :
+        <h1>Edit Initiation</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label">
@@ -313,6 +307,21 @@ function Initiation(props) {
 
       <div className="input-div">
         <label className="entry-label">
+          <GenericHover text="The Transfer Date" />
+          Transfer Date:
+        </label>
+        <input
+          type="date"
+          value={transferDate}
+          onChange={(e) => {
+            setTransferDate(e.target.value);
+            setError("");
+          }}
+        />
+      </div>
+
+      <div className="input-div">
+        <label className="entry-label">
           <LocationHover text="Location of Initiation" /> Location:
         </label>
         <input
@@ -324,8 +333,6 @@ function Initiation(props) {
           }}
         />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

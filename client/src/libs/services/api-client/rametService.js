@@ -10,7 +10,7 @@ export async function getRamets() {
 
 // Add a ramet to the database given a mother tree id, the progeny id, the genetic id, the location, the gps
 // coordinates, and whether or not it's active
-export async function addRamet(id, motherTreeId, geneticId, familyId, progenyId, populationId, rametId, location, gps) {
+export async function addRamet(id, motherTreeId, geneticId, familyId, progenyId, populationId, rametId, location, gps, transferDate) {
   const response =  await getSingleId(geneticId, familyId, progenyId, populationId, rametId);
   await addLogs("Added ramet with id: " + id);
   return await instance.post("ramets", {
@@ -19,19 +19,33 @@ export async function addRamet(id, motherTreeId, geneticId, familyId, progenyId,
     locationId: location,
     rametGeneticId: response.data.id,
     gps: gps,
+    transferDate: transferDate,
     active: true
   });
 }
 
 // Update a ramet via a put request
-export async function updateRamet(id, motherTreeId, progenyId, geneticId, location, gps, active) {
+export async function updateRamet(
+  id, 
+  motherTreeId, 
+  progenyId, 
+  geneticId,
+  familyId,
+  rametId,
+  population,
+  location, 
+  gps,
+  transferDate,
+  active
+  ) {
+  const response = await getSingleId(geneticId, familyId, progenyId, population, rametId);
   await addLogs("Updated ramet with id: " + id);
-  return await instance.put(`ramets/${id}`, {
+  return await instance.put("ramets/edit/" + id, {
     motherTreeId: motherTreeId,
-    location: location,
-    progenyId: progenyId,
-    geneticId: geneticId,
+    locationId: location,
+    rametGeneticId: response.data.id,
     gps: gps,
+    transferDate: transferDate,
     active: active
   });
 }

@@ -1,28 +1,17 @@
 module.exports = (app) => {
     const Photo = require('../models/photo.model');
-    const GeneticId = require('../models/genetic-id.model');
     let router = require('express').Router();
-    const db = require('../database/database');
-    const util = require('util');
-    const multer = require('multer');
-    const upload = multer({ dest: 'uploads/' }); // Configure multer to save files in the "uploads" directory
-
-    async function ensureGeneticIdExists(geneticId) {
-      const innerRes = await GeneticId.findOne({ where: { geneticId } });
-      if (innerRes) {
-        return true;
-      }
-      return false;
-    }
+    let utils = require('./utils');
 
     // Retrieve all photos associated with material
-    router.get('/:geneticId', async (req, res) => {
-      const geneticId = req.params.geneticId;
-      const genExist = await ensureGeneticIdExists(geneticId);
-      if (genExist) {
+    router.get('/:associatedId', async (req, res) => {
+      const materialId = req.params.associatedId;
+      console.log("material ID", materialId);
+     const materialExists = await utils.ensureMaterialIdExists(materialId);
+      if (materialExists) {
         Photo.findAll({ 
           where: { 
-            associatedMaterial: geneticId
+            associatedMaterial: materialId
           }
         }).then((innerRes) => {
           if(innerRes) {
@@ -37,23 +26,20 @@ module.exports = (app) => {
           res.send(500);
         });
       } else {
-        console.log("GeneticId: " + geneticId + " not found");
+        console.log(" Id: " + materialId + " not found");
         res.sendStatus(404);
       }
     });
     
-
     // Add photo to material
     router.post('/', async (req, res) => {
       try {
-        const { geneticId, photoData } = req.body;
-    
-        if (!geneticId || !photoData) {
-          return res.status(400).json({ error: 'Missing geneticId or photoData' });
-        }
+        const { materialId, photoData } = req.body;
+        if (!materialId || !photoData )
+          return res.status(400).json({ error: 'Missing materialId or photoData' });
     
         const photo = await Photo.create({
-          associatedMaterial: geneticId,
+          associatedMaterial: materialId,
           photoData,
         });
     

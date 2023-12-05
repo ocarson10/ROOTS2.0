@@ -23,11 +23,11 @@ function FieldstationForm(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getFieldstation(id).then((response) => {
+      getFieldstation(props.fieldStationId).then((response) => {
         getId(response.data.fieldStationGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +
@@ -99,22 +99,26 @@ function FieldstationForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
+    if (props.operation === "add") {
       await addFieldstation(fieldStationId, geneticId.value, datePlanted, location, true).then(() => {
+        props.handleFilesSubmit(fieldStationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
+
+    } else if (props.operation === "edit") {
       await updateFieldstation(fieldStationId, geneticId.value, datePlanted, location, true).then(() => {
+        props.handleFilesSubmit(fieldStationId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
 
   }
@@ -157,7 +161,10 @@ function FieldstationForm(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Field Station Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Field Station</h1> :
+        <h1>Edit Field Station</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The ID of the same material in the previous stage" />Field Station ID:</label>

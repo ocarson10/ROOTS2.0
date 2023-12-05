@@ -78,7 +78,7 @@ function ArchivedMaintenanceTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/maintenance" addLink="/add/maintenance" status={"archive"} material={"maintenance"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/maintenance/edit" addLink="/material/maintenance/add" status={"archive"} material={"maintenance"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

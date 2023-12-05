@@ -3,32 +3,40 @@ import "../../libs/style/ColdTreatmentForm.css";
 import GeneticHover from "../hover-info/GeneticHover";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addColdTreatment, getColdTreatment, updateColdTreatment } from "../services/api-client/coldTreatmentService";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getMaturation } from "../services/api-client/maturationService";
+import { getLocations } from "../services/api-client/locationService";
 import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
+import FileUpload from "./FileUpload"
+
 function ColdTreatment(props) {
   const [coldTreatmentId, setColdTreatmentId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [numberEmbryos, setNumberEmbryos] = useState("");
   const [dateCold, setDateCold] = useState("");
   const [duration, setDuration] = useState("");
-  const [location, setLocation] = useState("");
+  const [transferDate, setTransferDate] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [locationOptions, setLocationOptions] = useState([]);
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    getExistingLocations();
+  }, []);
+
+  useEffect(() => {
+    if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
-      getColdTreatment(id).then((response) => {
+      //const id = window.location.href.split("/")[5];
+      getColdTreatment(props.coldTreatmentId).then((response) => {
         getId(response.data.coldTreatmentGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +
@@ -47,6 +55,7 @@ function ColdTreatment(props) {
         setNumberEmbryos(response.data.numberEmbryos);
         setDateCold(response.data.dateCold.substring(0, 10));
         setDuration(response.data.duration);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -104,22 +113,26 @@ function ColdTreatment(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (props.operation === "Add") {
-      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+    if (props.operation === "add") {
+      await addColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
-      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location, true).then(() => {
+
+    } else if (props.operation === "edit") {
+      await updateColdTreatment(coldTreatmentId, geneticId.value, numberEmbryos, dateCold, duration, location.value, true, transferDate).then(() => {
+        props.handleFilesSubmit(coldTreatmentId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 
@@ -128,7 +141,7 @@ function ColdTreatment(props) {
     setNumberEmbryos("");
     setDateCold("");
     setDuration("");
-    setLocation("");
+    setLocation({ value: "", label: "" });
     setGenOptions([]);
     getIds().then((response) => {
       const options = response.data.map((id) => {
@@ -148,10 +161,29 @@ function ColdTreatment(props) {
         };
       });
       setGenOptions(options);
+      setTransferDate(null);
     }).catch((error) => {
       console.log(error);
       setError("An error occured: " + error);
     });
+  }
+
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
   }
 
   const handleGenChange = (e) => {
@@ -161,7 +193,10 @@ function ColdTreatment(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Cold Treatment Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Cold Treatment</h1> :
+        <h1>Edit Cold Treatment</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The ID of the material in the Cold Treatment Stage" />Cold Treatment ID:</label>
@@ -189,11 +224,22 @@ function ColdTreatment(props) {
       </div>
 
       <div className="input-div">
-        <label className="entry-label"><LocationHover text="Location of Maintenance" /> Location:</label>
-        <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
+        <label className="entry-label"><GenericHover text="The Transfer Date For Materials" />Transfer Date:</label>
+        <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
       </div>
-      <ImageUpload/>
-      <FileUpload/>
+
+      <div className="input-div">
+        <label className="entry-label">
+          <LocationHover text="Location of Maintenance" /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+      </div>
+      <ImageUpload />
+      <FileUpload />
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

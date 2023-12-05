@@ -67,7 +67,7 @@ function ArchivedGreenhouseTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/greenhouse" addLink="/add/greenhouse" status={"archive"} material={"greenhouse"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/greenhouse/edit" addLink="/material/greenhouse/add" status={"archive"} material={"greenhouse"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

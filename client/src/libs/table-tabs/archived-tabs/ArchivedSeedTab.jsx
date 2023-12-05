@@ -93,7 +93,7 @@ function ArchivedSeedTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/seed-material" addLink="/add/seed-material" status={"archive"} material={"seed"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/seed-material/edit" addLink="/material/seed-material/add" status={"archive"} material={"seed"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

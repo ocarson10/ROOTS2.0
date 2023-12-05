@@ -23,6 +23,7 @@ function InitiationTab(props) {
               mediaBatch: res.data[initiation].mediaBatch,
               numberOfPlates: res.data[initiation].numberOfPlates,
               dateMade: res.data[initiation].dateMade,
+              transferDate: res.data[initiation].transferDate,
               location: res.data[initiation].locationId,
               active: res.data[initiation].active
             };
@@ -58,6 +59,7 @@ function InitiationTab(props) {
     mediaBatch: row.mediaBatch,
     numberOfPlates: row.numberOfPlates,
     dateMade: row.dateMade.substring(0, 10),
+    transferDate: row.transferDate.substring(0, 10),
     location: row.location
   }));
 
@@ -69,6 +71,7 @@ function InitiationTab(props) {
     { field: "mediaBatch", headerName: "Media Batch", width: 150 },
     { field: "numberOfPlates", headerName: "Number of Plates", width: 150 },
     { field: "dateMade", headerName: "Date", width: 150 },
+    { field: "transferDate", headerName: "Transfer Date", width: 150 },
     { field: "location", headerName: "Location", width: 150 }
   ];
 
@@ -76,7 +79,7 @@ function InitiationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent propagateLink="/propagate/initiation" editLink= "/edit/initiation" addLink="/add/initiation" status={"active"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent propagateLink="/propagate/initiation" editLink= "/material/initiation/edit" addLink="/material/initiation/add" status={"active"} material={"initiation"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

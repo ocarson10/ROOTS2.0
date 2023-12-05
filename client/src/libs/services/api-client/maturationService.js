@@ -12,7 +12,7 @@ export async function getMaturation(id) {
 }
 
 // Update a material in the maturation table via a put request
-export async function updateMaturation(maturationId, geneticId, numberOfPlates, mediaBatch, dateMatured, location, active) {
+export async function updateMaturation(maturationId, geneticId, numberOfPlates, mediaBatch, dateMatured, location, active, expectedTransferDate) {
   await addLogs(`Updated maturation with id: ${maturationId}`);
   return await instance.put("maturations/update/" + maturationId, {
     maturationId: maturationId,
@@ -20,14 +20,16 @@ export async function updateMaturation(maturationId, geneticId, numberOfPlates, 
     numberOfPlates: numberOfPlates,
     mediaBatch: mediaBatch,
     dateMatured: dateMatured,
+    transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    transferDate: expectedTransferDate
   });
 }
 
 // Add a new material to the maturation table given a previous id, the number of plates, the media batch,
 // the date of maturation, the location, and whether or not it's active
-export async function addMaturation(maturationId, geneticId, numberOfPlates, mediaBatch, dateMatured, location, active) {
+export async function addMaturation(maturationId, geneticId, numberOfPlates, mediaBatch, dateMatured, location, active, expectedTransferDate) {
   await addLogs(`Added maturation with id: ${maturationId}`);
   return await instance.post("maturations", {
     maturationId: maturationId,
@@ -35,8 +37,10 @@ export async function addMaturation(maturationId, geneticId, numberOfPlates, med
     numberOfPlates: numberOfPlates,
     mediaBatch: mediaBatch,
     dateMatured: dateMatured,
+    transferDate: transferDate,
     locationId: location,
-    active: active
+    active: active, 
+    transferDate: expectedTransferDate
   });
 }
 

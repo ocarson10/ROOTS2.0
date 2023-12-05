@@ -40,15 +40,14 @@ module.exports = (app) => {
     const reqLocationId = req.body.locationId;
     const reqTransferDate = req.body.transferDate;
 
-
     db.sync().then(() => {
       Ramet.create({
         id: reqRametId,
         motherTreeId: reqMotherTreeId,
         rametGeneticId: reqRametGeneticId,
-        transferDate: reqTransferDate,
         gps: reqGPS,
         locationId: reqLocationId,
+        transferDate: reqTransferDate,
         active: true
       }).then((innerRes) => {
         res.sendStatus(200);
@@ -61,6 +60,46 @@ module.exports = (app) => {
 
   // updates a ramet as inactive/active
   router.put('/:id', async (req, res) => {
+    const reqRametId = req.params.id;
+    const ramet = await Ramet.findOne({ where: { id: reqRametId } });
+    if (ramet) {
+      ramet.update({ active: ramet.active? false : true });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
+  router.put('/edit/:id', async (req, res) => {
+    const reqRametId = req.params.id;
+    const reqMotherTreeId = req.body.motherTreeId;
+    const reqLocation = req.body.locationId;
+    const reqGeneticId = req.body.rametGeneticId;
+    const reqGps = req.body.gps;
+    const reqActive = req.body.active;
+    let reqTransferDate = req.body.transferDate;
+    
+
+    
+    const ramet = await Ramet.findOne({ where: { id: reqRametId } })
+    if (ramet) {
+      ramet.update({
+        motherTreeId: reqMotherTreeId,
+        locationId: reqLocation,
+        rametGeneticId: reqGeneticId,
+        gps: reqGps,
+        transferDate: reqTransferDate,
+        active: reqActive
+      });
+      await ramet.save();
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
+  // updates a ramet as inactive/active
+  router.delete('/:id', async (req, res) => {
     const reqRametId = req.params.id;
     
     Ramet.findOne({ where: { id: reqRametId } }).then((innerRes) => {
@@ -75,21 +114,6 @@ module.exports = (app) => {
       console.log("Error in updating ramet: ", error);
       res.send(400);
     });
-  });
-
-  // Deletes a ramet, for testing
-  router.delete('/:id', async (req, res) => {
-    const reqRametId = req.params.id;
-    Ramet.destroy({ where: { id: reqRametId } }).then((innerRes) => {
-      if(innerRes) {
-        res.sendStatus(200);
-      } else {
-        res.sendStatus(404);
-      }
-    }).catch((error) => {
-      console.log("Error in deleting ramet: ", error);
-      res.send(400);
-    })
   });
   
   app.use('/ramets', router);

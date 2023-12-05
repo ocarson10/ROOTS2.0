@@ -41,10 +41,10 @@ function ArchivedTreeTab(props) {
               .catch((error) => {
                 setError(error);
               });
-            // if(!obj.active) {
-            //   tempArray.push(obj);
-            // }
-            tempArray.push(obj);
+            if(!obj.active) {
+              tempArray.push(obj);
+            }
+            //tempArray.push(obj);
           }
           //console.log(tempArray);
           setData(tempArray);
@@ -109,7 +109,8 @@ function ArchivedTreeTab(props) {
     <div>
       {data ? (
         <TableComponent
-          addLink="/add/tree-material"
+          addLink="/material/trees/edit"
+          editLink="/material/trees/add"
           status={"archive"}
           material={"tree"}
           rows={rows}

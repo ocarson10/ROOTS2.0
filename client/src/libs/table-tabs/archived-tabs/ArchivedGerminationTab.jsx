@@ -74,7 +74,7 @@ function ArchivedGerminationTab(props) {
   return (
     <div>
       {data ? (
-        <TableComponent editLink= "/edit/germination" addLink="/add/germination" status={"archive"} material={"germination"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
+        <TableComponent editLink= "/material/germination/edit" addLink="/material/germination/add" status={"archive"} material={"germination"} rows={rows} columns={columns} loading={loading1} error={error} user={props.user}/>
       ) : (
         <p></p>
       )}

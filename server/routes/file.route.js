@@ -2,27 +2,19 @@ module.exports = (app) => {
     const File = require('../models/file.model');
     const GeneticId = require('../models/genetic-id.model');
     let router = require('express').Router();
-    const db = require('../database/database');
-    const util = require('util');
-    const multer = require('multer');
-    const upload = multer({ dest: 'uploads/' }); // Configure multer to save files in the "uploads" directory
-
-    async function ensureGeneticIdExists(geneticId) {
-      const innerRes = await GeneticId.findOne({ where: { id: geneticId } });
-      if (innerRes) {
-        return true;
-      }
-      return false;
-    }
-
+    const utils = require('./utils');
+   
     // Retrieve all file associated with material
-    router.get('/:geneticId', async (req, res) => {
-      const geneticId = req.params.geneticId;
-      const genExist = await ensureGeneticIdExists(geneticId);
-      if (genExist) {
+    router.get('/:associatedId', async (req, res) => {
+      const materialId = req.params.associatedId;
+      console.log("material ID", materialId);
+
+      //const materialType = req.params.materialType;
+     const materialExists = await utils.ensureMaterialIdExists(materialId);
+      if (materialExists) {
         File.findAll({ 
           where: { 
-            associatedMaterial: geneticId
+            associatedMaterial: materialId
           }
         }).then((innerRes) => {
           if(innerRes) {
@@ -37,7 +29,7 @@ module.exports = (app) => {
           res.send(500);
         });
       } else {
-        console.log("GeneticId: " + geneticId + " not found");
+       // console.log(materialType + " Id: " + materialId + " not found");
         res.sendStatus(404);
       }
     });
@@ -46,14 +38,17 @@ module.exports = (app) => {
     // Add file to material
     router.post('/', async (req, res) => {
       try {
-        const { geneticId, fileData, fileName } = req.body;
+        const { materialId, fileData, fileName } = req.body;
     
-        if (!geneticId || !fileData) {
-          return res.status(400).json({ error: 'Missing geneticId or fileData' });
-        }
+        if (!materialId || !fileData || !fileName)
+          return res.status(400).json({ error: 'Missing materialId, fileName, or fileData' });
+
+        // const materialExists = await utils.ensureMaterialIdExists(materialType, materialId);
+        // if(!materialExists)
+        //   return res.status(404).json({error: `${materialType} Id: ${materialId} doesn't exist.`});
     
         const file = await File.create({
-          associatedMaterial: geneticId,
+          associatedMaterial: materialId,
           fileData,
           fileName,
         });

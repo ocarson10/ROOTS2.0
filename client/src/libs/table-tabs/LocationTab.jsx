@@ -20,8 +20,12 @@ function LocationTab(props) {
             let obj = {
               location: res.data[location].location,
               shorthand: res.data[location].shorthand,
+              active: res.data[location].active
+
             }
-            tempArray.push(obj);
+            if(obj.active){
+              tempArray.push(obj);
+            }
           }
           setData(tempArray);
           setLoading(false);
@@ -55,7 +59,7 @@ function LocationTab(props) {
 
   return (
     <div>
-      {data ? <TableComponent editLink="/edit/location" addLink="/add/location" status={"active"} material={"location"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
+      {data ? <TableComponent editLink="/material/location/edit" addLink="/material/location/add" status={"active"} material={"location"} rows={rows} columns={columns} loading={loading} error={error} user={props.user}/> : <p></p>}
     </div>
   )
 }

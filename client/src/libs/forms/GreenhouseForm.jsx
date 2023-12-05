@@ -2,19 +2,19 @@ import React, {useState, useEffect} from "react";
 import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addGreenhouse, getGreenhouse, updateGreenhouse } from "../services/api-client/greenhouseService";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getAcclimation } from "../services/api-client/acclimationService";
 import GeneticHover from "../hover-info/GeneticHover";
-import ImageUpload from "./ImageUpload";
-import FileUpload from "./FileUpload";
-import "../../libs/style/ImageUpload.css";
+
 function GreenhouseForm(props) {
   const [greenHouseId, setGreenHouseId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateGreenhouse, setDateGreenhouse] = useState("");
+  const [transferDate, setTransferDate] = useState(null);
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
@@ -23,11 +23,11 @@ function GreenhouseForm(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (props.operation === "Edit") {
+    if (props.operation === "edit") {
       setChangeId(false);
-      const id = window.location.href.split("/")[5];
+      //const id = window.location.href.split("/")[5];
 
-      getGreenhouse(id).then((response) => {
+      getGreenhouse(props.greenHouseId).then((response) => {
         getId(response.data.greenhouseGeneticId).then((id) => {
           setGeneticId({
             value: id.data.id, label: "P" +
@@ -44,6 +44,7 @@ function GreenhouseForm(props) {
         });
         setGreenHouseId(response.data.greenhouseId);
         setDateGreenhouse(response.data.dateGreenhouse.substring(0, 10));
+        setTransferDate(response.data.transferDate.substring(0, 10));
         setLocation(response.data.locationId);
       }).catch((error) => {
         console.log(error);
@@ -69,6 +70,7 @@ function GreenhouseForm(props) {
         });
         setGreenHouseId(response.data.greenhouseId);
         setDateGreenhouse(response.data.dateGreenhouse);
+        setTransferDate(response.data.transferDate);
         setLocation(response.data.location);
       }).catch((error) => {
         console.log(error);
@@ -102,22 +104,26 @@ function GreenhouseForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(props.operation === "Add") {
-      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+    if(props.operation === "add") {
+      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, transferDate).then(() => {
+        props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
-    } else if (props.operation === "Edit") {
-      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true).then(() => {
+
+    } else if (props.operation === "edit") {
+      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, transferDate).then(() => {
+        props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
       }).catch((error) => {
         console.log(error);
         setError("An error occured: " + error);
       });
+
     }
   }
 
@@ -128,6 +134,7 @@ function GreenhouseForm(props) {
     setLocation("");
     setError("");
     setGenOptions([]);
+    setTransferDate(null);
     getIds().then((response) => {
       const options = response.data.map((id) => {
         return {
@@ -160,7 +167,10 @@ function GreenhouseForm(props) {
 
   return (
     <div className="form-div">
-      <h1>Add Greenhouse Material</h1>
+      {props.operation === 'add' ?
+        <h1>Add Greenhouse</h1> :
+        <h1>Edit Greenhouse</h1>
+      }
 
       <div className="input-div">
         <label className="entry-label"><GenericHover text="The ID of the material in the Greenhouse stage"/>Greenhouse ID:</label>
@@ -178,11 +188,14 @@ function GreenhouseForm(props) {
       </div>
 
       <div className="input-div">
+        <label className="entry-label"><GenericHover text="The date the material should be transferred"/>Transfer Date:</label>
+        <input type="date" value={transferDate} onChange={(e) => {setTransferDate(e.target.value); setError("")}} />
+      </div>
+
+      <div className="input-div">
         <label className="entry-label"><LocationHover /> Location:</label>
         <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("")}} />
       </div>      
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
