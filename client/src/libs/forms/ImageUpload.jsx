@@ -36,7 +36,7 @@ function ImageUpload(props) {
           // write your building UI
           <div className="upload__image-wrapper">
             <h1>Photo Upload</h1>
-            <div class = "button-div"> 
+            <div className="button-div"> 
               <button
               style={isDragging ? { color: 'red' } : undefined}
               onClick={onImageUpload}
