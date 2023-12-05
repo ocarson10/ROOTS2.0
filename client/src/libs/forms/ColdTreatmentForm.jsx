@@ -238,8 +238,6 @@ function ColdTreatment(props) {
             value={location ? location : ""}
           />
       </div>
-      <ImageUpload />
-      <FileUpload />
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
