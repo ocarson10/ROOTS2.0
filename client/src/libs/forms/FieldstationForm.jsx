@@ -8,18 +8,27 @@ import Select from "react-select";
 import GeneticHover from "../hover-info/GeneticHover";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
+import { getLocations } from "../services/api-client/locationService";
 
 function FieldstationForm(props) {
   const [fieldStationId, setFieldStationId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [datePlanted, setDatePlanted] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [locationOptions, setLocationOptions] = useState([]);
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
 
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
   useEffect(() => {
     if (props.operation === "edit") {
       setChangeId(false);
@@ -98,7 +107,7 @@ function FieldstationForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (props.operation === "add") {
-      await addFieldstation(fieldStationId, geneticId.value, datePlanted, location, true).then(() => {
+      await addFieldstation(fieldStationId, geneticId.value, datePlanted, location.value, true).then(() => {
         props.handleFilesSubmit(fieldStationId);
         clear();
         navigate("/");
@@ -108,7 +117,7 @@ function FieldstationForm(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateFieldstation(fieldStationId, geneticId.value, datePlanted, location, true).then(() => {
+      await updateFieldstation(fieldStationId, geneticId.value, datePlanted, location.value, true).then(() => {
         props.handleFilesSubmit(fieldStationId);
         clear();
         navigate("/");
@@ -156,7 +165,18 @@ function FieldstationForm(props) {
     setGeneticId({ value: e.value, label: e.label });
     setError("");
   };
-
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
   return (
     <div className="form-div">
       {props.operation === 'add' ?
@@ -180,9 +200,15 @@ function FieldstationForm(props) {
       </div>
 
       <div className="input-div">
-        <label className="entry-label"><LocationHover /> Location:</label>
-        <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("") }} />
-      </div>
+          <label className="entry-label">
+            <LocationHover /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+        </div>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

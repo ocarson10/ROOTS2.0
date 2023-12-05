@@ -2,24 +2,37 @@ import React, {useState, useEffect} from "react";
 import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
+import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addGreenhouse, getGreenhouse, updateGreenhouse } from "../services/api-client/greenhouseService";
 import { getId, getIds } from "../services/api-client/idService";
 import { useNavigate } from "react-router-dom";
 import { getAcclimation } from "../services/api-client/acclimationService";
 import GeneticHover from "../hover-info/GeneticHover";
+import { getLocations } from "../services/api-client/locationService";
+
 
 function GreenhouseForm(props) {
   const [greenHouseId, setGreenHouseId] = useState("");
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [dateGreenhouse, setDateGreenhouse] = useState("");
   const [transferDate, setTransferDate] = useState(null);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [changeGen, setChangeGen] = useState(true);
   const [changeId, setChangeId] = useState(true);
   const navigate = useNavigate();
+  const [locationOptions, setLocationOptions] = useState([]);
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
+
 
   useEffect(() => {
     if (props.operation === "edit") {
@@ -104,7 +117,7 @@ function GreenhouseForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(props.operation === "add") {
-      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, transferDate).then(() => {
+      await addGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
@@ -114,7 +127,7 @@ function GreenhouseForm(props) {
       });
 
     } else if (props.operation === "edit") {
-      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location, true, transferDate).then(() => {
+      await updateGreenhouse(greenHouseId, geneticId.value, dateGreenhouse, location.value, true, transferDate).then(() => {
         props.handleFilesSubmit(greenHouseId);
         clear();
         navigate("/");
@@ -164,6 +177,19 @@ function GreenhouseForm(props) {
     setError("");
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
   return (
     <div className="form-div">
       {props.operation === 'add' ?
@@ -192,9 +218,16 @@ function GreenhouseForm(props) {
       </div>
 
       <div className="input-div">
-        <label className="entry-label"><LocationHover /> Location:</label>
-        <input type="text" value={location} onChange={(e) => { setLocation(e.target.value); setError("")}} />
-      </div>      
+          <label className="entry-label">
+            <LocationHover /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+        </div>
+            
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

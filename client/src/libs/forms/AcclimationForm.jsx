@@ -213,6 +213,17 @@ function AcclimationForm(props) {
           <input type="date" value={transferDate} onChange={(e) => { setTransferDate(e.target.value); setError("") }} />
         </div>
 
+        <div className="input-div">
+          <label className="entry-label">
+            <LocationHover /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+        </div>
+        
         <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit

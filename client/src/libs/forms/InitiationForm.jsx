@@ -16,6 +16,8 @@ import { addPhoto, getPhotos } from "../services/api-client/photoService";
 import { addFile, getFiles } from "../services/api-client/fileService";
 import FileUpload from "./FileUpload";
 import "../../libs/style/ImageUpload.css";
+import { getLocations } from "../services/api-client/locationService";
+
 
 function Initiation(props) {
   const [initiationId, setInitiationId] = useState("");
@@ -25,13 +27,23 @@ function Initiation(props) {
   const [numberOfPlates, setNumberOfPlates] = useState("");
   const [dateMade, setDateMade] = useState("");
   const [transferDate, setTransferDate] = useState(null);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({ value: "", label: "" });
   const [error, setError] = useState("");
   const [genOptions, setGenOptions] = useState([]);
   const [geneticId, setGeneticId] = useState({ value: "", label: "" });
   const [changeId, setChangeId] = useState(true);
   const [changeGen, setChangeGen] = useState(true);
   const navigate = useNavigate();
+  const [locationOptions, setLocationOptions] = useState([]);
+
+  useEffect(() => {
+    getExistingLocations();
+  }, []);
+
+  const handleLocationChange = (e) => {
+    setError("");
+    setLocation({value: e.value, label: e.value});
+  }
 
 
   useEffect(() => {
@@ -210,6 +222,19 @@ function Initiation(props) {
     setError("");
   };
 
+  const getExistingLocations = async () => {
+    getLocations().then((locations) => {
+      const options = locations.data.map((loc) => {
+        return {
+          value: loc.location,
+          label: loc.location
+        };
+      });
+      setLocationOptions(options);
+      console.log(options);
+    });
+  };
+
   return (
     <div className="form-div">
       {props.operation === 'add' ?
@@ -321,18 +346,15 @@ function Initiation(props) {
       </div>
 
       <div className="input-div">
-        <label className="entry-label">
-          <LocationHover text="Location of Initiation" /> Location:
-        </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => {
-            setLocation(e.target.value);
-            setError("");
-          }}
-        />
-      </div>
+          <label className="entry-label">
+            <LocationHover /> Location:
+          </label>
+          <Select
+            options={locationOptions}
+            onChange={handleLocationChange}
+            value={location ? location : ""}
+          />
+        </div>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
