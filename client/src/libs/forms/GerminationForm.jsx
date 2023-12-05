@@ -246,8 +246,6 @@ function GerminationForm(props) {
             value={location ? location : ""}
           />
       </div>
-      <ImageUpload></ImageUpload>
-      <FileUpload></FileUpload>
       <div className="button-div">
         <button className="form-button" id="submit" onClick={handleSubmit}>
           Submit
