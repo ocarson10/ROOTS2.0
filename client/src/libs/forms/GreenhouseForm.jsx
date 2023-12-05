@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import "../../libs/style/GerminationMaterial.css";
 import LocationHover from "../hover-info/LocationHover";
 import GenericHover from "../hover-info/GenericHover";
-import ExpectedTransferDateHover from "../hover-info/ExpectedTransferDateHover";
 import Select from 'react-select';
 import { addGreenhouse, getGreenhouse, updateGreenhouse } from "../services/api-client/greenhouseService";
 import { getId, getIds } from "../services/api-client/idService";
