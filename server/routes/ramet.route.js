@@ -38,6 +38,7 @@ module.exports = (app) => {
     const reqMotherTreeId = req.body.motherTreeId;
     const reqRametGeneticId = req.body.rametGeneticId;
     const reqLocationId = req.body.locationId;
+    const reqTransferDate = req.body.transferDate;
 
     db.sync().then(() => {
       Ramet.create({
@@ -46,6 +47,7 @@ module.exports = (app) => {
         rametGeneticId: reqRametGeneticId,
         gps: reqGPS,
         locationId: reqLocationId,
+        transferDate: reqTransferDate,
         active: true
       }).then((innerRes) => {
         res.sendStatus(200);
@@ -56,13 +58,28 @@ module.exports = (app) => {
     })
   });
 
+  // updates a ramet as inactive/active
+  router.put('/:id', async (req, res) => {
+    const reqRametId = req.params.id;
+    const ramet = await Ramet.findOne({ where: { id: reqRametId } });
+    if (ramet) {
+      ramet.update({ active: ramet.active? false : true });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   router.put('/edit/:id', async (req, res) => {
     const reqRametId = req.params.id;
     const reqMotherTreeId = req.body.motherTreeId;
     const reqLocation = req.body.locationId;
-    const reqGeneticId = req.body.rameteneticId;
+    const reqGeneticId = req.body.rametGeneticId;
     const reqGps = req.body.gps;
     const reqActive = req.body.active;
+    let reqTransferDate = req.body.transferDate;
+    
+
     
     const ramet = await Ramet.findOne({ where: { id: reqRametId } })
     if (ramet) {
@@ -71,8 +88,10 @@ module.exports = (app) => {
         locationId: reqLocation,
         rametGeneticId: reqGeneticId,
         gps: reqGps,
+        transferDate: reqTransferDate,
         active: reqActive
       });
+      await ramet.save();
       res.sendStatus(200);
     } else {
       res.sendStatus(404);
